@@ -1,18 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-public class TetrisGrid : MonoBehaviour
+public class TetrisGrid
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Cell[,] cells;
 
-    // Update is called once per frame
-    void Update()
+    public TetrisGrid(int sizeX, int sizeY)
     {
-        
+        cells = new Cell[sizeX, sizeY];
+
+        for (int x = 0; x < sizeX; x++)
+        {
+            for (int y = 0; y < sizeY; y++)
+            {
+                cells[x, y] = new Cell();
+            }
+        }
     }
+}
+
+public class Cell
+{
+    public GameObject occupyingCube;
 }
