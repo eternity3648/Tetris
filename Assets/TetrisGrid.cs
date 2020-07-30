@@ -69,27 +69,30 @@ public class TetrisGrid : MonoBehaviour
         Vector2 coord = GetCellСoordByPosition(figurePosition);
         Cell cell = GetCellByCoord(coord);
 
-        if (cell == null || !cell.IsFree())
+        if (CheckIfCellIsFitForBlock(cell))
+        {
+            currentCellCoord = coord;
+        }
+        else
         {
             Cell currentCell = GetCellByCoord(currentCellCoord);
             currentCell.occupyingCube = currentFigure;
             currentFigure.transform.localPosition = GetCellPosition(currentCellCoord);
             LaunchStartFigure();
         }
-        else
-        {
-            currentCellCoord = coord;
-        }
     }
 
     public void LaunchStartFigure()
     {
-        GameObject cube = Instantiate(CubePrefab, this.transform);
         Vector3 startPosition = GetFigureStartPosition();
-        cube.transform.localPosition = startPosition;
-        cube.SetActive(true);
         currentCell = GetCellByPosition(startPosition);
-        currentFigure = cube;
+        if (CheckIfCellIsFitForBlock(currentCell))
+        {
+            GameObject cube = Instantiate(CubePrefab, this.transform);
+            cube.transform.localPosition = startPosition;
+            cube.SetActive(true);
+            currentFigure = cube;
+        }
     }
 
     private void DrawBorder(Sides side, Vector3 centerPosition)
@@ -148,8 +151,15 @@ public class TetrisGrid : MonoBehaviour
 
     private Vector3 GetFigureStartPosition()
     {
-        Vector2 startCoord = new Vector2(Math.Abs(sizeX /2), 0);
+        int randomIndex = UnityEngine.Random.Range(0, sizeX); // TEMP, for demonstration
+        Vector2 startCoord = new Vector2(randomIndex, 0);
+        //Vector2 startCoord = new Vector2(Math.Abs(sizeX /2), 0);
         return GetCellPosition(startCoord);
+    }
+
+    private bool CheckIfCellIsFitForBlock(Cell cell)
+    {
+        return !(cell == null || !cell.IsFree());
     }
 }
 

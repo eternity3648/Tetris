@@ -524,4 +524,4 @@ MonoBehaviour:
   BorderLinePrefab: {fileID: 96408740}
   CubePrefab: {fileID: 840818625}
   cellSize: {x: 1.2, y: 1.2, z: 0}
-  startFigureSpeed: 20
+  startFigureSpeed: 50
