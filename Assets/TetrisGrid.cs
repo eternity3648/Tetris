@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class TetrisGrid : MonoBehaviour
 {
@@ -11,7 +12,9 @@ public class TetrisGrid : MonoBehaviour
     public float startFigureSpeed;
 
     private Vector3 startPositon;
+    private Vector2 currentCellCoord;
     private GameObject currentFigure;
+    private Cell currentCell;
     private float currentFigureSpeed;
 
     private enum Sides
@@ -59,9 +62,24 @@ public class TetrisGrid : MonoBehaviour
 
     public void Update()
     {
-        Vector3 currentFigurePosition = currentFigure.transform.localPosition;
-        currentFigurePosition += new Vector3(0, -currentFigureSpeed * Time.deltaTime, 0);
-        currentFigure.transform.localPosition = currentFigurePosition;
+        Vector3 figurePosition = currentFigure.transform.localPosition;
+        figurePosition += new Vector3(0, -currentFigureSpeed * Time.deltaTime, 0);
+        currentFigure.transform.localPosition = figurePosition;
+
+        Vector2 coord = GetCellСoordByPosition(figurePosition);
+        Cell cell = GetCellByCoord(coord);
+
+        if (cell == null || !cell.IsFree())
+        {
+            Cell currentCell = GetCellByCoord(currentCellCoord);
+            currentCell.occupyingCube = currentFigure;
+            currentFigure.transform.localPosition = GetCellPosition(currentCellCoord);
+            LaunchStartFigure();
+        }
+        else
+        {
+            currentCellCoord = coord;
+        }
     }
 
     public void LaunchStartFigure()
@@ -70,6 +88,7 @@ public class TetrisGrid : MonoBehaviour
         Vector3 startPosition = GetFigureStartPosition();
         cube.transform.localPosition = startPosition;
         cube.SetActive(true);
+        currentCell = GetCellByPosition(startPosition);
         currentFigure = cube;
     }
 
@@ -110,6 +129,23 @@ public class TetrisGrid : MonoBehaviour
         return position;
     }
 
+    private Vector2 GetCellСoordByPosition(Vector3 position) 
+    {
+        position -= startPositon;
+        return new Vector2(Convert.ToInt32((position.x / cellSize.x) - 0.5f), -Convert.ToInt32((position.y / cellSize.y - 0.5f)));
+    }
+
+    private Cell GetCellByPosition(Vector3 position)
+    {
+        return GetCellByCoord(GetCellСoordByPosition(position));
+    }
+
+    private Cell GetCellByCoord(Vector2 coord)
+    {
+        if (coord.x >= sizeX || coord.y >= sizeY) { return null; }
+        return cells[Convert.ToInt32(coord.x), Convert.ToInt32(coord.y)];
+    }
+
     private Vector3 GetFigureStartPosition()
     {
         Vector2 startCoord = new Vector2(Math.Abs(sizeX /2), 0);
@@ -120,4 +156,9 @@ public class TetrisGrid : MonoBehaviour
 public class Cell
 {
     public GameObject occupyingCube;
+
+    public bool IsFree()
+    {
+        return (occupyingCube == null);
+    }
 }
