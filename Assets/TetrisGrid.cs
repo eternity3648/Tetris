@@ -8,7 +8,11 @@ public class TetrisGrid : MonoBehaviour
     public GameObject BorderLinePrefab;
     public GameObject CubePrefab;
     public Vector3 cellSize;
-    Vector3 startPositon;
+    public float startFigureSpeed;
+
+    private Vector3 startPositon;
+    private GameObject currentFigure;
+    private float currentFigureSpeed;
 
     private enum Sides
     {
@@ -49,7 +53,15 @@ public class TetrisGrid : MonoBehaviour
             }
         }
 
+        currentFigureSpeed = startFigureSpeed;
         LaunchStartFigure();
+    }
+
+    public void Update()
+    {
+        Vector3 currentFigurePosition = currentFigure.transform.localPosition;
+        currentFigurePosition += new Vector3(0, -currentFigureSpeed * Time.deltaTime, 0);
+        currentFigure.transform.localPosition = currentFigurePosition;
     }
 
     public void LaunchStartFigure()
@@ -58,6 +70,7 @@ public class TetrisGrid : MonoBehaviour
         Vector3 startPosition = GetFigureStartPosition();
         cube.transform.localPosition = startPosition;
         cube.SetActive(true);
+        currentFigure = cube;
     }
 
     private void DrawBorder(Sides side, Vector3 centerPosition)
@@ -102,7 +115,6 @@ public class TetrisGrid : MonoBehaviour
         Vector2 startCoord = new Vector2(Math.Abs(sizeX /2), 0);
         return GetCellPosition(startCoord);
     }
-
 }
 
 public class Cell
