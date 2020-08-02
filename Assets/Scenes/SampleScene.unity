@@ -519,8 +519,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eae7f70ce147e9438d631efcb1b075e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sizeX: 10
-  sizeY: 20
+  sizeX: 5
+  sizeY: 8
   BorderLinePrefab: {fileID: 96408740}
   CubePrefab: {fileID: 840818625}
   cellSize: {x: 1.2, y: 1.2, z: 0}
