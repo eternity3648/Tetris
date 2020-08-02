@@ -8,6 +8,7 @@ public class TetrisGrid : MonoBehaviour
     public Cell[,] cells;
     public GameObject BorderLinePrefab;
     public GameObject CubePrefab;
+    public GameObject figurePrefab;
     public Vector3 cellSize;
     public float startFigureSpeed;
 
@@ -27,6 +28,21 @@ public class TetrisGrid : MonoBehaviour
 
     public void Start()
     {
+        int[,] figureMatrix = new int[4, 4]
+        {
+            {0, 0, 1, 0},
+            {0, 0, 2, 0},
+            {0, 4, 3, 0},
+            {0, 0, 0, 0}
+        };
+
+        GameObject fig = Instantiate(figurePrefab, this.transform);
+        Figure figScript = fig.GetComponent<Figure>();
+        figScript.Set(figureMatrix, CubePrefab, cellSize);
+        figScript.Rotate();
+
+
+
         cells = new Cell[sizeX, sizeY];
         startPositon = new Vector3(-cellSize.x * (sizeX / 2), cellSize.y * (sizeX / 2));
 
@@ -57,7 +73,7 @@ public class TetrisGrid : MonoBehaviour
         }
 
         currentFigureSpeed = startFigureSpeed;
-        LaunchStartFigure();
+        //LaunchStartFigure();
     }
 
     public void Update()
@@ -71,7 +87,6 @@ public class TetrisGrid : MonoBehaviour
 
             Vector2 coord = GetCellСoordByPosition(figurePosition);
             Cell cell = GetCellByCoord(coord);
-            print(coord);
 
             if (CheckIfCellIsFreeForBlock(cell))
             {
