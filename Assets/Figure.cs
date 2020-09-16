@@ -18,22 +18,63 @@ public class Figure : MonoBehaviour
         figureCellSize = cellSize;
         blocks = new GameObject[blocksCount + 1];
 
+        Render();
+    }
+
+    // direction = true - clockwise, false - opposite
+    public void Rotate(bool direction)
+    {
+        int[,] newMatrix = new int[blockMatrix.GetLength(1), blockMatrix.GetLength(0)];
+        int newColumn, newRow = 0;
+
+        if (direction)
+        {
+            for (int oldColumn = blockMatrix.GetLength(1) - 1; oldColumn >= 0; oldColumn--)
+            {
+                newColumn = 0;
+                for (int oldRow = 0; oldRow < blockMatrix.GetLength(0); oldRow++)
+                {
+                    newMatrix[newRow, newColumn] = blockMatrix[oldRow, oldColumn];
+                    newColumn++;
+                }
+                newRow++;
+            }
+        } 
+        else
+        {
+            for (int oldColumn = 0; oldColumn < blockMatrix.GetLength(0) - 1; oldColumn++)
+            {
+                newColumn = 0;
+                for (int oldRow = blockMatrix.GetLength(1); oldRow >= 0; oldRow--)
+                {
+                    newMatrix[newRow, newColumn] = blockMatrix[oldRow, oldColumn];
+                    newColumn++;
+                }
+                newRow++;
+            }
+        }
+
+        blockMatrix = newMatrix;
+        Render();
+    }
+
+    private void Render()
+    {
         for (int i = 1; i <= blocksCount; i++)
         {
+            if (blocks[i] != null) 
+            {
+                Destroy(blocks[i]);
+                blocks[i] = null;
+            }
+
             GameObject figureCube = Instantiate(cubePrefab, this.transform);
             blocks[i] = figureCube;
             Vector2 blockCoord = GetBlockCoord(i);
-            print(i);
             Vector3 position = GetBlockPositionByCoord(blockCoord);
-            print(position);
             figureCube.transform.localPosition = GetBlockPositionByCoord(blockCoord);
             figureCube.SetActive(true);
         }
-    }
-
-    public void Rotate()
-    {
-        Debug.Log("Rotate");
     }
 
     private Vector2 GetBlockCoord(int blockIndex)
@@ -44,7 +85,7 @@ public class Figure : MonoBehaviour
             {
                 if (blockMatrix[i, j] == blockIndex)
                 {
-                    return new Vector2(j, i);
+                    return new Vector2(i, j);
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -26,22 +27,31 @@ public class TetrisGrid : MonoBehaviour
         Bottom = 4
     }
 
+
+    private IEnumerator ExecuteAfterTime(float time, Figure fig)
+    {
+        yield return new WaitForSeconds(time);
+
+        fig.Rotate(true);
+    }
+
     public void Start()
     {
-        int[,] figureMatrix = new int[4, 4]
+        int[,] figureMatrix = new int[3, 3]
         {
-            {0, 0, 1, 0},
-            {0, 0, 2, 0},
-            {0, 4, 3, 0},
-            {0, 0, 0, 0}
+            {0, 4, 0},
+            {0, 3, 0},
+            {1, 2, 0},
         };
 
         GameObject fig = Instantiate(figurePrefab, this.transform);
         Figure figScript = fig.GetComponent<Figure>();
         figScript.Set(figureMatrix, CubePrefab, cellSize);
-        figScript.Rotate();
 
-
+        StartCoroutine(ExecuteAfterTime(3, figScript));
+        StartCoroutine(ExecuteAfterTime(6, figScript));
+        StartCoroutine(ExecuteAfterTime(9, figScript));
+        StartCoroutine(ExecuteAfterTime(12, figScript));
 
         cells = new Cell[sizeX, sizeY];
         startPositon = new Vector3(-cellSize.x * (sizeX / 2), cellSize.y * (sizeX / 2));
