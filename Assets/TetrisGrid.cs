@@ -14,7 +14,7 @@ public class TetrisGrid : MonoBehaviour
     public float startFigureSpeed;
 
     private Vector3 startPositon;
-    private Vector2 currentCellCoord;
+    private Vector2 currentFigureCoord;
     private GameObject currentFigure;
     private Figure figScript;
     private Cell currentCell;
@@ -68,7 +68,7 @@ public class TetrisGrid : MonoBehaviour
     public void Update()
     {
         float delta = Time.deltaTime;
-        if (false && currentFigure != null && delta < 0.2f)
+        if (currentFigure != null && delta < 0.2f)
         {
             Vector3 figurePosition = currentFigure.transform.localPosition;
             figurePosition += new Vector3(0, -currentFigureSpeed * Time.deltaTime, 0);
@@ -79,20 +79,20 @@ public class TetrisGrid : MonoBehaviour
 
             if (CheckIfCellIsFreeForBlock(cell))
             {
-                currentCellCoord = coord;
+                currentFigureCoord = coord;
             }
-            else if (currentCellCoord == new Vector2(1000, 1000))
+            else if (currentFigureCoord == new Vector2(1000, 1000))
             {
                 Destroy(currentFigure);
                 currentFigure = null;
             }
             else
             {
-                Cell currentCell = GetCellByCoord(currentCellCoord);
+                Cell currentCell = GetCellByCoord(currentFigureCoord);
                 if (currentCell.IsFree())
                 {
                     currentCell.occupyingCube = currentFigure;
-                    currentFigure.transform.localPosition = GetCellPosition(currentCellCoord);
+                    currentFigure.transform.localPosition = GetCellPosition(currentFigureCoord);
                     LaunchStartFigure();
                 }
                 else
@@ -117,13 +117,13 @@ public class TetrisGrid : MonoBehaviour
 
 
         currentCell = GetCellByPosition(startPosition);
-        print("currentCell");
-        print(GetCellСoordByPosition(startPosition));
-        //if (CheckIfCellIsFreeForBlock(currentCell))
-        //{
-        currentFigure.transform.localPosition = startPosition;
-        //currentCellCoord = new Vector2(1000, 1000);
-        //}
+        //print("currentCell");
+        //print(GetCellСoordByPosition(startPosition));
+        if (CheckIfCellIsFreeForBlock(currentCell))
+        {
+            currentFigure.transform.localPosition = startPosition;
+            currentFigureCoord = new Vector2(1000, 1000);
+        }
     }
 
     private void DrawBorder(Sides side, Vector3 centerPosition)
@@ -182,7 +182,6 @@ public class TetrisGrid : MonoBehaviour
 
     private Vector3 GetFigureStartPosition()
     {
-        int randomIndex = UnityEngine.Random.Range(0, sizeX); // TEMP, for demonstration
         Vector2 startCoord = new Vector2(Math.Abs(sizeX /2) - 2, 0);
         return GetCellPosition(startCoord);
     }
