@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Figure.cs" />
+    <Compile Include="Assets\FigureTypes.cs" />
     <Compile Include="Assets\GameScreen.cs" />
     <Compile Include="Assets\Main.cs" />
     <Compile Include="Assets\NewBehaviourScript.cs" />

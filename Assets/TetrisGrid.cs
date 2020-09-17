@@ -37,12 +37,8 @@ public class TetrisGrid : MonoBehaviour
 
     public void Start()
     {
-        int[,] figureMatrix = new int[3, 3]
-        {
-            {0, 4, 0},
-            {0, 3, 0},
-            {1, 2, 0},
-        };
+        FigureTypes.Init();
+        int[,] figureMatrix = FigureTypes.GetRangdom();
 
         GameObject fig = Instantiate(figurePrefab, this.transform);
         Figure figScript = fig.GetComponent<Figure>();
