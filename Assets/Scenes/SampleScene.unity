@@ -357,8 +357,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eae7f70ce147e9438d631efcb1b075e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sizeX: 5
-  sizeY: 8
+  sizeX: 20
+  sizeY: 10
   BorderLinePrefab: {fileID: 5100298991600962376, guid: bf9e2e0bc597c7148aa93cca0aaaaad7,
     type: 3}
   CubePrefab: {fileID: 2134582694407125513, guid: 6092d01cc8920ed4caeaa7b38e193f64,
