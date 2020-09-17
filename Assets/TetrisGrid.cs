@@ -99,14 +99,22 @@ public class TetrisGrid : MonoBehaviour
                 //else
                 //{
                     currentFigure.transform.localPosition = previousFigurePosition;
+                    coord = GetCellСoordByPosition(previousFigurePosition);
+
                     List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+                    Vector2 coord1 = new Vector2();
                     coords.ForEach(delegate (Vector2 blockCoord)
                     {
                         CreateBlockInCell(blockCoord);
+                        //coord1 = blockCoord;
                     });
 
+                    //print("Coord1");
+                    //print(coord1);
+                    //CreateBlockInCell(coord1);
                     Destroy(currentFigure);
-                    //LaunchStartFigure();
+                    currentFigure = null;
+                    LaunchStartFigure();
                 //}
             }
         }
@@ -221,7 +229,6 @@ public class TetrisGrid : MonoBehaviour
             {
                 Cell cell = GetCellByCoord(blockCoord);
                 canExist = CheckIfCellIsFreeForBlock(cell);
-                if (!canExist) { print(blockCoord); }
             }
         });
 
