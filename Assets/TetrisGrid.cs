@@ -98,9 +98,15 @@ public class TetrisGrid : MonoBehaviour
                 //}
                 //else
                 //{
-                    //Destroy(currentFigure);
                     currentFigure.transform.localPosition = previousFigurePosition;
-                    LaunchStartFigure();
+                    List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+                    coords.ForEach(delegate (Vector2 blockCoord)
+                    {
+                        CreateBlockInCell(blockCoord);
+                    });
+
+                    Destroy(currentFigure);
+                    //LaunchStartFigure();
                 //}
             }
         }
@@ -158,6 +164,15 @@ public class TetrisGrid : MonoBehaviour
         transform.rotation = Quaternion.Euler(angles);
         transform.localPosition = borderPosition;
         borderLine.SetActive(true);
+    }
+    
+    private void CreateBlockInCell(Vector2 coord)
+    {
+        GameObject figureCube = Instantiate(CubePrefab, this.transform);
+        figureCube.transform.localPosition = GetCellPosition(coord);
+        figureCube.SetActive(true);
+        Cell cell = GetCellByCoord(coord);
+        cell.occupyingCube = figureCube;
     }
 
     private Vector3 GetCellPosition(Vector2 coord)
