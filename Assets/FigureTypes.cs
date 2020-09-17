@@ -12,9 +12,9 @@ public static class FigureTypes
             (
                 new int[,]
                     {
-                        { 0, 4, 0},
-                        { 0, 3, 0},
-                        { 1, 2, 0}
+                        {0, 4, 0},
+                        {0, 3, 0},
+                        {1, 2, 0}
                     }
             );
         types.Add

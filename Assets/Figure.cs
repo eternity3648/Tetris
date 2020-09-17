@@ -9,26 +9,26 @@ public class Figure : MonoBehaviour
     public Vector3 figureCellSize;
     public const int blocksCount = 4;
     public GameObject[] blocks;
-    public Vector2 centerCoord = new Vector2(1, 1);
+    public Vector2 centerCoord = new Vector2(0, 0);
+    public Vector3 centerPosition;
 
     public void Set(int[,] matrix, GameObject cube, Vector3 cellSize)
     {
+        centerPosition = -figureCellSize;
         blockMatrix = matrix;
         cubePrefab = cube;
         figureCellSize = cellSize;
         blocks = new GameObject[blocksCount + 1];
-
         Render();
     }
 
-    // direction = true - clockwise, false - opposite
-    public void Rotate(bool direction)
+    public void Rotate()
     {
         int[,] newMatrix = new int[blockMatrix.GetLength(1), blockMatrix.GetLength(0)];
         int newColumn, newRow = 0;
 
-        if (direction)
-        {
+        //if (direction)
+        //{
             for (int oldColumn = blockMatrix.GetLength(1) - 1; oldColumn >= 0; oldColumn--)
             {
                 newColumn = 0;
@@ -39,20 +39,20 @@ public class Figure : MonoBehaviour
                 }
                 newRow++;
             }
-        } 
-        else
-        {
-            for (int oldColumn = 0; oldColumn < blockMatrix.GetLength(0) - 1; oldColumn++)
-            {
-                newColumn = 0;
-                for (int oldRow = blockMatrix.GetLength(1); oldRow >= 0; oldRow--)
-                {
-                    newMatrix[newRow, newColumn] = blockMatrix[oldRow, oldColumn];
-                    newColumn++;
-                }
-                newRow++;
-            }
-        }
+        //} 
+        //else
+        //{
+        //    for (int oldColumn = 0; oldColumn < blockMatrix.GetLength(0) - 1; oldColumn++)
+        //    {
+        //        newColumn = 0;
+        //        for (int oldRow = blockMatrix.GetLength(1); oldRow >= 0; oldRow--)
+        //        {
+        //            newMatrix[newRow, newColumn] = blockMatrix[oldRow, oldColumn];
+        //            newColumn++;
+        //        }
+        //        newRow++;
+        //    }
+        //}
 
         blockMatrix = newMatrix;
         Render();
@@ -85,6 +85,8 @@ public class Figure : MonoBehaviour
             {
                 if (blockMatrix[i, j] == blockIndex)
                 {
+                    //print("Coord");
+                    //print(new Vector2(i, j));
                     return new Vector2(i, j);
                 }
             }
@@ -95,7 +97,6 @@ public class Figure : MonoBehaviour
 
     private Vector3 GetBlockPositionByCoord(Vector2 coord)
     {
-        Vector3 centerPosition = new Vector3(centerCoord.x * figureCellSize.x, centerCoord.y * figureCellSize.y);
         Vector3 position = new Vector3(figureCellSize.x * coord.x - centerPosition.x, -figureCellSize.y * coord.y - centerPosition.y);
         return position;
     }
