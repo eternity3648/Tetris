@@ -58,6 +58,17 @@ public class Figure : MonoBehaviour
         Render();
     }
 
+    public List<Vector2> GetBlockCoordsRelativeToCoord(Vector2 coord)
+    {
+        List<Vector2> coords = new List<Vector2>();
+        for (int i = 1; i <= blocksCount; i++)
+        {
+            coords.Add(coord + GetBlockCoord(i));
+        }
+
+        return coords;
+    }
+
     private void Render()
     {
         for (int i = 1; i <= blocksCount; i++)
