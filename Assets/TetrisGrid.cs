@@ -14,6 +14,7 @@ public class TetrisGrid : MonoBehaviour
     public Vector3 cellSize;
     public float slowFigureSpeed;
     public float fastFigureSpeed;
+    public float delayBeforeFigureLanding;
 
     private Vector3 startPositon;
     private Vector2 currentFigureCoord;
@@ -21,6 +22,7 @@ public class TetrisGrid : MonoBehaviour
     private Figure figScript;
     private Cell currentCell;
     private float currentFigureSpeed;
+    private float currentDelayBeforeFigureLanding;
 
     private enum Sides
     {
@@ -36,6 +38,7 @@ public class TetrisGrid : MonoBehaviour
 
         cells = new Cell[sizeX, sizeY];
         startPositon = new Vector3(-cellSize.x * (sizeX / 2), cellSize.y * (sizeX / 2));
+        currentDelayBeforeFigureLanding = 0;
 
         for (int x = 0; x < sizeX; x++)
         {
@@ -110,32 +113,28 @@ public class TetrisGrid : MonoBehaviour
             }
             else
             {
-                //Cell currentCell = GetCellByCoord(currentFigureCoord);
-                //if (currentCell.IsFree())
-                //{
-                //    currentCell.occupyingCube = currentFigure;
-                //    currentFigure.transform.localPosition = GetCellPosition(currentFigureCoord);
-                //    LaunchStartFigure();
-                //}
-                //else
-                //{
-                    coord = GetCellСoordByPosition(previousFigurePosition);
-
-                    List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
-                    Vector2 coord1 = new Vector2();
-                    coords.ForEach(delegate (Vector2 blockCoord)
+                if (currentDelayBeforeFigureLanding == 0)
+                {
+                    currentDelayBeforeFigureLanding = delayBeforeFigureLanding;
+                }
+                else
+                {
+                    currentDelayBeforeFigureLanding -= delta;
+                    if (currentDelayBeforeFigureLanding <=0)
                     {
-                        CreateBlockInCell(blockCoord);
-                        //coord1 = blockCoord;
-                    });
-
-                    //print("Coord1");
-                    //print(coord1);
-                    //CreateBlockInCell(coord1);
-                    Destroy(currentFigure);
-                    currentFigure = null;
-                    LaunchStartFigure();
-                //}
+                        currentDelayBeforeFigureLanding = 0;
+                        coord = GetCellСoordByPosition(previousFigurePosition);
+                        List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+                        Vector2 coord1 = new Vector2();
+                        coords.ForEach(delegate (Vector2 blockCoord)
+                        {
+                            CreateBlockInCell(blockCoord);
+                        });
+                        Destroy(currentFigure);
+                        currentFigure = null;
+                        LaunchStartFigure();
+                    }
+                }
             }
         }
     }

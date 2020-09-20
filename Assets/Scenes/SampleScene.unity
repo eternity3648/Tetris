@@ -368,3 +368,4 @@ MonoBehaviour:
   cellSize: {x: 1.2, y: 1.2, z: 0}
   slowFigureSpeed: 5
   fastFigureSpeed: 25
+  delayBeforeFigureLanding: 0.35
