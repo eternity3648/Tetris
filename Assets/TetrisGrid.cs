@@ -12,7 +12,8 @@ public class TetrisGrid : MonoBehaviour
     public GameObject CubePrefab;
     public GameObject figurePrefab;
     public Vector3 cellSize;
-    public float startFigureSpeed;
+    public float slowFigureSpeed;
+    public float fastFigureSpeed;
 
     private Vector3 startPositon;
     private Vector2 currentFigureCoord;
@@ -62,7 +63,6 @@ public class TetrisGrid : MonoBehaviour
             }
         }
 
-        currentFigureSpeed = startFigureSpeed;
         LaunchStartFigure();
     }
 
@@ -76,13 +76,20 @@ public class TetrisGrid : MonoBehaviour
         {
             MoveFigure(false);
         }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            currentFigureSpeed = fastFigureSpeed;
+        }
+        else if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            currentFigureSpeed = slowFigureSpeed;
+        }
 
         float delta = Time.deltaTime;
         if (currentFigure != null && delta < 0.2f)
         {
             Vector3 previousFigurePosition = currentFigure.transform.localPosition;
             Vector3 figurePosition = previousFigurePosition + new Vector3(0, -currentFigureSpeed * Time.deltaTime, 0);
-            currentFigure.transform.localPosition = figurePosition;
 
             Vector2 coord = GetCellСoordByPosition(figurePosition);
             Cell cell = GetCellByCoord(coord);
@@ -90,6 +97,7 @@ public class TetrisGrid : MonoBehaviour
             if (CheckIfFigureCanExistInCoord(coord))
             {
                 currentFigureCoord = coord;
+                currentFigure.transform.localPosition = figurePosition;
             }
             else if (currentFigureCoord == new Vector2(1000, 1000))
             {
@@ -107,7 +115,6 @@ public class TetrisGrid : MonoBehaviour
                 //}
                 //else
                 //{
-                    currentFigure.transform.localPosition = previousFigurePosition;
                     coord = GetCellСoordByPosition(previousFigurePosition);
 
                     List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
@@ -132,7 +139,7 @@ public class TetrisGrid : MonoBehaviour
     public void LaunchStartFigure()
     {
         Vector3 startPosition = GetFigureStartPosition();
-
+        currentFigureSpeed = slowFigureSpeed;
 
         int[,] figureMatrix = FigureTypes.GetRangdom();
         currentFigure = CreateFigure(figureMatrix);
@@ -225,7 +232,7 @@ public class TetrisGrid : MonoBehaviour
     private Vector2 GetCellСoordByPosition(Vector3 position) 
     {
         position -= startPositon;
-        return new Vector2(Convert.ToInt32((position.x / cellSize.x) - 0.5f), -Convert.ToInt32((position.y / cellSize.y + 0.5f)));
+        return new Vector2(Convert.ToInt32((position.x / cellSize.x) - 0.5f), -Convert.ToInt32((position.y / cellSize.y)));
     }
 
     private Cell GetCellByPosition(Vector3 position)
