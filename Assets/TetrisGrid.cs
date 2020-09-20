@@ -84,6 +84,10 @@ public class TetrisGrid : MonoBehaviour
         {
             currentFigureSpeed = slowFigureSpeed;
         }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            RotateFigure();
+        }
 
         float delta = Time.deltaTime;
         if (currentFigure != null && delta < 0.2f)
@@ -94,7 +98,7 @@ public class TetrisGrid : MonoBehaviour
             Vector2 coord = GetCellСoordByPosition(figurePosition);
             Cell cell = GetCellByCoord(coord);
 
-            if (CheckIfFigureCanExistInCoord(coord))
+            if (CheckIfFigureCanExistInCoord(figScript, coord))
             {
                 currentFigureCoord = coord;
                 currentFigure.transform.localPosition = figurePosition;
@@ -152,7 +156,7 @@ public class TetrisGrid : MonoBehaviour
         {
             currentFigure.transform.localPosition = startPosition;
             currentFigureCoord = new Vector2(1000, 1000);
-            CheckIfFigureCanExistInCoord(GetCellСoordByPosition(startPosition));
+            CheckIfFigureCanExistInCoord(figScript, GetCellСoordByPosition(startPosition));
         }
     }
 
@@ -161,15 +165,25 @@ public class TetrisGrid : MonoBehaviour
     {
         Vector3 positionShift = new Vector3(cellSize.x, 0);
         if (!direction) { positionShift = -positionShift; }
+        Vector2 coord = GetCellСoordByPosition(currentFigure.transform.localPosition + positionShift);
 
-        int [,] matrix = figScript.GetMatrix();
-        GameObject testFigure = CreateFigure(matrix);
-        testFigure.transform.localPosition = currentFigure.transform.localPosition + positionShift;
-
-        Vector2 coord = GetCellСoordByPosition(testFigure.transform.localPosition);
-        if (CheckIfFigureCanExistInCoord(coord))
+        if (CheckIfFigureCanExistInCoord(figScript, coord))
         {
-            currentFigure.transform.localPosition = testFigure.transform.localPosition;
+            currentFigure.transform.localPosition += positionShift;
+        }
+    }
+
+    private void RotateFigure()
+    {
+        int[,] matrix = figScript.GetMatrix();
+        GameObject testFigure = CreateFigure(matrix);
+        Figure testFigScript = testFigure.GetComponent<Figure>();
+        testFigScript.Rotate();
+        Vector2 coord = GetCellСoordByPosition(figScript.transform.localPosition);
+
+        if (CheckIfFigureCanExistInCoord(testFigScript, coord))
+        {
+            figScript.Rotate();
         }
         Destroy(testFigure);
     }
@@ -177,8 +191,8 @@ public class TetrisGrid : MonoBehaviour
     private GameObject CreateFigure(int[,] matrix)
     {
         GameObject figure = Instantiate(figurePrefab, this.transform);
-        figScript = figure.GetComponent<Figure>();
-        figScript.Set(matrix, CubePrefab, cellSize);
+        Figure script = figure.GetComponent<Figure>();
+        script.Set(matrix, CubePrefab, cellSize);
         return figure;
     }
 
@@ -265,9 +279,9 @@ public class TetrisGrid : MonoBehaviour
         return cell != null && cell.IsFree();
     }
 
-    private bool CheckIfFigureCanExistInCoord(Vector2 coord)
+    private bool CheckIfFigureCanExistInCoord(Figure script, Vector2 coord)
     {
-        List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+        List<Vector2> coords = script.GetBlockCoordsRelativeToCoord(coord);
         bool canExist = true;
         coords.ForEach(delegate (Vector2 blockCoord)
         {
