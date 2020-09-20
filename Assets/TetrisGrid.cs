@@ -68,6 +68,15 @@ public class TetrisGrid : MonoBehaviour
 
     public void Update()
     {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            MoveFigure(true);
+        } 
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            MoveFigure(false);
+        }
+
         float delta = Time.deltaTime;
         if (currentFigure != null && delta < 0.2f)
         {
@@ -126,11 +135,8 @@ public class TetrisGrid : MonoBehaviour
 
 
         int[,] figureMatrix = FigureTypes.GetRangdom();
-
-        currentFigure = Instantiate(figurePrefab, this.transform);
+        currentFigure = CreateFigure(figureMatrix);
         figScript = currentFigure.GetComponent<Figure>();
-        figScript.Set(figureMatrix, CubePrefab, cellSize);
-
 
         currentCell = GetCellByPosition(startPosition);
         //print("currentCell");
@@ -142,6 +148,33 @@ public class TetrisGrid : MonoBehaviour
             CheckIfFigureCanExistInCoord(GetCellСoordByPosition(startPosition));
         }
     }
+
+    // direction true - right, false - left
+    private void MoveFigure(bool direction)
+    {
+        Vector3 positionShift = new Vector3(cellSize.x, 0);
+        if (!direction) { positionShift = -positionShift; }
+
+        int [,] matrix = figScript.GetMatrix();
+        GameObject testFigure = CreateFigure(matrix);
+        testFigure.transform.localPosition = currentFigure.transform.localPosition + positionShift;
+
+        Vector2 coord = GetCellСoordByPosition(testFigure.transform.localPosition);
+        if (CheckIfFigureCanExistInCoord(coord))
+        {
+            currentFigure.transform.localPosition = testFigure.transform.localPosition;
+        }
+        Destroy(testFigure);
+    }
+
+    private GameObject CreateFigure(int[,] matrix)
+    {
+        GameObject figure = Instantiate(figurePrefab, this.transform);
+        figScript = figure.GetComponent<Figure>();
+        figScript.Set(matrix, CubePrefab, cellSize);
+        return figure;
+    }
+
 
     private void DrawBorder(Sides side, Vector3 centerPosition)
     {
@@ -202,8 +235,14 @@ public class TetrisGrid : MonoBehaviour
 
     private Cell GetCellByCoord(Vector2 coord)
     {
-        if (coord.x >= sizeX || coord.y >= sizeY) { return null; }
-        return cells[Convert.ToInt32(coord.x), Convert.ToInt32(coord.y)];
+        if (coord.x < 0 || coord.x >= sizeX || coord.y < 0 || coord.y >= sizeY)
+        {
+            return null;
+        }
+        else
+        {
+            return cells[Convert.ToInt32(coord.x), Convert.ToInt32(coord.y)];
+        }
     }
 
     private Vector3 GetFigureStartPosition()

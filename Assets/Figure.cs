@@ -69,6 +69,11 @@ public class Figure : MonoBehaviour
         return coords;
     }
 
+    public int [,] GetMatrix()
+    {
+        return blockMatrix;
+    }
+
     private void Render()
     {
         for (int i = 1; i <= blocksCount; i++)
