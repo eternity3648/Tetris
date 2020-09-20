@@ -71,6 +71,7 @@ public class TetrisGrid : MonoBehaviour
 
     public void Update()
     {
+        bool downArrowPressed = false;
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             MoveFigure(true);
@@ -82,6 +83,7 @@ public class TetrisGrid : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             currentFigureSpeed = fastFigureSpeed;
+            downArrowPressed = true;
         }
         else if (Input.GetKeyUp(KeyCode.DownArrow))
         {
@@ -113,7 +115,7 @@ public class TetrisGrid : MonoBehaviour
             }
             else
             {
-                if (currentDelayBeforeFigureLanding == 0)
+                if (currentDelayBeforeFigureLanding == 0 && currentFigureSpeed != fastFigureSpeed)
                 {
                     currentDelayBeforeFigureLanding = delayBeforeFigureLanding;
                 }
