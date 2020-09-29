@@ -23,6 +23,7 @@ public class TetrisGrid : MonoBehaviour
     private Cell currentCell;
     private float currentFigureSpeed;
     private float currentDelayBeforeFigureLanding;
+    float fastHorizontalMovementDelay;
 
     private enum Sides
     {
@@ -39,6 +40,7 @@ public class TetrisGrid : MonoBehaviour
         cells = new Cell[sizeX, sizeY];
         startPositon = new Vector3(-cellSize.x * (sizeX / 2), cellSize.y * (sizeX / 2));
         currentDelayBeforeFigureLanding = 0;
+        fastHorizontalMovementDelay = 0;
 
         for (int x = 0; x < sizeX; x++)
         {
@@ -71,13 +73,31 @@ public class TetrisGrid : MonoBehaviour
 
     public void Update()
     {
+        float delta = Time.deltaTime;
+
+        if (fastHorizontalMovementDelay > 0) { fastHorizontalMovementDelay -= delta; }
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             MoveFigure(true);
-        } 
+            fastHorizontalMovementDelay = 0.25f;
+        }
+        else if (Input.GetKey(KeyCode.RightArrow) && fastHorizontalMovementDelay < 0)
+        {
+            MoveFigure(true);
+        }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             MoveFigure(false);
+            fastHorizontalMovementDelay = 0.25f;
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow) && fastHorizontalMovementDelay < 0)
+        {
+            MoveFigure(false);
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
+        {
+            fastHorizontalMovementDelay = 0;
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -92,7 +112,6 @@ public class TetrisGrid : MonoBehaviour
             RotateFigure();
         }
 
-        float delta = Time.deltaTime;
         if (currentFigure != null && delta < 0.2f)
         {
             Vector3 previousFigurePosition = currentFigure.transform.localPosition;
