@@ -15,6 +15,7 @@ public class TetrisGrid : MonoBehaviour
     public float slowFigureSpeed;
     public float fastFigureSpeed;
     public float delayBeforeFigureLanding;
+    public float startFastHorizontalMovementDelat;
 
     private Vector3 startPositon;
     private Vector2 currentFigureCoord;
@@ -80,7 +81,7 @@ public class TetrisGrid : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             MoveFigure(true);
-            fastHorizontalMovementDelay = 0.25f;
+            fastHorizontalMovementDelay = startFastHorizontalMovementDelat;
         }
         else if (Input.GetKey(KeyCode.RightArrow) && fastHorizontalMovementDelay < 0)
         {
@@ -89,7 +90,7 @@ public class TetrisGrid : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             MoveFigure(false);
-            fastHorizontalMovementDelay = 0.25f;
+            fastHorizontalMovementDelay = startFastHorizontalMovementDelat;
         }
         else if (Input.GetKey(KeyCode.LeftArrow) && fastHorizontalMovementDelay < 0)
         {

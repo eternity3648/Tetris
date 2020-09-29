@@ -67,7 +67,7 @@
     <Compile Include="Assets\FigureTypes.cs" />
     <Compile Include="Assets\GameScreen.cs" />
     <Compile Include="Assets\Main.cs" />
-    <Compile Include="Assets\NewBehaviourScript.cs" />
+    <Compile Include="Assets\Square.cs" />
     <Compile Include="Assets\TetrisGrid.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Repos/Tetris/Tetris/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
