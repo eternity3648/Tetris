@@ -71,7 +71,6 @@ public class TetrisGrid : MonoBehaviour
 
     public void Update()
     {
-        bool downArrowPressed = false;
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             MoveFigure(true);
@@ -83,7 +82,6 @@ public class TetrisGrid : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             currentFigureSpeed = fastFigureSpeed;
-            downArrowPressed = true;
         }
         else if (Input.GetKeyUp(KeyCode.DownArrow))
         {
@@ -127,7 +125,6 @@ public class TetrisGrid : MonoBehaviour
                         currentDelayBeforeFigureLanding = 0;
                         coord = GetCellСoordByPosition(previousFigurePosition);
                         List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
-                        Vector2 coord1 = new Vector2();
                         coords.ForEach(delegate (Vector2 blockCoord)
                         {
                             CreateBlockInCell(blockCoord);
@@ -180,11 +177,25 @@ public class TetrisGrid : MonoBehaviour
         GameObject testFigure = CreateFigure(matrix);
         Figure testFigScript = testFigure.GetComponent<Figure>();
         testFigScript.Rotate();
-        Vector2 coord = GetCellСoordByPosition(figScript.transform.localPosition);
+        Vector2 coord = GetCellСoordByPosition(currentFigure.transform.localPosition);
+        int coordShiftRange = 2;
 
-        if (CheckIfFigureCanExistInCoord(testFigScript, coord))
+        for (int i = 0; i <= coordShiftRange; i++)
         {
-            figScript.Rotate();
+            Vector2 testLeftCoord = coord + new Vector2(-i, 0);
+            if (CheckIfFigureCanExistInCoord(testFigScript, testLeftCoord))
+            {
+                currentFigure.transform.localPosition += new Vector3(-i * cellSize.x, 0);
+                figScript.Rotate();
+                break;
+            }
+            Vector2 testRightCoord = coord + new Vector2(i, 0);
+            if (CheckIfFigureCanExistInCoord(testFigScript, testRightCoord))
+            {
+                currentFigure.transform.localPosition += new Vector3(i * cellSize.x, 0);
+                figScript.Rotate();
+                break;
+            }
         }
         Destroy(testFigure);
     }
