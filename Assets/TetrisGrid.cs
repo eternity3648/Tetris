@@ -76,43 +76,6 @@ public class TetrisGrid : MonoBehaviour
     {
         float delta = Time.deltaTime;
 
-        if (fastHorizontalMovementDelay > 0) { fastHorizontalMovementDelay -= delta; }
-
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            MoveFigure(true);
-            fastHorizontalMovementDelay = startFastHorizontalMovementDelat;
-        }
-        else if (Input.GetKey(KeyCode.RightArrow) && fastHorizontalMovementDelay < 0)
-        {
-            MoveFigure(true);
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            MoveFigure(false);
-            fastHorizontalMovementDelay = startFastHorizontalMovementDelat;
-        }
-        else if (Input.GetKey(KeyCode.LeftArrow) && fastHorizontalMovementDelay < 0)
-        {
-            MoveFigure(false);
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
-        {
-            fastHorizontalMovementDelay = 0;
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            currentFigureSpeed = fastFigureSpeed;
-        }
-        else if (Input.GetKeyUp(KeyCode.DownArrow))
-        {
-            currentFigureSpeed = slowFigureSpeed;
-        }
-        else if (Input.GetKeyDown(KeyCode.Space))
-        {
-            RotateFigure();
-        }
-
         if (currentFigure != null && delta < 0.2f)
         {
             Vector3 previousFigurePosition = currentFigure.transform.localPosition;
@@ -179,7 +142,7 @@ public class TetrisGrid : MonoBehaviour
     }
 
     // direction true - right, false - left
-    private void MoveFigure(bool direction)
+    public void MoveFigure(bool direction)
     {
         Vector3 positionShift = new Vector3(cellSize.x, 0);
         if (!direction) { positionShift = -positionShift; }
