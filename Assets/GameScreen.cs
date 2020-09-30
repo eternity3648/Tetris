@@ -13,9 +13,4 @@ public class GameScreen : MonoBehaviour
     void Update()
     {
     }
-
-    void OnMouseDown()
-    {
-        print("OnMouseDown");
-    }
 }
