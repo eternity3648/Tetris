@@ -8,22 +8,34 @@ public class GameScreen : MonoBehaviour
 {
     public GameObject grid;
     public GameObject leftButton, rightButton;
+    public GameObject clickableBack;
     public float startFastHorizontalMovementDelat;
 
 
     private OperateFigure MoveHorizontal;
     private TetrisGrid gridScript;
     private float fastHorizontalMovementDelay;
+    private bool rightSidePressed, leftSidePressed;
 
     // Start is called before the first frame update
     void Start()
     {
         MoveHorizontal = MoveFigure;
         gridScript = grid.GetComponent<TetrisGrid>();
-        fastHorizontalMovementDelay = 0;
+        ResetVariables(true);
 
-        leftButton.GetComponent<Button>().SetOnMouseDown(MoveHorizontal, false);
-        rightButton.GetComponent<Button>().SetOnMouseDown(MoveHorizontal, true);
+        leftButton.GetComponent<Button>().Set(MoveHorizontal, ResetVariables, false);
+        rightButton.GetComponent<Button>().Set(MoveHorizontal, ResetVariables, true);
+        OperateFigure Back = ResetVariables;
+        clickableBack.GetComponent<Button>().Set(null, ResetVariables, true);
+    }
+
+    void ResetVariables(bool _)
+    {
+        print("job");
+        fastHorizontalMovementDelay = 0;
+        rightSidePressed = false;
+        leftSidePressed = false;
     }
 
     // Update is called once per frame
@@ -33,24 +45,14 @@ public class GameScreen : MonoBehaviour
 
         if (fastHorizontalMovementDelay > 0) { fastHorizontalMovementDelay -= delta; }
 
-        //if (Input.GetKeyDown(KeyCode.RightArrow))
-        //{
-        //    MoveFigure(true);
-        //    fastHorizontalMovementDelay = startFastHorizontalMovementDelat;
-        //}
-        //else if (Input.GetKey(KeyCode.RightArrow) && fastHorizontalMovementDelay < 0)
-        //{
-        //    MoveFigure(true);
-        //}
-        //else if (Input.GetKeyDown(KeyCode.LeftArrow))
-        //{
-        //    MoveFigure(false);
-        //    fastHorizontalMovementDelay = startFastHorizontalMovementDelat;
-        //}
-        //else if (Input.GetKey(KeyCode.LeftArrow) && fastHorizontalMovementDelay < 0)
-        //{
-        //    MoveFigure(false);
-        //}
+        if (rightSidePressed && fastHorizontalMovementDelay < 0)
+        {
+            gridScript.MoveFigure(true);
+        }
+        else if (leftSidePressed && fastHorizontalMovementDelay < 0)
+        {
+            gridScript.MoveFigure(false);
+        }
         //else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
         //{
         //    fastHorizontalMovementDelay = 0;
@@ -72,5 +74,8 @@ public class GameScreen : MonoBehaviour
     void MoveFigure(bool side)
     {
         gridScript.MoveFigure(side);
+        if (side) { rightSidePressed = true; }
+        else { leftSidePressed = true; }
+        fastHorizontalMovementDelay = startFastHorizontalMovementDelat;
     }
 }

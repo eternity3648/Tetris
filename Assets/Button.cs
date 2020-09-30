@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class Button : MonoBehaviour
 {
-    OperateFigure Action;
+    OperateFigure DownAction, UpAction;
     bool side;
-    public void SetOnMouseDown(OperateFigure action, bool s)
+    public void Set(OperateFigure downAction, OperateFigure upAction, bool s)
     {
-        Action = action;
+        DownAction = downAction;
+        UpAction = upAction;
         side = s;
     }
 
     void OnMouseDown()
     {
-        Action(side);
+        DownAction?.Invoke(side);
+    }
+
+    void OnMouseUp()
+    {
+        UpAction?.Invoke(side);
     }
 }
