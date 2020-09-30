@@ -171,7 +171,7 @@ MonoBehaviour:
   leftButton: {fileID: 1199165904}
   rightButton: {fileID: 1742534351}
   clickableBack: {fileID: 1214648528}
-  startFastHorizontalMovementDelat: 0
+  startFastHorizontalMovementDelat: 0.35
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
