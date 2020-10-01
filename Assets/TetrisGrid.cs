@@ -36,6 +36,11 @@ public class TetrisGrid : MonoBehaviour
     
     public void Start()
     {
+        foreach (Transform child in this.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
         FigureTypes.Init();
 
         cells = new Cell[sizeX, sizeY];

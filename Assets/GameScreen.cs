@@ -8,7 +8,7 @@ public class GameScreen : MonoBehaviour
 {
     public GameObject grid;
     public GameObject leftButton, rightButton, downButton, rotateButton;
-    public GameObject clickableBack;
+    public GameObject restartButton;
     public float startFastHorizontalMovementDelat;
 
     private TetrisGrid gridScript;
@@ -25,6 +25,7 @@ public class GameScreen : MonoBehaviour
         rightButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, true);
         downButton.GetComponent<Button>().Set(SetFigureSpeed, ResetVariables, true);
         rotateButton.GetComponent<Button>().Set(null, RotateFigure, true);
+        restartButton.GetComponent<Button>().Set(null, Restart, true);
         //clickableBack.GetComponent<Button>().Set(null, ResetVariables, true);
     }
 
@@ -83,8 +84,14 @@ public class GameScreen : MonoBehaviour
         print("SetFigureSpeed");
         gridScript.SetFigureSpeed(speed);
     }
+
     void RotateFigure(bool _)
     {
         gridScript.RotateFigure();
+    }
+
+    void Restart(bool _)
+    {
+        gridScript.Start();
     }
 }
