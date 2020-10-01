@@ -7,7 +7,7 @@ public delegate void OperateFigure(bool side);
 public class GameScreen : MonoBehaviour
 {
     public GameObject grid;
-    public GameObject leftButton, rightButton, downButton;
+    public GameObject leftButton, rightButton, downButton, rotateButton;
     public GameObject clickableBack;
     public float startFastHorizontalMovementDelat;
 
@@ -24,6 +24,7 @@ public class GameScreen : MonoBehaviour
         leftButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, false);
         rightButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, true);
         downButton.GetComponent<Button>().Set(SetFigureSpeed, ResetVariables, true);
+        rotateButton.GetComponent<Button>().Set(null, RotateFigure, true);
         //clickableBack.GetComponent<Button>().Set(null, ResetVariables, true);
     }
 
@@ -81,5 +82,9 @@ public class GameScreen : MonoBehaviour
     {
         print("SetFigureSpeed");
         gridScript.SetFigureSpeed(speed);
+    }
+    void RotateFigure(bool _)
+    {
+        gridScript.RotateFigure();
     }
 }

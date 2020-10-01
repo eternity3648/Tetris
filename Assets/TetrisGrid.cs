@@ -167,7 +167,7 @@ public class TetrisGrid : MonoBehaviour
         }
     }
 
-    private void RotateFigure()
+    public void RotateFigure()
     {
         int[,] matrix = figScript.GetMatrix();
         GameObject testFigure = CreateFigure(matrix);
@@ -195,6 +195,7 @@ public class TetrisGrid : MonoBehaviour
         }
         Destroy(testFigure);
     }
+
 
     private GameObject CreateFigure(int[,] matrix)
     {
