@@ -11,8 +11,6 @@ public class GameScreen : MonoBehaviour
     public GameObject clickableBack;
     public float startFastHorizontalMovementDelat;
 
-
-    private OperateFigure MoveHorizontal;
     private TetrisGrid gridScript;
     private float fastHorizontalMovementDelay;
     private bool rightSidePressed, leftSidePressed;
@@ -20,13 +18,11 @@ public class GameScreen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MoveHorizontal = MoveFigure;
         gridScript = grid.GetComponent<TetrisGrid>();
         ResetVariables(true);
 
-        leftButton.GetComponent<Button>().Set(MoveHorizontal, ResetVariables, false);
-        rightButton.GetComponent<Button>().Set(MoveHorizontal, ResetVariables, true);
-        OperateFigure Back = ResetVariables;
+        leftButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, false);
+        rightButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, true);
         clickableBack.GetComponent<Button>().Set(null, ResetVariables, true);
     }
 
@@ -73,6 +69,7 @@ public class GameScreen : MonoBehaviour
 
     void MoveFigure(bool side)
     {
+        print("Smth");
         gridScript.MoveFigure(side);
         if (side) { rightSidePressed = true; }
         else { leftSidePressed = true; }
