@@ -154,6 +154,19 @@ public class TetrisGrid : MonoBehaviour
         }
     }
 
+    // speed true - fast, false - slow
+    public void SetFigureSpeed(bool speed)
+    {
+        if (speed)
+        {
+            currentFigureSpeed = fastFigureSpeed;
+        }
+        else
+        {
+            currentFigureSpeed = slowFigureSpeed;
+        }
+    }
+
     private void RotateFigure()
     {
         int[,] matrix = figScript.GetMatrix();
