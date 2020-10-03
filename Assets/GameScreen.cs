@@ -10,6 +10,7 @@ public class GameScreen : MonoBehaviour
     public GameObject leftButton, rightButton, downButton, rotateButton;
     public GameObject restartButton;
     public float startFastHorizontalMovementDelat;
+    public float nativeAspectRatio;
 
     private TetrisGrid gridScript;
     private float fastHorizontalMovementDelay;
@@ -18,6 +19,10 @@ public class GameScreen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        float aspectRatio = (Screen.width * 1.0f) / Screen.height;
+        float scale = aspectRatio / nativeAspectRatio;
+        this.transform.localScale = new Vector3(scale, scale);
+
         gridScript = grid.GetComponent<TetrisGrid>();
         ResetVariables(true);
 
