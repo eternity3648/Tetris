@@ -119,6 +119,7 @@ public class TetrisGrid : MonoBehaviour
                         });
                         Destroy(currentFigure);
                         currentFigure = null;
+                        CheckForBlocksRemoving();
                         LaunchStartFigure();
                     }
                 }
@@ -308,6 +309,31 @@ public class TetrisGrid : MonoBehaviour
 
         return canExist;
     }
+
+    private void CheckForBlocksRemoving()
+    {
+        for (int y = 0; y < sizeY; y++)
+        {
+            bool is_line_filled = true;
+            for (int x = 0; x < sizeX; x++)
+            {
+                if (cells[x, y].IsFree()) 
+                {
+                    is_line_filled = false;
+                    break;
+                }
+            }
+            if (is_line_filled) { RemoveBlocksFromLine(y); }
+        }
+    }
+
+    private void RemoveBlocksFromLine(int y)
+    {
+        for (int x = 0; x < sizeX; x++)
+        {
+            cells[x, y].DestroyCube();
+        }
+    }
 }
 
 public class Cell
@@ -317,5 +343,11 @@ public class Cell
     public bool IsFree()
     {
         return (occupyingCube == null);
+    }
+
+    public void DestroyCube()
+    {
+        GameObject.Destroy(occupyingCube);
+        occupyingCube = null;
     }
 }
