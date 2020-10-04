@@ -333,6 +333,23 @@ public class TetrisGrid : MonoBehaviour
         {
             cells[x, y].DestroyCube();
         }
+        ShiftHierBlocks(y);
+    }
+
+    private void ShiftHierBlocks(int y1)
+    {
+        for (int y = y1 - 1; y >= 0; y--)
+        {
+            for (int x = 0; x < sizeX; x++)
+            {
+                Vector2 coord = new Vector2(x, y);
+                if (!GetCellByCoord(coord).IsFree())
+                {
+                    GetCellByCoord(coord).DestroyCube();
+                    CreateBlockInCell(new Vector2(coord.x, coord.y + 1));
+                }
+            }
+        }
     }
 }
 
