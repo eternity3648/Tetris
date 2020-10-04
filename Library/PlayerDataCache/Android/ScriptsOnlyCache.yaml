@@ -42,25 +42,25 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9674}
+      Script: {instanceID: 9672}
     - Class: 114
-      Script: {instanceID: 9724}
+      Script: {instanceID: 9722}
     - Class: 114
-      Script: {instanceID: 9878}
+      Script: {instanceID: 9876}
     - Class: 114
-      Script: {instanceID: 10278}
+      Script: {instanceID: 10276}
     - Class: 114
-      Script: {instanceID: 10424}
+      Script: {instanceID: 10422}
     - Class: 114
-      Script: {instanceID: 10518}
+      Script: {instanceID: 10516}
     - Class: 114
-      Script: {instanceID: 10540}
+      Script: {instanceID: 10538}
     - Class: 114
-      Script: {instanceID: 10654}
+      Script: {instanceID: 10652}
     - Class: 114
-      Script: {instanceID: 11130}
+      Script: {instanceID: 11128}
     - Class: 114
-      Script: {instanceID: 11502}
+      Script: {instanceID: 11500}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -517,4 +517,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Repos/Tetris/Tetris/AndroidBuild/Tetris.apk
+  playerPath: C:/Repos/Tetris/Tetris/AndroidBuilds/Tetris 0.2.apk
