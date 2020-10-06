@@ -285,8 +285,6 @@ public class TetrisGrid : MonoBehaviour
     private Vector3 GetFigureStartPosition()
     {
         Vector2 startCoord = new Vector2(Math.Abs(sizeX /2) - 2, 0);
-        //print("startCoord");
-        //print(startCoord);
         return GetCellPosition(startCoord);
     }
 
@@ -313,6 +311,7 @@ public class TetrisGrid : MonoBehaviour
 
     private void CheckForBlocksRemoving()
     {
+        List<int> removedLinesIndices = new List<int>();
         for (int y = 0; y < sizeY; y++)
         {
             bool is_line_filled = true;
@@ -324,8 +323,13 @@ public class TetrisGrid : MonoBehaviour
                     break;
                 }
             }
-            if (is_line_filled) { RemoveBlocksFromLine(y); }
+            if (is_line_filled) 
+            {
+                RemoveBlocksFromLine(y);
+                removedLinesIndices.Add(y);
+            }
         }
+        ShiftBlocks(removedLinesIndices);
     }
 
     private void RemoveBlocksFromLine(int y)
@@ -334,20 +338,29 @@ public class TetrisGrid : MonoBehaviour
         {
             cells[x, y].DestroyCube();
         }
-        ShiftHierBlocks(y);
     }
 
-    private void ShiftHierBlocks(int y1)
+    private void ShiftBlocks(List<int> removedLinesIndices)
     {
-        for (int y = y1 - 1; y >= 0; y--)
+        for (int y = sizeY - 1; y >= 0; y--)
         {
-            for (int x = 0; x < sizeX; x++)
+            for (int x = sizeX - 1; x >= 0; x--)
             {
-                Vector2 coord = new Vector2(x, y);
-                if (!GetCellByCoord(coord).IsFree())
+                int removedLinesCounterUnder = 0;
+
+                removedLinesIndices.ForEach(delegate (int y1)
                 {
-                    GetCellByCoord(coord).DestroyCube();
-                    CreateBlockInCell(new Vector2(coord.x, coord.y + 1));
+                    if (y1 > y)
+                    {
+                        removedLinesCounterUnder++;
+                    }
+                });
+
+                Cell cell = GetCellByCoord(new Vector2(x, y));
+                if (!cell.IsFree() && removedLinesCounterUnder > 0)
+                {
+                    cell.DestroyCube();
+                    CreateBlockInCell(new Vector2(x, y + removedLinesCounterUnder));
                 }
             }
         }
