@@ -33,8 +33,6 @@ public class GameScreen : MonoBehaviour
         rotateButton.GetComponent<Button>().Set(null, RotateFigure, true);
         restartButton.GetComponent<Button>().Set(null, Restart, true);
         //clickableBack.GetComponent<Button>().Set(null, ResetVariables, true);
-
-        //leftButton.transform.DOScale(new Vector3(0, 0), 5);
     }
 
     void ResetVariables(bool _)

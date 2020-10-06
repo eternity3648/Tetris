@@ -404,7 +404,17 @@ public class Cell
 
     public void DestroyCube()
     {
-        GameObject.Destroy(occupyingCube);
+        GameObject cube = occupyingCube;
         occupyingCube = null;
+
+        void Destroy()
+        {
+            GameObject.Destroy(cube);
+        }
+
+        SpriteRenderer rend = cube.GetComponent<SpriteRenderer>();
+        Color color = rend.color;
+        color.a = 0;
+        rend.DOColor(color, 0.3f).OnComplete(Destroy);
     }
 }
