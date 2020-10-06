@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public delegate void OperateFigure(bool side);
 
@@ -32,6 +33,8 @@ public class GameScreen : MonoBehaviour
         rotateButton.GetComponent<Button>().Set(null, RotateFigure, true);
         restartButton.GetComponent<Button>().Set(null, Restart, true);
         //clickableBack.GetComponent<Button>().Set(null, ResetVariables, true);
+
+        //leftButton.transform.DOScale(new Vector3(0, 0), 5);
     }
 
     void ResetVariables(bool _)
@@ -58,22 +61,6 @@ public class GameScreen : MonoBehaviour
         {
             gridScript.MoveFigure(false);
         }
-        //else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow))
-        //{
-        //    fastHorizontalMovementDelay = 0;
-        //}
-        //else if (Input.GetKeyDown(KeyCode.DownArrow))
-        //{
-        //    currentFigureSpeed = fastFigureSpeed;
-        //}
-        //else if (Input.GetKeyUp(KeyCode.DownArrow))
-        //{
-        //    currentFigureSpeed = slowFigureSpeed;
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    RotateFigure();
-        //}
     }
 
     void MoveFigure(bool side)
