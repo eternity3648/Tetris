@@ -17,6 +17,7 @@ public class TetrisGrid : MonoBehaviour
     public float fastFigureSpeed;
     public float delayBeforeFigureLanding;
     public float startFastHorizontalMovementDelat;
+    public float fallAnimationDelay;
 
     private Vector3 startPositon;
     private Vector2 currentFigureCoord;
@@ -121,7 +122,6 @@ public class TetrisGrid : MonoBehaviour
                         Destroy(currentFigure);
                         currentFigure = null;
                         CheckForBlocksRemoving();
-                        LaunchStartFigure();
                     }
                 }
             }
@@ -342,12 +342,13 @@ public class TetrisGrid : MonoBehaviour
 
     private void ShiftBlocks(List<int> removedLinesIndices)
     {
+        bool isAnimationFirst = false;
+
         for (int y = sizeY - 1; y >= 0; y--)
         {
             for (int x = sizeX - 1; x >= 0; x--)
             {
                 int removedLinesCounterUnder = 0;
-
                 removedLinesIndices.ForEach(delegate (int y1)
                 {
                     if (y1 > y)
@@ -360,10 +361,35 @@ public class TetrisGrid : MonoBehaviour
                 if (!cell.IsFree() && removedLinesCounterUnder > 0)
                 {
                     cell.DestroyCube();
-                    CreateBlockInCell(new Vector2(x, y + removedLinesCounterUnder));
+                    Vector2 newCoord = new Vector2(x, y + removedLinesCounterUnder);
+                    CreateBlockInCell(newCoord);
+                    TweenCallback OnFinish = LaunchStartFigure;
+                    if (!isAnimationFirst) 
+                    {
+                        isAnimationFirst = true;
+                    } 
+                    else
+                    {
+                        OnFinish = null;
+                    }
+                    AddCubeFallAnimation(GetCellByCoord(newCoord).occupyingCube, removedLinesCounterUnder, OnFinish);
                 }
             }
         }
+
+        if (!isAnimationFirst)
+        {
+            LaunchStartFigure();
+        }
+    }
+
+    private void AddCubeFallAnimation(GameObject cube, int linesFallCount, TweenCallback OnFinish)
+    {
+        Transform tran = cube.transform;
+        Vector3 targetPosition = tran.localPosition;
+        Vector3 startPosition = targetPosition + new Vector3(0, cellSize.y * linesFallCount);
+        tran.localPosition = startPosition;
+        tran.DOLocalMoveY(targetPosition.y, fallAnimationDelay).OnComplete(OnFinish);
     }
 }
 

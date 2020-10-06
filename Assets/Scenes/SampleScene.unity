@@ -1267,3 +1267,4 @@ MonoBehaviour:
   fastFigureSpeed: 25
   delayBeforeFigureLanding: 0.35
   startFastHorizontalMovementDelat: 0.25
+  fallAnimationDelay: 0.3
