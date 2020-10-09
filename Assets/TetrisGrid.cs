@@ -15,6 +15,7 @@ public class TetrisGrid : MonoBehaviour
     public Vector3 cellSize;
     public float slowFigureSpeed;
     public float fastFigureSpeed;
+    public float superFastFigureSpeed;
     public float delayBeforeFigureLanding;
     public float startFastHorizontalMovementDelat;
     public float fallAnimationDelay;
@@ -146,6 +147,8 @@ public class TetrisGrid : MonoBehaviour
             currentFigureCoord = new Vector2(1000, 1000);
             CheckIfFigureCanExistInCoord(figScript, GetCellСoordByPosition(startPosition));
         }
+
+        SetFigureSpeed(1);
     }
 
     // direction true - right, false - left
@@ -161,17 +164,26 @@ public class TetrisGrid : MonoBehaviour
         }
     }
 
-    // speed true - fast, false - slow
-    public void SetFigureSpeed(bool speed)
+    // 1 - slow, 2 - fast, 3 - superfast and unstoppable
+    public void SetFigureSpeed(int speed)
     {
-        if (speed)
-        {
-            currentFigureSpeed = fastFigureSpeed;
-        }
-        else
+        if (speed == 1)
         {
             currentFigureSpeed = slowFigureSpeed;
         }
+        else if (speed == 2)
+        {
+            currentFigureSpeed = fastFigureSpeed;
+        }
+        else if (speed == 3)
+        {
+            currentFigureSpeed = superFastFigureSpeed;
+        }
+    }
+
+    public bool CanFigureSpeedBeChanged()
+    {
+        return currentFigureSpeed != superFastFigureSpeed;
     }
 
     public void RotateFigure()

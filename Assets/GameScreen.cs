@@ -37,7 +37,7 @@ public class GameScreen : MonoBehaviour
 
         leftButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, false);
         rightButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, true);
-        downButton.GetComponent<Button>().Set(SetFigureSpeed, ResetVariables, true);
+        //downButton.GetComponent<Button>().Set(SetFigureSpeed, ResetVariables, true);
         rotateButton.GetComponent<Button>().Set(null, RotateFigure, true);
         restartButton.GetComponent<Button>().Set(null, Restart, true);
         //clickableBack.GetComponent<Button>().Set(null, ResetVariables, true);
@@ -48,7 +48,7 @@ public class GameScreen : MonoBehaviour
         fastHorizontalMovementDelay = 0;
         rightSidePressed = false;
         leftSidePressed = false;
-        SetFigureSpeed(false);
+        SetFigureSpeed(1);
         //print("ResetVariables");
     }
 
@@ -78,6 +78,8 @@ public class GameScreen : MonoBehaviour
         {
             mousePressed = false;
             mouseMoved = new Vector3();
+            if (gridScript.CanFigureSpeedBeChanged())
+                SetFigureSpeed(1);
         }
 
         if (mousePressed)
@@ -108,6 +110,17 @@ public class GameScreen : MonoBehaviour
                 }
             }
 
+            if (mouseMoved.y <= -40 && gridScript.CanFigureSpeedBeChanged())
+            {
+                SetFigureSpeed(2);
+            }
+
+            print(posDiff.y);
+            if (posDiff.y < -15)
+            {
+                SetFigureSpeed(3);
+            }
+
             lastMousePosition = Input.mousePosition;
         }
 
@@ -132,9 +145,8 @@ public class GameScreen : MonoBehaviour
         fastHorizontalMovementDelay = startFastHorizontalMovementDelat;
     }
 
-    void SetFigureSpeed(bool speed)
+    void SetFigureSpeed(int speed)
     {
-        print("SetFigureSpeed");
         gridScript.SetFigureSpeed(speed);
     }
 
