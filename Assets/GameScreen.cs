@@ -13,8 +13,9 @@ public class GameScreen : MonoBehaviour
     public GameObject restartButton;
     public float startFastHorizontalMovementDelat;
     public float nativeAspectRatio;
-    public float dragSpeed = 40;
-    public float superAccelerationDragSpeed = 15;
+    public float horizontalDragSpeed;
+    public float verticalDragSpeed;
+    public float superAccelerationDragSpeed;
 
     private TetrisGrid gridScript;
     private float fastHorizontalMovementDelay;
@@ -39,8 +40,10 @@ public class GameScreen : MonoBehaviour
 
         if (Application.platform == RuntimePlatform.Android)
         {
-            dragSpeed *= 3.5f;
-            superAccelerationDragSpeed *= 3.5f;
+            horizontalDragSpeed *= 2.8f;
+            verticalDragSpeed *= 2.8f;
+            superAccelerationDragSpeed *= 2.8f;
+
         }
 
         //leftButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, false);
@@ -101,7 +104,7 @@ public class GameScreen : MonoBehaviour
             if (posDiff.magnitude < 1) { posDiff = new Vector3(); }
             mouseMoved += posDiff;
 
-            if (Mathf.Abs(mouseMoved.x) >= dragSpeed)
+            if (Mathf.Abs(mouseMoved.x) >= horizontalDragSpeed && !wasFigureAcceleratedVertically)
             {
                 wasFigureMoved = true;
                 int turnsCount = 0;
@@ -109,14 +112,14 @@ public class GameScreen : MonoBehaviour
 
                 if (mouseMoved.x > 0)
                 {
-                    turnsCount = (int)Mathf.Round(mouseMoved.x / dragSpeed);
-                    mouseMoved.x -= dragSpeed * turnsCount;
+                    turnsCount = (int)Mathf.Round(mouseMoved.x / horizontalDragSpeed);
+                    mouseMoved.x -= horizontalDragSpeed * turnsCount;
                 }
                 else
                 {
                     turnSide = false;
-                    turnsCount = (int)Mathf.Round(Mathf.Abs(mouseMoved.x) / dragSpeed);
-                    mouseMoved.x += dragSpeed * turnsCount;
+                    turnsCount = (int)Mathf.Round(Mathf.Abs(mouseMoved.x) / horizontalDragSpeed);
+                    mouseMoved.x += horizontalDragSpeed * turnsCount;
                 }
 
                 for (int i = 0; i < turnsCount; i++)
@@ -125,15 +128,16 @@ public class GameScreen : MonoBehaviour
                 }
             }
 
-
+            print(-superAccelerationDragSpeed);
             if (posDiff.y < -superAccelerationDragSpeed && !wasFigureAcceleratedVertically)
             {
+                print(posDiff.y);
                 wasFigureMoved = true;
                 wasFigureAcceleratedVertically = true;
                 SetFigureSpeed(3);
             }
 
-            if (mouseMoved.y <= -dragSpeed && gridScript.CanFigureSpeedBeChanged() && !wasFigureAcceleratedVertically)
+            if (mouseMoved.y <= -verticalDragSpeed && gridScript.CanFigureSpeedBeChanged() && !wasFigureAcceleratedVertically)
             {
                 wasFigureMoved = true;
                 wasFigureAcceleratedVertically = true;

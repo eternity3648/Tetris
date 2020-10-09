@@ -276,7 +276,9 @@ MonoBehaviour:
   restartButton: {fileID: 700512152}
   startFastHorizontalMovementDelat: 0.35
   nativeAspectRatio: 0.5625
-  horizontalDragSpeed: 0
+  horizontalDragSpeed: 40
+  verticalDragSpeed: 60
+  superAccelerationDragSpeed: 20
 --- !u!1 &133382903
 GameObject:
   m_ObjectHideFlags: 0
