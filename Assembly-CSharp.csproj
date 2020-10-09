@@ -75,6 +75,7 @@
     <Compile Include="Assets\FigureTypes.cs" />
     <Compile Include="Assets\GameScreen.cs" />
     <Compile Include="Assets\Main.cs" />
+    <Compile Include="Assets\Swipe.cs" />
     <Compile Include="Assets\TetrisGrid.cs" />
     <None Include="Assets\DOTween\readme.txt" />
     <Reference Include="Unity.Timeline.Editor">

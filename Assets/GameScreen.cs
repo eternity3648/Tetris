@@ -8,14 +8,19 @@ public delegate void OperateFigure(bool side);
 public class GameScreen : MonoBehaviour
 {
     public GameObject grid;
+    public Swipe swipeControls;
     public GameObject leftButton, rightButton, downButton, rotateButton;
     public GameObject restartButton;
     public float startFastHorizontalMovementDelat;
     public float nativeAspectRatio;
+    public float horizontalDragSpeed;
 
     private TetrisGrid gridScript;
     private float fastHorizontalMovementDelay;
     private bool rightSidePressed, leftSidePressed;
+    private Vector3 mouseMoved;
+    private Vector3 lastMousePosition;
+    private bool mousePressed = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +28,9 @@ public class GameScreen : MonoBehaviour
         float aspectRatio = (Screen.width * 1.0f) / Screen.height;
         float scale = aspectRatio / nativeAspectRatio;
         this.transform.localScale = new Vector3(scale, scale);
+        Vector3 lastMousePosition = Input.mousePosition;
+        horizontalDragSpeed = 10;
+        mouseMoved = new Vector3();
 
         gridScript = grid.GetComponent<TetrisGrid>();
         ResetVariables(true);
@@ -59,6 +67,61 @@ public class GameScreen : MonoBehaviour
         {
             gridScript.MoveFigure(false);
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            mousePressed = true;
+            lastMousePosition = Input.mousePosition;
+
+        } 
+        else if (Input.GetMouseButtonUp(0))
+        {
+            mousePressed = false;
+            mouseMoved = new Vector3();
+        }
+
+        if (mousePressed)
+        {
+            Vector3 posDiff = Input.mousePosition - lastMousePosition;
+            mouseMoved += posDiff;
+
+            if (Mathf.Abs(mouseMoved.x) >= 40)
+            {
+                int turnsCount = 0;
+                bool turnSide = true;
+
+                if (mouseMoved.x > 0)
+                {
+                    turnsCount = (int)Mathf.Round(mouseMoved.x / 40);
+                    mouseMoved.x -= 40 * turnsCount;
+                }
+                else
+                {
+                    turnSide = false;
+                    turnsCount = (int)Mathf.Round(Mathf.Abs(mouseMoved.x) / 40);
+                    mouseMoved.x += 40 * turnsCount;
+                }
+
+                for (int i = 0; i < turnsCount; i++)
+                {
+                    gridScript.MoveFigure(turnSide);
+                }
+            }
+
+            lastMousePosition = Input.mousePosition;
+        }
+
+        //if ((Input.mousePosition - lastMousePosition).magnitude >
+
+        //Debug.Log("Yeah");
+        //if (swipeControls.SwipeLeft)
+        //    Debug.Log("Left");
+        //if (swipeControls.SwipeRight)
+        //    Debug.Log("Right");
+        //if (swipeControls.SwipeUp)
+        //    Debug.Log("Up");
+        //if (swipeControls.SwipeDown)
+        //    Debug.Log("Down");
     }
 
     void MoveFigure(bool side)
