@@ -87,7 +87,8 @@ public class TetrisGrid : MonoBehaviour
         if (currentFigure != null && delta < 0.2f)
         {
             Vector3 previousFigurePosition = currentFigure.transform.localPosition;
-            Vector3 figurePosition = previousFigurePosition + new Vector3(0, -currentFigureSpeed * Time.deltaTime, 0);
+            Vector3 posDiff = new Vector3(0, -currentFigureSpeed * Time.deltaTime, 0);
+            Vector3 figurePosition = previousFigurePosition + posDiff;
 
             Vector2 coord = GetCellСoordByPosition(figurePosition);
             Cell cell = GetCellByCoord(coord);
@@ -96,6 +97,7 @@ public class TetrisGrid : MonoBehaviour
             {
                 currentFigureCoord = coord;
                 currentFigure.transform.localPosition = figurePosition;
+                currentDelayBeforeFigureLanding = 0;
             }
             else if (currentFigureCoord == new Vector2(1000, 1000))
             {
@@ -104,18 +106,37 @@ public class TetrisGrid : MonoBehaviour
             }
             else
             {
-                if (currentDelayBeforeFigureLanding == 0 && currentFigureSpeed != fastFigureSpeed)
+                void LandFigure()
+                {
+                    coord = GetCellСoordByPosition(previousFigurePosition);
+                    currentDelayBeforeFigureLanding = 0;
+                    List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+
+                    coords.ForEach(delegate (Vector2 blockCoord)
+                    {
+                        CreateBlockInCell(blockCoord);
+                    });
+                    Destroy(currentFigure);
+                    currentFigure = null;
+                    CheckForBlocksRemoving();
+                }
+
+                if (currentFigureSpeed == superFastFigureSpeed)
+                    LandFigure();
+                else if (currentDelayBeforeFigureLanding == 0)
                 {
                     currentDelayBeforeFigureLanding = delayBeforeFigureLanding;
                 }
                 else
                 {
                     currentDelayBeforeFigureLanding -= delta;
-                    if (currentDelayBeforeFigureLanding <=0)
+
+                    if (currentDelayBeforeFigureLanding <= 0)
                     {
-                        currentDelayBeforeFigureLanding = 0;
                         coord = GetCellСoordByPosition(previousFigurePosition);
+                        currentDelayBeforeFigureLanding = 0;
                         List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+
                         coords.ForEach(delegate (Vector2 blockCoord)
                         {
                             CreateBlockInCell(blockCoord);
@@ -178,6 +199,7 @@ public class TetrisGrid : MonoBehaviour
         else if (speed == 3)
         {
             currentFigureSpeed = superFastFigureSpeed;
+            print("SetFast");
         }
     }
 

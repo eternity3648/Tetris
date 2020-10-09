@@ -13,7 +13,8 @@ public class GameScreen : MonoBehaviour
     public GameObject restartButton;
     public float startFastHorizontalMovementDelat;
     public float nativeAspectRatio;
-    public float horizontalDragSpeed;
+    public float dragSpeed = 40;
+    public float superAccelerationDragSpeed = 15;
 
     private TetrisGrid gridScript;
     private float fastHorizontalMovementDelay;
@@ -22,6 +23,7 @@ public class GameScreen : MonoBehaviour
     private Vector3 lastMousePosition;
     private bool mousePressed = false;
     private bool wasFigureMoved = false;
+    private bool wasFigureAcceleratedVertically = false;
 
     // Start is called before the first frame update
     void Start()
@@ -30,11 +32,16 @@ public class GameScreen : MonoBehaviour
         float scale = aspectRatio / nativeAspectRatio;
         this.transform.localScale = new Vector3(scale, scale);
         Vector3 lastMousePosition = Input.mousePosition;
-        horizontalDragSpeed = 10;
         mouseMoved = new Vector3();
 
         gridScript = grid.GetComponent<TetrisGrid>();
         ResetVariables(true);
+
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            dragSpeed *= 3.5f;
+            superAccelerationDragSpeed *= 3.5f;
+        }
 
         //leftButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, false);
         //rightButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, true);
@@ -85,14 +92,16 @@ public class GameScreen : MonoBehaviour
             Vector3 posDiff = Input.mousePosition - lastMousePosition;
             if (!wasFigureMoved) RotateFigure(true);
             wasFigureMoved = false;
+            wasFigureAcceleratedVertically = false;
         }
 
         if (mousePressed)
         {
             Vector3 posDiff = Input.mousePosition - lastMousePosition;
+            if (posDiff.magnitude < 1) { posDiff = new Vector3(); }
             mouseMoved += posDiff;
 
-            if (Mathf.Abs(mouseMoved.x) >= 40)
+            if (Mathf.Abs(mouseMoved.x) >= dragSpeed)
             {
                 wasFigureMoved = true;
                 int turnsCount = 0;
@@ -100,14 +109,14 @@ public class GameScreen : MonoBehaviour
 
                 if (mouseMoved.x > 0)
                 {
-                    turnsCount = (int)Mathf.Round(mouseMoved.x / 40);
-                    mouseMoved.x -= 40 * turnsCount;
+                    turnsCount = (int)Mathf.Round(mouseMoved.x / dragSpeed);
+                    mouseMoved.x -= dragSpeed * turnsCount;
                 }
                 else
                 {
                     turnSide = false;
-                    turnsCount = (int)Mathf.Round(Mathf.Abs(mouseMoved.x) / 40);
-                    mouseMoved.x += 40 * turnsCount;
+                    turnsCount = (int)Mathf.Round(Mathf.Abs(mouseMoved.x) / dragSpeed);
+                    mouseMoved.x += dragSpeed * turnsCount;
                 }
 
                 for (int i = 0; i < turnsCount; i++)
@@ -116,17 +125,19 @@ public class GameScreen : MonoBehaviour
                 }
             }
 
-            if (mouseMoved.y <= -40 && gridScript.CanFigureSpeedBeChanged())
+
+            if (posDiff.y < -superAccelerationDragSpeed && !wasFigureAcceleratedVertically)
             {
                 wasFigureMoved = true;
-                SetFigureSpeed(2);
+                wasFigureAcceleratedVertically = true;
+                SetFigureSpeed(3);
             }
 
-            print(posDiff.y);
-            if (posDiff.y < -15)
+            if (mouseMoved.y <= -dragSpeed && gridScript.CanFigureSpeedBeChanged() && !wasFigureAcceleratedVertically)
             {
                 wasFigureMoved = true;
-                SetFigureSpeed(3);
+                wasFigureAcceleratedVertically = true;
+                SetFigureSpeed(2);
             }
 
             lastMousePosition = Input.mousePosition;
