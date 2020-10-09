@@ -1268,7 +1268,7 @@ MonoBehaviour:
   cellSize: {x: 1.2, y: 1.2, z: 0}
   slowFigureSpeed: 3
   fastFigureSpeed: 20
-  superFastFigureSpeed: 40
+  superFastFigureSpeed: 60
   delayBeforeFigureLanding: 0.35
   startFastHorizontalMovementDelat: 0.25
   fallAnimationDelay: 0.3

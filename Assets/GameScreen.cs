@@ -21,6 +21,7 @@ public class GameScreen : MonoBehaviour
     private Vector3 mouseMoved;
     private Vector3 lastMousePosition;
     private bool mousePressed = false;
+    private bool wasFigureMoved = false;
 
     // Start is called before the first frame update
     void Start()
@@ -35,12 +36,12 @@ public class GameScreen : MonoBehaviour
         gridScript = grid.GetComponent<TetrisGrid>();
         ResetVariables(true);
 
-        leftButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, false);
-        rightButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, true);
-        //downButton.GetComponent<Button>().Set(SetFigureSpeed, ResetVariables, true);
-        rotateButton.GetComponent<Button>().Set(null, RotateFigure, true);
-        restartButton.GetComponent<Button>().Set(null, Restart, true);
-        //clickableBack.GetComponent<Button>().Set(null, ResetVariables, true);
+        //leftButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, false);
+        //rightButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, true);
+        ////downButton.GetComponent<Button>().Set(SetFigureSpeed, ResetVariables, true);
+        //rotateButton.GetComponent<Button>().Set(null, RotateFigure, true);
+        //restartButton.GetComponent<Button>().Set(null, Restart, true);
+        ////clickableBack.GetComponent<Button>().Set(null, ResetVariables, true);
     }
 
     void ResetVariables(bool _)
@@ -80,6 +81,10 @@ public class GameScreen : MonoBehaviour
             mouseMoved = new Vector3();
             if (gridScript.CanFigureSpeedBeChanged())
                 SetFigureSpeed(1);
+
+            Vector3 posDiff = Input.mousePosition - lastMousePosition;
+            if (!wasFigureMoved) RotateFigure(true);
+            wasFigureMoved = false;
         }
 
         if (mousePressed)
@@ -89,6 +94,7 @@ public class GameScreen : MonoBehaviour
 
             if (Mathf.Abs(mouseMoved.x) >= 40)
             {
+                wasFigureMoved = true;
                 int turnsCount = 0;
                 bool turnSide = true;
 
@@ -112,12 +118,14 @@ public class GameScreen : MonoBehaviour
 
             if (mouseMoved.y <= -40 && gridScript.CanFigureSpeedBeChanged())
             {
+                wasFigureMoved = true;
                 SetFigureSpeed(2);
             }
 
             print(posDiff.y);
             if (posDiff.y < -15)
             {
+                wasFigureMoved = true;
                 SetFigureSpeed(3);
             }
 
