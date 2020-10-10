@@ -54,12 +54,7 @@ public class GameScreen : MonoBehaviour
             superAccelerationDragSpeed *= 2.8f;
         }
 
-        //leftButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, false);
-        //rightButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, true);
-        ////downButton.GetComponent<Button>().Set(SetFigureSpeed, ResetVariables, true);
-        //rotateButton.GetComponent<Button>().Set(null, RotateFigure, true);
-        //restartButton.GetComponent<Button>().Set(null, Restart, true);
-        ////clickableBack.GetComponent<Button>().Set(null, ResetVariables, true);
+        restartButton.GetComponent<Button>().Set(null, Restart, true);
     }
 
     void ResetVariables(bool _)
@@ -68,20 +63,24 @@ public class GameScreen : MonoBehaviour
         rightSidePressed = false;
         leftSidePressed = false;
         SetFigureSpeed(1);
+
+        if (scoreTweener != null) scoreTweener.Kill(true);
+        scoreText.text = "0";
         score = 0;
         scoreForTween = 0;
-        OnLineDestroy(0);
-        //print("ResetVariables");
     }
 
     void OnLineDestroy(int lineCount)
     {
-        if (scoreTweener != null)  scoreTweener.Kill(false); 
-        score += pointsForDestroyingLines[lineCount];
-        scoreTweener = DOTween.To(x => scoreForTween = (int)x, scoreForTween, score, 1.5f)
-                               .SetEase(Ease.OutCubic)
-                               .SetAutoKill(false);
-        scoreTweener.OnUpdate(() => scoreText.text = scoreForTween.ToString());
+        if (lineCount > 0)
+        {
+            if (scoreTweener != null) scoreTweener.Kill(true);
+            score += pointsForDestroyingLines[lineCount];
+            scoreTweener = DOTween.To(x => scoreForTween = (int)x, scoreForTween, score, 1.5f)
+                                   .SetEase(Ease.OutCubic)
+                                   .SetAutoKill(false);
+            scoreTweener.OnUpdate(() => scoreText.text = scoreForTween.ToString());
+        }
     }
 
     // Update is called once per frame
@@ -165,18 +164,6 @@ public class GameScreen : MonoBehaviour
 
             lastMousePosition = Input.mousePosition;
         }
-
-        //if ((Input.mousePosition - lastMousePosition).magnitude >
-
-        //Debug.Log("Yeah");
-        //if (swipeControls.SwipeLeft)
-        //    Debug.Log("Left");
-        //if (swipeControls.SwipeRight)
-        //    Debug.Log("Right");
-        //if (swipeControls.SwipeUp)
-        //    Debug.Log("Up");
-        //if (swipeControls.SwipeDown)
-        //    Debug.Log("Down");
     }
 
     void MoveFigure(bool side)
@@ -199,6 +186,7 @@ public class GameScreen : MonoBehaviour
 
     void Restart(bool _)
     {
+        ResetVariables(true);
         gridScript.Start();
     }
 }
