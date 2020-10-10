@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public delegate void OperateFigure(bool side);
@@ -11,12 +12,13 @@ public class GameScreen : MonoBehaviour
     public Swipe swipeControls;
     public GameObject leftButton, rightButton, downButton, rotateButton;
     public GameObject restartButton;
+    public Text scoreText;
     public float startFastHorizontalMovementDelat;
     public float nativeAspectRatio;
     public float horizontalDragSpeed;
     public float verticalDragSpeed;
     public float superAccelerationDragSpeed;
-    public int[] pointsForDestroyingLines = new int[4];
+    public int[] pointsForDestroyingLines = new int[5];
 
     private TetrisGrid gridScript;
     private float fastHorizontalMovementDelay;
@@ -26,6 +28,7 @@ public class GameScreen : MonoBehaviour
     private bool mousePressed = false;
     private bool wasFigureMoved = false;
     private bool wasFigureAcceleratedVertically = false;
+    private int score = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -62,12 +65,15 @@ public class GameScreen : MonoBehaviour
         rightSidePressed = false;
         leftSidePressed = false;
         SetFigureSpeed(1);
+        score = 0;
+        OnLineDestroy(0);
         //print("ResetVariables");
     }
 
     void OnLineDestroy(int lineCount)
     {
-        print(lineCount);
+        score += pointsForDestroyingLines[lineCount];
+        scoreText.text = score.ToString();
     }
 
     // Update is called once per frame
