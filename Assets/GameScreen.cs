@@ -16,6 +16,7 @@ public class GameScreen : MonoBehaviour
     public float horizontalDragSpeed;
     public float verticalDragSpeed;
     public float superAccelerationDragSpeed;
+    public int[] pointsForDestroyingLines = new int[4];
 
     private TetrisGrid gridScript;
     private float fastHorizontalMovementDelay;
@@ -36,6 +37,8 @@ public class GameScreen : MonoBehaviour
         mouseMoved = new Vector3();
 
         gridScript = grid.GetComponent<TetrisGrid>();
+        TweenCallback<int> callb = OnLineDestroy;
+        gridScript.SetOnLinesDestroy(callb);
         ResetVariables(true);
 
         if (Application.platform == RuntimePlatform.Android)
@@ -43,7 +46,6 @@ public class GameScreen : MonoBehaviour
             horizontalDragSpeed *= 2.8f;
             verticalDragSpeed *= 2.8f;
             superAccelerationDragSpeed *= 2.8f;
-
         }
 
         //leftButton.GetComponent<Button>().Set(MoveFigure, ResetVariables, false);
@@ -61,6 +63,11 @@ public class GameScreen : MonoBehaviour
         leftSidePressed = false;
         SetFigureSpeed(1);
         //print("ResetVariables");
+    }
+
+    void OnLineDestroy(int lineCount)
+    {
+        print(lineCount);
     }
 
     // Update is called once per frame
@@ -128,10 +135,8 @@ public class GameScreen : MonoBehaviour
                 }
             }
 
-            print(-superAccelerationDragSpeed);
             if (posDiff.y < -superAccelerationDragSpeed && !wasFigureAcceleratedVertically)
             {
-                print(posDiff.y);
                 wasFigureMoved = true;
                 wasFigureAcceleratedVertically = true;
                 SetFigureSpeed(3);

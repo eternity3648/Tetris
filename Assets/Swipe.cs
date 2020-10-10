@@ -23,7 +23,6 @@ public class Swipe : MonoBehaviour
         #region Standalone Inputs
         if (Input.GetMouseButtonDown(0))
         {
-            print("Clicked");
             tap = true;
             isDraging = true;
             startTouch = Input.mousePosition;

@@ -27,6 +27,7 @@ public class TetrisGrid : MonoBehaviour
     private Cell currentCell;
     private float currentFigureSpeed;
     private float currentDelayBeforeFigureLanding;
+    private TweenCallback<int> OnLineDestroy;
     float fastHorizontalMovementDelay;
 
     private enum Sides
@@ -199,13 +200,17 @@ public class TetrisGrid : MonoBehaviour
         else if (speed == 3)
         {
             currentFigureSpeed = superFastFigureSpeed;
-            print("SetFast");
         }
     }
 
     public bool CanFigureSpeedBeChanged()
     {
         return currentFigureSpeed != superFastFigureSpeed;
+    }
+
+    public void SetOnLinesDestroy(TweenCallback<int> OnDestroy)
+    {
+        OnLineDestroy = OnDestroy;
     }
 
     public void RotateFigure()
@@ -364,6 +369,7 @@ public class TetrisGrid : MonoBehaviour
             }
         }
         ShiftBlocks(removedLinesIndices);
+        OnLineDestroy(removedLinesIndices.Count);
     }
 
     private void RemoveBlocksFromLine(int y)
