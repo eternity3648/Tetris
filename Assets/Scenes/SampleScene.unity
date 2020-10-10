@@ -278,7 +278,7 @@ MonoBehaviour:
   nativeAspectRatio: 0.5625
   horizontalDragSpeed: 40
   verticalDragSpeed: 60
-  superAccelerationDragSpeed: 20
+  superAccelerationDragSpeed: 19
 --- !u!1 &133382903
 GameObject:
   m_ObjectHideFlags: 0
