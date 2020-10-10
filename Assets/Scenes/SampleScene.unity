@@ -1349,7 +1349,7 @@ MonoBehaviour:
   figurePrefab: {fileID: 5379771758226413113, guid: dda6a26933d7e8943b6cc593bfb90457,
     type: 3}
   cellSize: {x: 1.2, y: 1.2, z: 0}
-  slowFigureSpeed: 3
+  slowFigureSpeed: 2.3
   fastFigureSpeed: 20
   superFastFigureSpeed: 60
   delayBeforeFigureLanding: 0.35

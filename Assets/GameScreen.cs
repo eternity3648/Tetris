@@ -28,7 +28,10 @@ public class GameScreen : MonoBehaviour
     private bool mousePressed = false;
     private bool wasFigureMoved = false;
     private bool wasFigureAcceleratedVertically = false;
+    private Tweener scoreTweener;
     private int score = 0;
+    private int scoreForTween = 0;
+    private int transitionValueForTween = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -66,14 +69,19 @@ public class GameScreen : MonoBehaviour
         leftSidePressed = false;
         SetFigureSpeed(1);
         score = 0;
+        scoreForTween = 0;
         OnLineDestroy(0);
         //print("ResetVariables");
     }
 
     void OnLineDestroy(int lineCount)
     {
+        if (scoreTweener != null)  scoreTweener.Kill(false); 
         score += pointsForDestroyingLines[lineCount];
-        scoreText.text = score.ToString();
+        scoreTweener = DOTween.To(x => scoreForTween = (int)x, scoreForTween, score, 1.5f)
+                               .SetEase(Ease.OutCubic)
+                               .SetAutoKill(false);
+        scoreTweener.OnUpdate(() => scoreText.text = scoreForTween.ToString());
     }
 
     // Update is called once per frame
