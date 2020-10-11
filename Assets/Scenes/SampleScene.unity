@@ -1355,6 +1355,8 @@ MonoBehaviour:
   delayBeforeFigureLanding: 0.35
   startFastHorizontalMovementDelat: 0.25
   fallAnimationDelay: 0.3
+  speedCoeffIncrease: 0.2
+  speedCoeffIncreaseTime: 30
 --- !u!1 &1723890479
 GameObject:
   m_ObjectHideFlags: 0

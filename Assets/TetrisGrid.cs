@@ -19,6 +19,7 @@ public class TetrisGrid : MonoBehaviour
     public float delayBeforeFigureLanding;
     public float startFastHorizontalMovementDelat;
     public float fallAnimationDelay;
+    public float speedCoeffIncrease, speedCoeffIncreaseTime;
 
     private Vector3 startPositon;
     private Vector2 currentFigureCoord;
@@ -28,6 +29,8 @@ public class TetrisGrid : MonoBehaviour
     private float currentFigureSpeed;
     private float currentDelayBeforeFigureLanding;
     private TweenCallback<int> OnLineDestroy;
+    private float speedCoeff = 1.0f;
+    private float speedCoeffIncreaseCurrentTime = 0;
     float fastHorizontalMovementDelay;
 
     private enum Sides
@@ -51,6 +54,8 @@ public class TetrisGrid : MonoBehaviour
         startPositon = new Vector3(-cellSize.x * (sizeX / 2), cellSize.y * (sizeX / 2));
         currentDelayBeforeFigureLanding = 0;
         fastHorizontalMovementDelay = 0;
+        speedCoeff = 1.0f;
+        speedCoeffIncreaseCurrentTime = 0;
 
         for (int x = 0; x < sizeX; x++)
         {
@@ -84,11 +89,18 @@ public class TetrisGrid : MonoBehaviour
     public void Update()
     {
         float delta = Time.deltaTime;
+        speedCoeffIncreaseCurrentTime += delta;
+
+        if (speedCoeffIncreaseCurrentTime >= speedCoeffIncreaseTime)
+        {
+            speedCoeff += speedCoeffIncrease;
+            speedCoeffIncreaseCurrentTime -= speedCoeffIncreaseTime;
+        }
 
         if (currentFigure != null && delta < 0.2f)
         {
             Vector3 previousFigurePosition = currentFigure.transform.localPosition;
-            Vector3 posDiff = new Vector3(0, -currentFigureSpeed * Time.deltaTime, 0);
+            Vector3 posDiff = new Vector3(0, -currentFigureSpeed * speedCoeff * Time.deltaTime, 0);
             Vector3 figurePosition = previousFigurePosition + posDiff;
 
             Vector2 coord = GetCellСoordByPosition(figurePosition);
