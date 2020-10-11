@@ -122,7 +122,6 @@ public class TetrisGrid : MonoBehaviour
             {
                 void LandFigure()
                 {
-                    coord = GetCellСoordByPosition(previousFigurePosition);
                     int coordX = (int)coord.x;
                     int coordY = (int)coord.y;
 
