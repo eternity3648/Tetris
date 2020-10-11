@@ -12,13 +12,18 @@ public class Figure : MonoBehaviour
     public Vector2 centerCoord = new Vector2(0, 0);
     public Vector3 centerPosition;
 
-    public void Set(int[,] matrix, GameObject cube, Vector3 cellSize)
+    private int index;
+    private Sprite sprite;
+
+    public void Set(int[,] matrix, GameObject cube, Vector3 cellSize, int index1, Sprite sprite1)
     {
         centerPosition = -figureCellSize;
         blockMatrix = matrix;
         cubePrefab = cube;
         figureCellSize = cellSize;
         blocks = new GameObject[blocksCount + 1];
+        index = index1;
+        sprite = sprite1;
         Render();
     }
 
@@ -73,6 +78,10 @@ public class Figure : MonoBehaviour
     {
         return blockMatrix;
     }
+    public int GetIndex()
+    {
+        return index;
+    }
 
     private void Render()
     {
@@ -85,6 +94,7 @@ public class Figure : MonoBehaviour
             }
 
             GameObject figureCube = Instantiate(cubePrefab, this.transform);
+            figureCube.GetComponent<SpriteRenderer>().sprite = sprite;
             blocks[i] = figureCube;
             Vector2 blockCoord = GetBlockCoord(i);
             Vector3 position = GetBlockPositionByCoord(blockCoord);

@@ -11,6 +11,7 @@ public class TetrisGrid : MonoBehaviour
     public Cell[,] cells;
     public GameObject BorderLinePrefab;
     public GameObject CubePrefab;
+    public Sprite[] cubeSprites;
     public GameObject figurePrefab;
     public Vector3 cellSize;
     public float slowFigureSpeed;
@@ -122,16 +123,27 @@ public class TetrisGrid : MonoBehaviour
                 void LandFigure()
                 {
                     coord = GetCellСoordByPosition(previousFigurePosition);
-                    currentDelayBeforeFigureLanding = 0;
-                    List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+                    int coordX = (int)coord.x;
+                    int coordY = (int)coord.y;
 
-                    coords.ForEach(delegate (Vector2 blockCoord)
+                    for (int y = coordY; y >= 0; y--)
                     {
-                        CreateBlockInCell(blockCoord);
-                    });
-                    Destroy(currentFigure);
-                    currentFigure = null;
-                    CheckForBlocksRemoving();
+                        coord = new Vector2(coordX, y);
+                        if (CheckIfFigureCanExistInCoord(figScript, coord))
+                        {
+                            currentDelayBeforeFigureLanding = 0;
+                            List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+
+                            coords.ForEach(delegate (Vector2 blockCoord)
+                            {
+                                CreateBlockInCell(blockCoord, figScript.GetIndex());
+                            });
+                            Destroy(currentFigure);
+                            currentFigure = null;
+                            CheckForBlocksRemoving();
+                            break;
+                        }
+                    }
                 }
 
                 if (currentFigureSpeed == superFastFigureSpeed)
@@ -146,28 +158,7 @@ public class TetrisGrid : MonoBehaviour
 
                     if (currentDelayBeforeFigureLanding <= 0)
                     {
-                        coord = GetCellСoordByPosition(previousFigurePosition);
-                        int coordX = (int)coord.x;
-                        int coordY = (int)coord.y;
-
-                        for (int y = coordY; y >= 0; y--)
-                        {
-                            coord = new Vector2(coordX, y);
-                            if (CheckIfFigureCanExistInCoord(figScript, coord))
-                            {
-                                currentDelayBeforeFigureLanding = 0;
-                                List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
-
-                                coords.ForEach(delegate (Vector2 blockCoord)
-                                {
-                                    CreateBlockInCell(blockCoord);
-                                });
-                                Destroy(currentFigure);
-                                currentFigure = null;
-                                CheckForBlocksRemoving();
-                                break;
-                            }
-                        }
+                        LandFigure();
                     }
                 }
             }
@@ -179,8 +170,9 @@ public class TetrisGrid : MonoBehaviour
         Vector3 startPosition = GetFigureStartPosition();
         currentFigureSpeed = slowFigureSpeed;
 
-        int[,] figureMatrix = FigureTypes.GetRangdom();
-        currentFigure = CreateFigure(figureMatrix);
+        int figureIndex = FigureTypes.GetRangdomIndex();
+        int[,] figureMatrix = FigureTypes.GetFigureByIndex(figureIndex);
+        currentFigure = CreateFigure(figureMatrix, figureIndex);
         figScript = currentFigure.GetComponent<Figure>();
 
         currentCell = GetCellByPosition(startPosition);
@@ -238,8 +230,7 @@ public class TetrisGrid : MonoBehaviour
 
     public void RotateFigure()
     {
-        int[,] matrix = figScript.GetMatrix();
-        GameObject testFigure = CreateFigure(matrix);
+        GameObject testFigure = CreateFigure(figScript.GetMatrix(), figScript.GetIndex());
         Figure testFigScript = testFigure.GetComponent<Figure>();
         testFigScript.Rotate();
         Vector2 coord = GetCellСoordByPosition(currentFigure.transform.localPosition);
@@ -266,11 +257,11 @@ public class TetrisGrid : MonoBehaviour
     }
 
 
-    private GameObject CreateFigure(int[,] matrix)
+    private GameObject CreateFigure(int[,] matrix, int figureIndex)
     {
         GameObject figure = Instantiate(figurePrefab, this.transform);
         Figure script = figure.GetComponent<Figure>();
-        script.Set(matrix, CubePrefab, cellSize);
+        script.Set(matrix, CubePrefab, cellSize, figureIndex, cubeSprites[figureIndex]);
         return figure;
     }
 
@@ -306,13 +297,15 @@ public class TetrisGrid : MonoBehaviour
         borderLine.SetActive(true);
     }
     
-    private void CreateBlockInCell(Vector2 coord)
+    private void CreateBlockInCell(Vector2 coord, int figureIndex)
     {
         GameObject figureCube = Instantiate(CubePrefab, this.transform);
+        figureCube.GetComponent<SpriteRenderer>().sprite = cubeSprites[figureIndex];
         figureCube.transform.localPosition = GetCellPosition(coord);
         figureCube.SetActive(true);
         Cell cell = GetCellByCoord(coord);
         cell.occupyingCube = figureCube;
+        cell.cubeIndex = figureIndex;
     }
 
     private Vector3 GetCellPosition(Vector2 coord)
@@ -423,9 +416,10 @@ public class TetrisGrid : MonoBehaviour
                 Cell cell = GetCellByCoord(new Vector2(x, y));
                 if (!cell.IsFree() && removedLinesCounterUnder > 0)
                 {
+                    int cubeIndex = cell.cubeIndex;
                     cell.DestroyCube();
                     Vector2 newCoord = new Vector2(x, y + removedLinesCounterUnder);
-                    CreateBlockInCell(newCoord);
+                    CreateBlockInCell(newCoord, cubeIndex);
                     TweenCallback OnFinish = LaunchStartFigure;
                     if (!isAnimationFirst) 
                     {
@@ -459,6 +453,7 @@ public class TetrisGrid : MonoBehaviour
 public class Cell
 {
     public GameObject occupyingCube;
+    public int cubeIndex;
 
     public bool IsFree()
     {
@@ -469,6 +464,7 @@ public class Cell
     {
         GameObject cube = occupyingCube;
         occupyingCube = null;
+        cubeIndex = -1;
 
         void Destroy()
         {

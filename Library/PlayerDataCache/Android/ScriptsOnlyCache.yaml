@@ -24,6 +24,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
+    - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
     - Class: 1
@@ -45,30 +46,34 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9680}
+      Script: {instanceID: 9702}
     - Class: 114
-      Script: {instanceID: 9730}
+      Script: {instanceID: 9752}
     - Class: 114
-      Script: {instanceID: 9894}
+      Script: {instanceID: 9868}
     - Class: 114
-      Script: {instanceID: 10296}
+      Script: {instanceID: 9916}
     - Class: 114
-      Script: {instanceID: 10442}
+      Script: {instanceID: 10318}
     - Class: 114
-      Script: {instanceID: 10536}
+      Script: {instanceID: 10464}
     - Class: 114
-      Script: {instanceID: 10560}
+      Script: {instanceID: 10558}
     - Class: 114
-      Script: {instanceID: 10674}
+      Script: {instanceID: 10582}
     - Class: 114
-      Script: {instanceID: 11154}
+      Script: {instanceID: 10696}
     - Class: 114
-      Script: {instanceID: 11230}
+      Script: {instanceID: 11176}
     - Class: 114
-      Script: {instanceID: 11350}
+      Script: {instanceID: 11252}
     - Class: 114
-      Script: {instanceID: 11538}
+      Script: {instanceID: 11372}
+    - Class: 114
+      Script: {instanceID: 11560}
     - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
@@ -109,7 +114,7 @@ ScriptsOnlyBuild:
     className: TMP_Dropdown
   - hash:
       serializedVersion: 2
-      Hash: 392912a2665d8029e9497e921627ab16
+      Hash: e5784a962bc6cbfe03ed9a0704c3c02a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: TetrisGrid
@@ -277,7 +282,7 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
-      Hash: 2195e5bf19cbc0abeb21e3e70b3a908c
+      Hash: 97346dcdda259718d53e4030a43a6cf9
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameScreen
@@ -542,4 +547,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Repos/Tetris/Tetris/AndroidBuilds/Tetris 0.3.apk
+  playerPath: C:/Repos/Tetris/Tetris/AndroidBuilds/Tetris 0.4.apk

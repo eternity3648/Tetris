@@ -1346,6 +1346,14 @@ MonoBehaviour:
     type: 3}
   CubePrefab: {fileID: 2134582694407125513, guid: 6092d01cc8920ed4caeaa7b38e193f64,
     type: 3}
+  cubeSprites:
+  - {fileID: 21300000, guid: f42e312357ae62c4692693be7837bd64, type: 3}
+  - {fileID: 21300000, guid: 064ae0e36ccf3a74caa4a99db2c28693, type: 3}
+  - {fileID: 21300000, guid: 0f4d106bf40a48b4294070629c67ec16, type: 3}
+  - {fileID: 21300000, guid: e08b56d7c12717e4c92e7c811fdcc33f, type: 3}
+  - {fileID: 21300000, guid: 6c71fe9fbc04c894e86d5427ca7f29e6, type: 3}
+  - {fileID: 21300000, guid: aaed8b35e90be684ebe7b044bf2e23cb, type: 3}
+  - {fileID: 21300000, guid: ea53fbe82f5c2be4a949e6db5bbd9e1a, type: 3}
   figurePrefab: {fileID: 5379771758226413113, guid: dda6a26933d7e8943b6cc593bfb90457,
     type: 3}
   cellSize: {x: 1.2, y: 1.2, z: 0}
