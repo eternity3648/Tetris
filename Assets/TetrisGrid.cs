@@ -147,16 +147,27 @@ public class TetrisGrid : MonoBehaviour
                     if (currentDelayBeforeFigureLanding <= 0)
                     {
                         coord = GetCellСoordByPosition(previousFigurePosition);
-                        currentDelayBeforeFigureLanding = 0;
-                        List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+                        int coordX = (int)coord.x;
+                        int coordY = (int)coord.y;
 
-                        coords.ForEach(delegate (Vector2 blockCoord)
+                        for (int y = coordY; y >= 0; y--)
                         {
-                            CreateBlockInCell(blockCoord);
-                        });
-                        Destroy(currentFigure);
-                        currentFigure = null;
-                        CheckForBlocksRemoving();
+                            coord = new Vector2(coordX, y);
+                            if (CheckIfFigureCanExistInCoord(figScript, coord))
+                            {
+                                currentDelayBeforeFigureLanding = 0;
+                                List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+
+                                coords.ForEach(delegate (Vector2 blockCoord)
+                                {
+                                    CreateBlockInCell(blockCoord);
+                                });
+                                Destroy(currentFigure);
+                                currentFigure = null;
+                                CheckForBlocksRemoving();
+                                break;
+                            }
+                        }
                     }
                 }
             }
