@@ -30,6 +30,7 @@ public class TetrisGrid : MonoBehaviour
     private float currentFigureSpeed;
     private float currentDelayBeforeFigureLanding;
     private TweenCallback<int> OnLineDestroy;
+    private TweenCallback<GameObject> OnFigureCreate;
     private float speedCoeff = 1.0f;
     private float speedCoeffIncreaseCurrentTime = 0;
     float fastHorizontalMovementDelay;
@@ -185,6 +186,13 @@ public class TetrisGrid : MonoBehaviour
         }
 
         SetFigureSpeed(1);
+
+        OnFigureCreate(CreateFigure(figureMatrix, figureIndex));
+    }
+
+    public void SetOnFigureCreate(TweenCallback<GameObject> callb)
+    {
+        OnFigureCreate = callb;
     }
 
     // direction true - right, false - left
