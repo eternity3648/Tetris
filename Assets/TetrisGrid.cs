@@ -33,7 +33,7 @@ public class TetrisGrid : MonoBehaviour
     private TweenCallback<GameObject> OnFigureCreate;
     private float speedCoeff = 1.0f;
     private float speedCoeffIncreaseCurrentTime = 0;
-    float fastHorizontalMovementDelay;
+    private int nextFigureIndex;
 
     private enum Sides
     {
@@ -55,9 +55,9 @@ public class TetrisGrid : MonoBehaviour
         cells = new Cell[sizeX, sizeY];
         startPositon = new Vector3(-cellSize.x * (sizeX / 2), cellSize.y * (sizeX / 2));
         currentDelayBeforeFigureLanding = 0;
-        fastHorizontalMovementDelay = 0;
         speedCoeff = 1.0f;
         speedCoeffIncreaseCurrentTime = 0;
+        nextFigureIndex = -1;
 
         for (int x = 0; x < sizeX; x++)
         {
@@ -170,7 +170,13 @@ public class TetrisGrid : MonoBehaviour
         Vector3 startPosition = GetFigureStartPosition();
         currentFigureSpeed = slowFigureSpeed;
 
-        int figureIndex = FigureTypes.GetRangdomIndex();
+        int figureIndex;
+        if (nextFigureIndex == -1)
+            figureIndex = FigureTypes.GetRangdomIndex();
+        else
+            figureIndex = nextFigureIndex;
+
+        nextFigureIndex = FigureTypes.GetRangdomIndex();
         int[,] figureMatrix = FigureTypes.GetFigureByIndex(figureIndex);
         currentFigure = CreateFigure(figureMatrix, figureIndex);
         figScript = currentFigure.GetComponent<Figure>();
@@ -186,8 +192,7 @@ public class TetrisGrid : MonoBehaviour
         }
 
         SetFigureSpeed(1);
-
-        OnFigureCreate(CreateFigure(figureMatrix, figureIndex, false));
+        OnFigureCreate(CreateFigure(FigureTypes.GetFigureByIndex(nextFigureIndex), nextFigureIndex, false));
     }
 
     public void SetOnFigureCreate(TweenCallback<GameObject> callb)

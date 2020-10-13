@@ -7,8 +7,11 @@ public static class FigureTypes
 
     public static List<int[,]> types = new List<int[,]>();
     public static List<Vector3> positionShifts = new List<Vector3>();
+
     private static bool initialized = false;
-   
+    private static System.Random random = new System.Random();
+
+
     public static void Init()
     {
         if (!initialized)
@@ -90,7 +93,6 @@ public static class FigureTypes
 
     public static int GetRangdomIndex()
     {
-        System.Random random = new System.Random();
         return random.Next(types.Count);
     }
 
