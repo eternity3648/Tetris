@@ -4,6 +4,7 @@ ScriptsOnlyBuild:
     - Button
     - Figure
     - GameScreen
+    - MainCamera
     - Swipe
     - TetrisGrid
     DOTween.dll:
@@ -54,23 +55,25 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9916}
     - Class: 114
-      Script: {instanceID: 10318}
+      Script: {instanceID: 10060}
     - Class: 114
-      Script: {instanceID: 10464}
+      Script: {instanceID: 10320}
     - Class: 114
-      Script: {instanceID: 10558}
+      Script: {instanceID: 10466}
     - Class: 114
-      Script: {instanceID: 10582}
+      Script: {instanceID: 10560}
     - Class: 114
-      Script: {instanceID: 10696}
+      Script: {instanceID: 10584}
     - Class: 114
-      Script: {instanceID: 11176}
+      Script: {instanceID: 10698}
     - Class: 114
-      Script: {instanceID: 11252}
+      Script: {instanceID: 11178}
     - Class: 114
-      Script: {instanceID: 11372}
+      Script: {instanceID: 11254}
     - Class: 114
-      Script: {instanceID: 11560}
+      Script: {instanceID: 11374}
+    - Class: 114
+      Script: {instanceID: 11562}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -208,6 +211,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
     className: PhysicsRaycaster
+  - hash:
+      serializedVersion: 2
+      Hash: c00a914236c0302251dff92fc11813aa
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: MainCamera
   - hash:
       serializedVersion: 2
       Hash: bd3cf68c8964d3c66d1c43f4f98508c9
@@ -547,4 +556,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Repos/Tetris/Tetris/AndroidBuilds/Tetris 0.4.apk
+  playerPath: C:/Repos/Tetris/Tetris/AndroidBuilds/Tetris 0.5.apk
