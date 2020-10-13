@@ -32,12 +32,13 @@ public class GameScreen : MonoBehaviour
     private int score = 0;
     private int scoreForTween = 0;
     private int transitionValueForTween = 0;
+    float scale;
 
     // Start is called before the first frame update
     void Start()
     {
         float aspectRatio = (Screen.width * 1.0f) / Screen.height;
-        float scale = aspectRatio / nativeAspectRatio;
+        scale = aspectRatio / nativeAspectRatio;
         this.transform.localScale = new Vector3(scale, scale);
         Vector3 lastMousePosition = Input.mousePosition;
         mouseMoved = new Vector3();
@@ -46,6 +47,10 @@ public class GameScreen : MonoBehaviour
         TweenCallback<int> callb = OnLineDestroy;
         gridScript.SetOnLinesDestroy(callb);
         ResetVariables(true);
+
+        horizontalDragSpeed /= scale;
+        verticalDragSpeed /= scale;
+        superAccelerationDragSpeed /= scale;
 
         if (Application.platform == RuntimePlatform.Android)
         {
