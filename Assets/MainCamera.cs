@@ -6,12 +6,16 @@ using DG.Tweening;
 public class MainCamera : MonoBehaviour
 {
     public GameObject tetrisGrid;
+    public GameObject gameScreen;
     public GameObject nextFigureContainer;
 
     void Start()
     {
-        TweenCallback<GameObject> callb = OnFigureCreate;
-        tetrisGrid.GetComponent<TetrisGrid>().SetOnFigureCreate(callb);
+        TetrisGrid gridScript = tetrisGrid.GetComponent<TetrisGrid>();
+        TweenCallback<GameObject> callb1 = OnFigureCreate;
+        gridScript.SetOnFigureCreate(callb1);
+        TweenCallback callb2 = OnFigureFastFall;
+        gridScript.SetOnFigureFastFall(callb2);
     }
 
     void OnFigureCreate(GameObject figure)
@@ -33,5 +37,13 @@ public class MainCamera : MonoBehaviour
 
 
         //figure.transform.position = nextFigureContainer.transform.position - new Vector3(0.4f * positionDiff.x, -0.27f * positionDiff.y);
+    }
+
+    void OnFigureFastFall()
+    {
+        Sequence sequence = DOTween.Sequence();
+        float delay = 0.2f;
+        sequence.Join(gameScreen.transform.DOMove(new Vector3(0, -0.2f, 0), delay));
+        sequence.Join(gameScreen.transform.DOMove(new Vector3(0, 0, 0), delay).SetDelay(delay));
     }
 }

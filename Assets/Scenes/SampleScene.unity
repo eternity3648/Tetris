@@ -716,6 +716,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tetrisGrid: {fileID: 1575080049}
+  gameScreen: {fileID: 123263901}
   nextFigureContainer: {fileID: 137145577}
 --- !u!20 &519420031
 Camera:
