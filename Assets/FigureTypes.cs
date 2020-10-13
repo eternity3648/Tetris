@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class FigureTypes 
 { 
 
     public static List<int[,]> types = new List<int[,]>();
+    public static List<Vector3> positionShifts = new List<Vector3>();
     private static bool initialized = false;
    
     public static void Init()
@@ -20,6 +22,7 @@ public static class FigureTypes
                         {1, 2, 0}
                         }
                 );
+            positionShifts.Add(new Vector3(46, -58));
             types.Add
                 (
                     new int[,]
@@ -29,6 +32,7 @@ public static class FigureTypes
                         {0, 2, 1}
                         }
                 );
+            positionShifts.Add(new Vector3(43, -102));
             types.Add
                 (
                     new int[,]
@@ -38,6 +42,7 @@ public static class FigureTypes
                         {0, 2, 1}
                         }
                 );
+            positionShifts.Add(new Vector3(53, -51));
             types.Add
                 (
                     new int[,]
@@ -47,6 +52,7 @@ public static class FigureTypes
                         {1, 2, 0}
                         }
                 );
+            positionShifts.Add(new Vector3(71, -51));
             types.Add
                 (
                     new int[,]
@@ -56,6 +62,7 @@ public static class FigureTypes
                         {0, 4, 0}
                         }
                 );
+            positionShifts.Add(new Vector3(51, -59));
             types.Add
                 (
                     new int[,]
@@ -64,6 +71,7 @@ public static class FigureTypes
                         {3, 4}
                         }
                 );
+            positionShifts.Add(new Vector3(20, -63));
             types.Add
                 (
                     new int[,]
@@ -74,6 +82,7 @@ public static class FigureTypes
                         {0, 0, 0, 0},
                         }
                 );
+            positionShifts.Add(new Vector3(85, -57));
 
             initialized = true;
         }
@@ -81,12 +90,16 @@ public static class FigureTypes
 
     public static int GetRangdomIndex()
     {
-        Random random = new Random();
+        System.Random random = new System.Random();
         return random.Next(types.Count);
     }
 
     public static int[,] GetFigureByIndex(int index)
     {
         return types[index];
+    }
+    public static Vector3 GetPositionShiftByIndex(int index)
+    {
+        return positionShifts[index];
     }
 }

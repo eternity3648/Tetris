@@ -20,18 +20,18 @@ public class MainCamera : MonoBehaviour
         {
             GameObject.Destroy(child.gameObject);
         }
-        figure.transform.parent = null;
-        figure.transform.localPosition = new Vector3();
-        //figure.transform.position = new Vector3();
+        Vector2 cellSize = tetrisGrid.GetComponent<TetrisGrid>().cellSize;
+        Figure figScript = figure.GetComponent<Figure>();
+        int matrixSize = figScript.blockMatrix.GetUpperBound(0) + 1;
+
+        Vector3 positionDiff = (float)matrixSize / 2.0f * cellSize * 1 / 0.35f;
         figure.transform.parent = nextFigureContainer.transform;
-        //figure.transform.localPosition = new Vector3();
+        figure.transform.localPosition = - positionDiff - FigureTypes.GetPositionShiftByIndex(figScript.GetIndex());
         Vector3 scale = figure.transform.localScale;
-        scale *= 0.65f;
+        scale *= 0.35f;
         figure.transform.localScale = scale;
 
-        Vector2 cellSize = tetrisGrid.GetComponent<TetrisGrid>().cellSize;
-        int matrixSize = figure.GetComponent<Figure>().blockMatrix.GetUpperBound(0) + 1;
-        Vector3 positionDiff = (float)matrixSize / 2.0f * cellSize;
-        figure.transform.position = nextFigureContainer.transform.position - new Vector3(0.4f * positionDiff.x, -0.27f * positionDiff.y);
+
+        //figure.transform.position = nextFigureContainer.transform.position - new Vector3(0.4f * positionDiff.x, -0.27f * positionDiff.y);
     }
 }

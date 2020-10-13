@@ -187,7 +187,7 @@ public class TetrisGrid : MonoBehaviour
 
         SetFigureSpeed(1);
 
-        OnFigureCreate(CreateFigure(figureMatrix, figureIndex));
+        OnFigureCreate(CreateFigure(figureMatrix, figureIndex, false));
     }
 
     public void SetOnFigureCreate(TweenCallback<GameObject> callb)
@@ -264,9 +264,17 @@ public class TetrisGrid : MonoBehaviour
     }
 
 
-    private GameObject CreateFigure(int[,] matrix, int figureIndex)
+    private GameObject CreateFigure(int[,] matrix, int figureIndex, bool attachToGrid = true)
     {
-        GameObject figure = Instantiate(figurePrefab, this.transform);
+        GameObject figure;
+        if (attachToGrid)
+        {
+            figure = Instantiate(figurePrefab, this.transform);
+        }
+        else
+        {
+            figure = Instantiate(figurePrefab);
+        }
         Figure script = figure.GetComponent<Figure>();
         script.Set(matrix, CubePrefab, cellSize, figureIndex, cubeSprites[figureIndex]);
         return figure;
