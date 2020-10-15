@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Button : MonoBehaviour
+public class Button1 : MonoBehaviour
 {
     OperateFigure DownAction, UpAction;
     bool side;

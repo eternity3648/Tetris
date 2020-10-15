@@ -59,7 +59,7 @@ public class GameScreen : MonoBehaviour
             superAccelerationDragSpeed *= 2.8f;
         }
 
-        restartButton.GetComponent<Button>().Set(null, Restart, true);
+        restartButton.GetComponent<Button1>().Set(null, Restart, true);
     }
 
     void ResetVariables(bool _)
