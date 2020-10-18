@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
     public GameObject newGameButton;
+    public GameObject camera;
 
     // Start is called before the first frame update
     void Start()
@@ -18,8 +20,9 @@ public class MainMenu : MonoBehaviour
         
     }
 
-    public void Fuck()
+    public void LoadGame()
     {
-        print("Fuck");
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Additive);
+        SceneManager.UnloadSceneAsync("MainMenu");
     }
 }
