@@ -16,11 +16,6 @@ public class PausePopUp : MonoBehaviour
         Vector3 scale = this.transform.localScale;
         this.transform.localScale = new Vector3(scale.x * 0.3f, scale.x * 0.3f);
         this.transform.DOScale(scale.x, 0.5f).SetEase(Ease.OutQuad);
-
-        SpriteRenderer rend = this.GetComponent<SpriteRenderer>();
-        Color color = rend.color;
-        color.a = 0;
-        rend.DOColor(color, 2f);
     }
 
 

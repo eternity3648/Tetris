@@ -71,6 +71,7 @@
     <Compile Include="Assets\DOTween\Modules\DOTweenModuleUI.cs" />
     <Compile Include="Assets\DOTween\Modules\DOTweenModuleUnityVersion.cs" />
     <Compile Include="Assets\DOTween\Modules\DOTweenModuleUtils.cs" />
+    <Compile Include="Assets\FadeButton.cs" />
     <Compile Include="Assets\Figure.cs" />
     <Compile Include="Assets\FigureTypes.cs" />
     <Compile Include="Assets\GameScreen.cs" />

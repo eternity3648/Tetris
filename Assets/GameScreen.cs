@@ -10,7 +10,7 @@ public class GameScreen : MonoBehaviour
 {
     public GameObject grid;
     public Swipe swipeControls;
-    public GameObject leftButton, rightButton, downButton, rotateButton, pausePopUp;
+    public GameObject leftButton, rightButton, downButton, rotateButton, pausePopUp, fadeButton;
     public Text scoreText;
     public float startFastHorizontalMovementDelat;
     public float nativeAspectRatio;
@@ -48,6 +48,10 @@ public class GameScreen : MonoBehaviour
         gridScript.SetOnLinesDestroy(callb);
         ResetVariables(true);
 
+        TweenCallback OnMouseUp1 = OnMouseUp;
+        TweenCallback OnMouseDown1 = OnMouseDown;
+        fadeButton.GetComponent<FadeButton>().Set(OnMouseDown1, OnMouseUp1);
+
         if (Application.platform == RuntimePlatform.Android)
         {
             horizontalDragSpeed *= 2.5f;
@@ -82,6 +86,27 @@ public class GameScreen : MonoBehaviour
         }
     }
 
+    private void OnMouseDown()
+    {
+        mousePressed = true;
+        lastMousePosition = Input.mousePosition;
+        //print("Down");
+    }
+
+    private void OnMouseUp()
+    {
+        mousePressed = false;
+        mouseMoved = new Vector3();
+        if (gridScript.CanFigureSpeedBeChanged())
+            SetFigureSpeed(1);
+
+        Vector3 posDiff = Input.mousePosition - lastMousePosition;
+        if (!wasFigureMoved) RotateFigure(true);
+        wasFigureMoved = false;
+        wasFigureAcceleratedVertically = false;
+        //print("UPPPP");
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -96,25 +121,6 @@ public class GameScreen : MonoBehaviour
         else if (leftSidePressed && fastHorizontalMovementDelay < 0)
         {
             gridScript.MoveFigure(false);
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            mousePressed = true;
-            lastMousePosition = Input.mousePosition;
-
-        } 
-        else if (Input.GetMouseButtonUp(0))
-        {
-            mousePressed = false;
-            mouseMoved = new Vector3();
-            if (gridScript.CanFigureSpeedBeChanged())
-                SetFigureSpeed(1);
-
-            Vector3 posDiff = Input.mousePosition - lastMousePosition;
-            if (!wasFigureMoved) RotateFigure(true);
-            wasFigureMoved = false;
-            wasFigureAcceleratedVertically = false;
         }
 
         if (mousePressed)
@@ -202,5 +208,11 @@ public class GameScreen : MonoBehaviour
         TweenCallback callb = Restart;
         pausePopUp.SetActive(true);
         pauseScript.Start(callb, callb, callb);
+        gridScript.SetPause(true);
+    }
+
+    public void ClickOnFade()
+    {
+       
     }
 }

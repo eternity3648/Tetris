@@ -35,6 +35,7 @@ public class TetrisGrid : MonoBehaviour
     private float speedCoeff = 1.0f;
     private float speedCoeffIncreaseCurrentTime = 0;
     private int nextFigureIndex;
+    private bool pause = false;
 
     private enum Sides
     {
@@ -89,80 +90,88 @@ public class TetrisGrid : MonoBehaviour
         LaunchStartFigure();
     }
 
+    public void SetPause(bool value)
+    {
+        pause = value;
+    }
+
     public void Update()
     {
         float delta = Time.deltaTime;
         speedCoeffIncreaseCurrentTime += delta;
 
-        if (speedCoeffIncreaseCurrentTime >= speedCoeffIncreaseTime)
+        if (!pause)
         {
-            speedCoeff += speedCoeffIncrease;
-            speedCoeffIncreaseCurrentTime -= speedCoeffIncreaseTime;
-        }
-
-        if (currentFigure != null && delta < 0.2f)
-        {
-            Vector3 previousFigurePosition = currentFigure.transform.localPosition;
-            Vector3 posDiff = new Vector3(0, -currentFigureSpeed * speedCoeff * Time.deltaTime, 0);
-            Vector3 figurePosition = previousFigurePosition + posDiff;
-
-            Vector2 coord = GetCellСoordByPosition(figurePosition);
-            Cell cell = GetCellByCoord(coord);
-
-            if (CheckIfFigureCanExistInCoord(figScript, coord))
+            if (speedCoeffIncreaseCurrentTime >= speedCoeffIncreaseTime)
             {
-                currentFigureCoord = coord;
-                currentFigure.transform.localPosition = figurePosition;
-                currentDelayBeforeFigureLanding = 0;
+                speedCoeff += speedCoeffIncrease;
+                speedCoeffIncreaseCurrentTime -= speedCoeffIncreaseTime;
             }
-            else if (currentFigureCoord == new Vector2(1000, 1000))
+
+            if (currentFigure != null && delta < 0.2f)
             {
-                Destroy(currentFigure);
-                currentFigure = null;
-            }
-            else
-            {
-                void LandFigure()
+                Vector3 previousFigurePosition = currentFigure.transform.localPosition;
+                Vector3 posDiff = new Vector3(0, -currentFigureSpeed * speedCoeff * Time.deltaTime, 0);
+                Vector3 figurePosition = previousFigurePosition + posDiff;
+
+                Vector2 coord = GetCellСoordByPosition(figurePosition);
+                Cell cell = GetCellByCoord(coord);
+
+                if (CheckIfFigureCanExistInCoord(figScript, coord))
                 {
-                    int coordX = (int)coord.x;
-                    int coordY = (int)coord.y;
-
-                    for (int y = coordY; y >= 0; y--)
-                    {
-                        coord = new Vector2(coordX, y);
-                        if (CheckIfFigureCanExistInCoord(figScript, coord))
-                        {
-                            currentDelayBeforeFigureLanding = 0;
-                            List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
-
-                            coords.ForEach(delegate (Vector2 blockCoord)
-                            {
-                                CreateBlockInCell(blockCoord, figScript.GetIndex());
-                            });
-                            Destroy(currentFigure);
-                            currentFigure = null;
-                            CheckForBlocksRemoving();
-                            break;
-                        }
-                    }
+                    currentFigureCoord = coord;
+                    currentFigure.transform.localPosition = figurePosition;
+                    currentDelayBeforeFigureLanding = 0;
                 }
-
-                if (currentFigureSpeed == superFastFigureSpeed)
+                else if (currentFigureCoord == new Vector2(1000, 1000))
                 {
-                    LandFigure();
-                    OnFigureFastFall();
-                }
-                else if (currentDelayBeforeFigureLanding == 0)
-                {
-                    currentDelayBeforeFigureLanding = delayBeforeFigureLanding;
+                    Destroy(currentFigure);
+                    currentFigure = null;
                 }
                 else
                 {
-                    currentDelayBeforeFigureLanding -= delta;
+                    void LandFigure()
+                    {
+                        int coordX = (int)coord.x;
+                        int coordY = (int)coord.y;
 
-                    if (currentDelayBeforeFigureLanding <= 0)
+                        for (int y = coordY; y >= 0; y--)
+                        {
+                            coord = new Vector2(coordX, y);
+                            if (CheckIfFigureCanExistInCoord(figScript, coord))
+                            {
+                                currentDelayBeforeFigureLanding = 0;
+                                List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+
+                                coords.ForEach(delegate (Vector2 blockCoord)
+                                {
+                                    CreateBlockInCell(blockCoord, figScript.GetIndex());
+                                });
+                                Destroy(currentFigure);
+                                currentFigure = null;
+                                CheckForBlocksRemoving();
+                                break;
+                            }
+                        }
+                    }
+
+                    if (currentFigureSpeed == superFastFigureSpeed)
                     {
                         LandFigure();
+                        OnFigureFastFall();
+                    }
+                    else if (currentDelayBeforeFigureLanding == 0)
+                    {
+                        currentDelayBeforeFigureLanding = delayBeforeFigureLanding;
+                    }
+                    else
+                    {
+                        currentDelayBeforeFigureLanding -= delta;
+
+                        if (currentDelayBeforeFigureLanding <= 0)
+                        {
+                            LandFigure();
+                        }
                     }
                 }
             }
