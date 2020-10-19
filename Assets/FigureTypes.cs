@@ -35,7 +35,7 @@ public static class FigureTypes
                         {0, 2, 1}
                         }
                 );
-            positionShifts.Add(new Vector3(43, -102));
+            positionShifts.Add(new Vector3(35, -62));
             types.Add
                 (
                     new int[,]
@@ -45,7 +45,7 @@ public static class FigureTypes
                         {0, 2, 1}
                         }
                 );
-            positionShifts.Add(new Vector3(53, -51));
+            positionShifts.Add(new Vector3(56, -60));
             types.Add
                 (
                     new int[,]
@@ -55,7 +55,7 @@ public static class FigureTypes
                         {1, 2, 0}
                         }
                 );
-            positionShifts.Add(new Vector3(71, -51));
+            positionShifts.Add(new Vector3(57, -60));
             types.Add
                 (
                     new int[,]
@@ -74,7 +74,7 @@ public static class FigureTypes
                         {3, 4}
                         }
                 );
-            positionShifts.Add(new Vector3(20, -63));
+            positionShifts.Add(new Vector3(37, -48));
             types.Add
                 (
                     new int[,]
@@ -85,7 +85,7 @@ public static class FigureTypes
                         {0, 0, 0, 0},
                         }
                 );
-            positionShifts.Add(new Vector3(85, -57));
+            positionShifts.Add(new Vector3(74, -72));
 
             initialized = true;
         }

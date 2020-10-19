@@ -10,8 +10,7 @@ public class GameScreen : MonoBehaviour
 {
     public GameObject grid;
     public Swipe swipeControls;
-    public GameObject leftButton, rightButton, downButton, rotateButton;
-    public GameObject restartButton;
+    public GameObject leftButton, rightButton, downButton, rotateButton, pausePopUp;
     public Text scoreText;
     public float startFastHorizontalMovementDelat;
     public float nativeAspectRatio;
@@ -39,7 +38,8 @@ public class GameScreen : MonoBehaviour
     {
         float aspectRatio = (Screen.width * 1.0f) / Screen.height;
         scale = aspectRatio / nativeAspectRatio;
-        this.transform.localScale = new Vector3(scale, scale);
+        Vector3 localScale = this.transform.localScale;
+        //this.transform.localScale = new Vector3(scale * localScale.x, scale * localScale.y);
         Vector3 lastMousePosition = Input.mousePosition;
         mouseMoved = new Vector3();
 
@@ -58,8 +58,6 @@ public class GameScreen : MonoBehaviour
             verticalDragSpeed *= 2.8f;
             superAccelerationDragSpeed *= 2.8f;
         }
-
-        restartButton.GetComponent<Button1>().Set(null, Restart, true);
     }
 
     void ResetVariables(bool _)
@@ -189,9 +187,18 @@ public class GameScreen : MonoBehaviour
         gridScript.RotateFigure();
     }
 
-    void Restart(bool _)
+    void Restart()
     {
         ResetVariables(true);
         gridScript.Start();
+        pausePopUp.SetActive(false);
+    }
+
+    public void StartPausePopUp()
+    {
+        PausePopUp pauseScript = pausePopUp.GetComponent<PausePopUp>();
+        TweenCallback callb = Restart;
+        pausePopUp.SetActive(true);
+        pauseScript.Start(callb, callb, callb);
     }
 }
