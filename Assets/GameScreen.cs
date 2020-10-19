@@ -199,20 +199,21 @@ public class GameScreen : MonoBehaviour
     {
         ResetVariables(true);
         gridScript.Start();
-        pausePopUp.SetActive(false);
+        gridScript.SetPause(false);
     }
 
     public void StartPausePopUp()
     {
         PausePopUp pauseScript = pausePopUp.GetComponent<PausePopUp>();
-        TweenCallback callb = Restart;
+        TweenCallback OnNewGameButtonClick1 = Restart;
+        TweenCallback OnContinueButtonClick1 = OnContinueButtonClick;
         pausePopUp.SetActive(true);
-        pauseScript.Start(callb, callb, callb);
+        pauseScript.Start(OnNewGameButtonClick1, OnContinueButtonClick1, OnContinueButtonClick1);
         gridScript.SetPause(true);
     }
 
-    public void ClickOnFade()
+    public void OnContinueButtonClick()
     {
-       
+        gridScript.SetPause(false);
     }
 }

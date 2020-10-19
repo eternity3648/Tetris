@@ -22,11 +22,13 @@ public class PausePopUp : MonoBehaviour
     public void OnNewGameButtonClickAction()
     {
         OnNewGameButtonClick();
+        this.gameObject.SetActive(false);
     }
 
     public void OnContinueButtonClickAction()
     {
         OnContinueButtonClick();
+        this.gameObject.SetActive(false);
     }
 
     public void OnMainMenuButtonClickAction()
