@@ -22,7 +22,6 @@ public class MainMenu : MonoBehaviour
 
     public void LoadGame()
     {
-        SceneManager.LoadScene("GameScene", LoadSceneMode.Additive);
-        SceneManager.UnloadSceneAsync("MainMenu");
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 
 public delegate void OperateFigure(bool side);
@@ -207,13 +208,19 @@ public class GameScreen : MonoBehaviour
         PausePopUp pauseScript = pausePopUp.GetComponent<PausePopUp>();
         TweenCallback OnNewGameButtonClick1 = Restart;
         TweenCallback OnContinueButtonClick1 = OnContinueButtonClick;
+        TweenCallback OnMainMenuButtonClick1 = OnMainMenuButtonClick;
         pausePopUp.SetActive(true);
-        pauseScript.Start(OnNewGameButtonClick1, OnContinueButtonClick1, OnContinueButtonClick1);
+        pauseScript.Start(OnNewGameButtonClick1, OnContinueButtonClick1, OnMainMenuButtonClick1);
         gridScript.SetPause(true);
     }
 
     public void OnContinueButtonClick()
     {
         gridScript.SetPause(false);
+    }
+
+    public void OnMainMenuButtonClick()
+    {
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 }
