@@ -48,15 +48,11 @@ public class GameScreen : MonoBehaviour
         gridScript.SetOnLinesDestroy(callb);
         ResetVariables(true);
 
-        horizontalDragSpeed /= scale;
-        verticalDragSpeed /= scale;
-        superAccelerationDragSpeed /= scale;
-
         if (Application.platform == RuntimePlatform.Android)
         {
-            horizontalDragSpeed *= 2.8f;
-            verticalDragSpeed *= 2.8f;
-            superAccelerationDragSpeed *= 2.8f;
+            horizontalDragSpeed *= 2.5f;
+            verticalDragSpeed *= 2.5f;
+            superAccelerationDragSpeed *= 2.5f;
         }
     }
 
@@ -127,7 +123,7 @@ public class GameScreen : MonoBehaviour
             if (posDiff.magnitude < 1) { posDiff = new Vector3(); }
             mouseMoved += posDiff;
 
-            if (Mathf.Abs(mouseMoved.x) >= horizontalDragSpeed && !wasFigureAcceleratedVertically)
+            if (Mathf.Abs(mouseMoved.x) >= horizontalDragSpeed)
             {
                 wasFigureMoved = true;
                 int turnsCount = 0;
@@ -149,16 +145,22 @@ public class GameScreen : MonoBehaviour
                 {
                     gridScript.MoveFigure(turnSide);
                 }
-            }
 
-            if (posDiff.y < -superAccelerationDragSpeed && !wasFigureAcceleratedVertically)
+                if (gridScript.CanFigureSpeedBeChanged()) 
+                {
+                    SetFigureSpeed(1);
+                    wasFigureAcceleratedVertically = false;
+                    mouseMoved.y = 0;
+                }
+
+            }
+            else if (posDiff.y < -superAccelerationDragSpeed && !wasFigureAcceleratedVertically)
             {
                 wasFigureMoved = true;
                 wasFigureAcceleratedVertically = true;
                 SetFigureSpeed(3);
             }
-
-            if (mouseMoved.y <= -verticalDragSpeed && gridScript.CanFigureSpeedBeChanged() && !wasFigureAcceleratedVertically)
+            else if (mouseMoved.y <= -verticalDragSpeed && gridScript.CanFigureSpeedBeChanged() && !wasFigureAcceleratedVertically)
             {
                 wasFigureMoved = true;
                 wasFigureAcceleratedVertically = true;
