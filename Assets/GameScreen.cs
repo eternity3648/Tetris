@@ -78,6 +78,7 @@ public class GameScreen : MonoBehaviour
     {
         if (lineCount > 0)
         {
+            print("OnLineDestroy");
             if (scoreTweener != null) scoreTweener.Kill(true);
             score += pointsForDestroyingLines[lineCount];
             scoreTweener = DOTween.To(x => scoreForTween = (int)x, scoreForTween, score, 1.5f)

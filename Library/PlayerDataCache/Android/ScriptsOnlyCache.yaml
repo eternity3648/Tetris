@@ -1,13 +1,19 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - FadeButton
     - Figure
     - GameScreen
     - MainCamera
+    - MainMenu
     - PausePopUp
     - TetrisGrid
     DOTween.dll:
     - DG.Tweening.Core.DOTweenSettings
+    GoogleMobileAds.Editor.dll:
+    - GoogleMobileAds.Editor.GoogleMobileAdsSettings
+    GoogleMobileAds.dll:
+    - GoogleMobileAds.Common.MobileAdsEventExecutor
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
@@ -54,25 +60,25 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9916}
     - Class: 114
-      Script: {instanceID: 10060}
+      Script: {instanceID: 9918}
+    - Class: 114
+      Script: {instanceID: 10062}
     - Class: 114
       Script: {instanceID: 10320}
     - Class: 114
-      Script: {instanceID: 10466}
+      Script: {instanceID: 10324}
     - Class: 114
-      Script: {instanceID: 10560}
+      Script: {instanceID: 10470}
     - Class: 114
-      Script: {instanceID: 10584}
+      Script: {instanceID: 10564}
     - Class: 114
-      Script: {instanceID: 10698}
+      Script: {instanceID: 10588}
     - Class: 114
-      Script: {instanceID: 11178}
+      Script: {instanceID: 10702}
     - Class: 114
-      Script: {instanceID: 11254}
+      Script: {instanceID: 11182}
     - Class: 114
-      Script: {instanceID: 11564}
-    - Class: 114
-      Script: {instanceID: 11668}
+      Script: {instanceID: 11568}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -80,6 +86,57 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 212
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    Assets/MainMenu.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 9702}
+    - Class: 114
+      Script: {instanceID: 9868}
+    - Class: 114
+      Script: {instanceID: 9916}
+    - Class: 114
+      Script: {instanceID: 10324}
+    - Class: 114
+      Script: {instanceID: 10702}
+    - Class: 114
+      Script: {instanceID: 11182}
+    - Class: 114
+      Script: {instanceID: 11258}
+    - Class: 114
+      Script: {instanceID: 11298}
+    - Class: 114
+      Script: {instanceID: 11568}
+    - Class: 114
+      Script: {instanceID: 13848}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -168,6 +225,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: Image
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PausePopUp
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -260,6 +323,12 @@ ScriptsOnlyBuild:
     className: Shadow
   - hash:
       serializedVersion: 2
+      Hash: a63fc1a3b035e5a0b5839cd7f7b3086e
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: FadeButton
+  - hash:
+      serializedVersion: 2
       Hash: cc4274b586df3c02688bac01b88bd16c
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
@@ -290,7 +359,7 @@ ScriptsOnlyBuild:
     className: Selectable
   - hash:
       serializedVersion: 2
-      Hash: de822bdec4de7b3f5de76c1f37e11b92
+      Hash: 1eba11d5fddd50be1ea6d05371c8efae
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameScreen
@@ -440,7 +509,7 @@ ScriptsOnlyBuild:
     className: DOTweenSettings
   - hash:
       serializedVersion: 2
-      Hash: 46ec06797514218777bd83c0cad74743
+      Hash: c290f8b502d6fa18696111123a651e8c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MainMenu
@@ -554,11 +623,18 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   - hash:
       serializedVersion: 2
+      Hash: 6fb512c6733e02f441372611e6f94f11
+    assemblyName: GoogleMobileAds.Editor.dll
+    namespaceName: GoogleMobileAds.Editor
+    className: GoogleMobileAdsSettings
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: PausePopUp
+    assemblyName: GoogleMobileAds.dll
+    namespaceName: GoogleMobileAds.Common
+    className: MobileAdsEventExecutor
   platform: 13
   scenePathNames:
+  - Assets/MainMenu.unity
   - Assets/GameScene.unity
   playerPath: C:/Repos/Tetris/Tetris/AndroidBuilds/Tetris5454545.apk
