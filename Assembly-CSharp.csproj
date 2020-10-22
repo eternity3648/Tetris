@@ -79,6 +79,7 @@
     <Compile Include="Assets\MainCamera.cs" />
     <Compile Include="Assets\MainMenu.cs" />
     <Compile Include="Assets\PausePopUp.cs" />
+    <Compile Include="Assets\Save.cs" />
     <Compile Include="Assets\Swipe.cs" />
     <Compile Include="Assets\TetrisGrid.cs" />
     <None Include="Assets\DOTween\readme.txt" />

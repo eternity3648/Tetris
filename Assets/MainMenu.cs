@@ -12,7 +12,6 @@ public class MainMenu : MonoBehaviour
     public GameObject camera;
     public Text text;
     private InterstitialAd interstitial;
-    bool adShown = false;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +38,8 @@ public class MainMenu : MonoBehaviour
         this.interstitial = new InterstitialAd(adUnitId);
         AdRequest request = new AdRequest.Builder().Build();
         // Load the interstitial with the request.
+
+        this.interstitial.OnAdClosed += OnInterstitialClose;
         this.interstitial.OnAdLoaded += HandleOnAdLoaded;
         this.interstitial.OnAdFailedToLoad += HandleOnAdFailedToLoad;
 
@@ -49,27 +50,36 @@ public class MainMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (this.interstitial.IsLoaded() && !adShown)
-        {
+    }
+
+    public void ShowInterstitial()
+    {
+        if (this.interstitial.IsLoaded())
             this.interstitial.Show();
-            adShown = true;
-        }
+        else
+            LoadGame();
+
+
     }
 
     public void LoadGame()
     {
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-        print("jest");
     }
 
     public void HandleOnAdFailedToLoad(object sender, AdFailedToLoadEventArgs args)
     {
-        print( "Interstitial failed to load: " + args.Message);
-        // Handle the ad failed to load event.
+        LoadGame();
     }
     public void HandleOnAdLoaded(object sender, EventArgs args)
     {
         text.GetComponent<Text>().text = "HandleAdLoaded event received";
     }
+
+    public void OnInterstitialClose(object sender, EventArgs args)
+    {
+        LoadGame();
+    }
+
 
 }

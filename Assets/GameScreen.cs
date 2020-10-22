@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using GoogleMobileAds.Api;
 
 public delegate void OperateFigure(bool side);
 
@@ -31,14 +31,13 @@ public class GameScreen : MonoBehaviour
     private Tweener scoreTweener;
     private int score = 0;
     private int scoreForTween = 0;
-    private int transitionValueForTween = 0;
-    float scale;
+    private InterstitialAd interstitial;
 
     // Start is called before the first frame update
     void Start()
     {
         float aspectRatio = (Screen.width * 1.0f) / Screen.height;
-        scale = aspectRatio / nativeAspectRatio;
+        //scale = aspectRatio / nativeAspectRatio;
         Vector3 localScale = this.transform.localScale;
         //this.transform.localScale = new Vector3(scale * localScale.x, scale * localScale.y);
         Vector3 lastMousePosition = Input.mousePosition;
@@ -59,6 +58,25 @@ public class GameScreen : MonoBehaviour
             verticalDragSpeed *= 2.5f;
             superAccelerationDragSpeed *= 2.5f;
         }
+
+        LoadInterstitial();
+    }
+
+    void LoadInterstitial()
+    {
+        string adUnitId;
+        if (Application.platform == RuntimePlatform.Android)
+            adUnitId = "ca-app-pub-6874205512651144/5373847119";
+        else
+            adUnitId = "Unexpected Platform";
+
+        this.interstitial = new InterstitialAd(adUnitId);
+        AdRequest request = new AdRequest.Builder().Build();
+        // Load the interstitial with the request.
+        this.interstitial.OnAdOpening += OnInterstitialOpen;
+        this.interstitial.OnAdClosed += OnInterstitialClose;
+
+        this.interstitial.LoadAd(request);
     }
 
     void ResetVariables(bool _)
@@ -202,6 +220,10 @@ public class GameScreen : MonoBehaviour
         ResetVariables(true);
         gridScript.Start();
         gridScript.SetPause(false);
+
+        if (interstitial.IsLoaded())
+            interstitial.Show();
+        LoadInterstitial();
     }
 
     public void StartPausePopUp()
@@ -223,5 +245,15 @@ public class GameScreen : MonoBehaviour
     public void OnMainMenuButtonClick()
     {
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+    }
+
+    public void OnInterstitialOpen(object sender, EventArgs args)
+    {
+        gridScript.SetPause(true);
+    }
+
+    public void OnInterstitialClose(object sender, EventArgs args)
+    {
+        gridScript.SetPause(false);
     }
 }
