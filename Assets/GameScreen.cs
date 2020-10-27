@@ -63,6 +63,12 @@ public class GameScreen : MonoBehaviour
             horizontalDragSpeed *= 2.5f;
             verticalDragSpeed *= 2.5f;
             superAccelerationDragSpeed *= 2.5f;
+        } 
+        else
+        {
+            horizontalDragSpeed *= 2.5f;
+            verticalDragSpeed *= 2.5f;
+            superAccelerationDragSpeed *= 2.5f;
         }
 
         LoadInterstitial();
@@ -75,6 +81,8 @@ public class GameScreen : MonoBehaviour
         this.bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom);
         AdRequest request = new AdRequest.Builder().Build();
         this.bannerView.LoadAd(request);
+
+        LoadGame();
     }
 
     private Save CreateSaveGameObject()
@@ -93,6 +101,24 @@ public class GameScreen : MonoBehaviour
         FileStream file = File.Create(Application.persistentDataPath + "/gamesave.save");
         bf.Serialize(file, save);
         file.Close();
+    }
+
+    public void LoadGame()
+    {
+        if (File.Exists(Application.persistentDataPath + "/gamesave.save"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/gamesave.save", FileMode.Open);
+            Save save = (Save)bf.Deserialize(file);
+            file.Close();
+
+            print("Score");
+            print(save.score);
+        }
+        else
+        {
+            Debug.Log("No game saved!");
+        }
     }
 
 
