@@ -637,4 +637,4 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/MainMenu.unity
   - Assets/GameScene.unity
-  playerPath: C:/Repos/Tetris/Tetris/AndroidBuilds/Tetris5454545.apk
+  playerPath: C:/Repos/Tetris/Tetris/AndroidBuilds/Tetris111111.apk

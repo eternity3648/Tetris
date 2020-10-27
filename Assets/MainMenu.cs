@@ -54,7 +54,7 @@ public class MainMenu : MonoBehaviour
 
     public void ShowInterstitial()
     {
-        if (this.interstitial.IsLoaded())
+        if (this.interstitial.IsLoaded() && Application.platform == RuntimePlatform.Android)
             this.interstitial.Show();
         else
             LoadGame();

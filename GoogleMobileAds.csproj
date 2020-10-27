@@ -137,14 +137,14 @@
     <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\RewardedAdClient.cs" />
     <Compile Include="Assets\GoogleMobileAds\Platforms\iOS\Utils.cs" />
     <Compile Include="Assets\GoogleMobileAds\Platforms\Unity\InitializationStatusDummyClient.cs" />
-    <Reference Include="UnityEngine.UI">
-      <HintPath>C:/Repos/Tetris/Tetris/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>C:/Repos/Tetris/Tetris/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>C:/Repos/Tetris/Tetris/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>C:/Repos/Tetris/Tetris/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.18f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

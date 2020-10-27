@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -32,6 +34,8 @@ public class GameScreen : MonoBehaviour
     private int score = 0;
     private int scoreForTween = 0;
     private InterstitialAd interstitial;
+    private BannerView bannerView;
+    string adUnitId;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +46,8 @@ public class GameScreen : MonoBehaviour
         //this.transform.localScale = new Vector3(scale * localScale.x, scale * localScale.y);
         Vector3 lastMousePosition = Input.mousePosition;
         mouseMoved = new Vector3();
+
+        Save save = new Save();
 
         gridScript = grid.GetComponent<TetrisGrid>();
         TweenCallback<int> callb = OnLineDestroy;
@@ -60,7 +66,35 @@ public class GameScreen : MonoBehaviour
         }
 
         LoadInterstitial();
+
+        string adUnitId;
+        if (Application.platform == RuntimePlatform.Android)
+            adUnitId = "ca-app-pub-6874205512651144/9313092129";
+        else
+            adUnitId = "Unexpected Platform";
+        this.bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom);
+        AdRequest request = new AdRequest.Builder().Build();
+        this.bannerView.LoadAd(request);
     }
+
+    private Save CreateSaveGameObject()
+    {
+        Save save = new Save();
+        save.score = score;
+
+        return save;
+    }
+
+    private void SaveGame()
+    {
+        Save save = CreateSaveGameObject();
+
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath + "/gamesave.save");
+        bf.Serialize(file, save);
+        file.Close();
+    }
+
 
     void LoadInterstitial()
     {
@@ -104,6 +138,8 @@ public class GameScreen : MonoBehaviour
                                    .SetAutoKill(false);
             scoreTweener.OnUpdate(() => scoreText.text = scoreForTween.ToString());
         }
+
+        SaveGame();
     }
 
     private void OnMouseDown()
@@ -244,6 +280,7 @@ public class GameScreen : MonoBehaviour
 
     public void OnMainMenuButtonClick()
     {
+        this.bannerView.Destroy();
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
