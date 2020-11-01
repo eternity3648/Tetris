@@ -173,7 +173,7 @@ ScriptsOnlyBuild:
     className: TMP_Dropdown
   - hash:
       serializedVersion: 2
-      Hash: e5784a962bc6cbfe03ed9a0704c3c02a
+      Hash: b48fbca36aaf4e9f7218b74a8f81b186
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: TetrisGrid
@@ -389,7 +389,7 @@ ScriptsOnlyBuild:
     className: TMP_SpriteAnimator
   - hash:
       serializedVersion: 2
-      Hash: 88a13759cee1dbcb97fd7f0801590b64
+      Hash: 331b7dc05346968f2cc27e2d80bf01e2
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Figure
@@ -521,7 +521,7 @@ ScriptsOnlyBuild:
     className: DOTweenSettings
   - hash:
       serializedVersion: 2
-      Hash: c290f8b502d6fa18696111123a651e8c
+      Hash: f62b4be6bf293b7a0c36858a6bfbc795
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MainMenu

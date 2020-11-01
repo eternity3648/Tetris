@@ -136,6 +136,8 @@ public class GameScreen : MonoBehaviour
             gridScript.LaunchSavedStartFigure(new Vector3(save.figurePosition.x, save.figurePosition.y), save.figureIndex, save.rotationCount,  save.nextFigureIndex);
 
             scoreText.text = save.score.ToString();
+            score = save.score;
+            scoreForTween = score;
         }
         else
         {
