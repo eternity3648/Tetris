@@ -231,7 +231,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 201816786}
-        m_MethodName: ShowInterstitial
+        m_MethodName: ShowInterstitialAndStartNewGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -279,6 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   newGameButton: {fileID: 189275806}
+  continueGameButton: {fileID: 2049558424}
   camera: {fileID: 563796920}
   text: {fileID: 1947791064}
 --- !u!4 &201816787
@@ -1093,8 +1094,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: LoadGame
+      - m_Target: {fileID: 201816786}
+        m_MethodName: ShowInterstitialAndLoadSavedGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

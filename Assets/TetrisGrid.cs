@@ -179,6 +179,18 @@ public class TetrisGrid : MonoBehaviour
         }
     }
 
+    public void ClearCells() 
+    {
+        for (int x = 0; x < sizeX; x++)
+        {
+            for (int y = 0; y < sizeY; y++)
+            {
+                if (!cells[x, y].IsFree())
+                    cells[x, y].DestroyCube();
+            }
+        }
+    }
+
     public void LaunchStartFigure()
     {
         Vector3 startPosition = GetFigureStartPosition();

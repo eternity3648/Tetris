@@ -135,8 +135,7 @@ public class GameScreen : MonoBehaviour
 
             gridScript.LaunchSavedStartFigure(new Vector3(save.figurePosition.x, save.figurePosition.y), save.figureIndex, save.rotationCount,  save.nextFigureIndex);
 
-            print("rotationCount");
-            print(save.rotationCount);
+            scoreText.text = save.score.ToString();
         }
         else
         {
@@ -173,6 +172,12 @@ public class GameScreen : MonoBehaviour
         scoreText.text = "0";
         score = 0;
         scoreForTween = 0;
+    }
+
+    void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus)
+            StartPausePopUp();
     }
 
     void OnLineDestroy(int lineCount)
@@ -299,8 +304,10 @@ public class GameScreen : MonoBehaviour
 
     void Restart()
     {
+        File.Delete(Application.persistentDataPath + "/gamesave.save");
         ResetVariables(true);
         gridScript.Start();
+        gridScript.ClearCells();
         gridScript.SetPause(false);
 
         if (interstitial.IsLoaded())

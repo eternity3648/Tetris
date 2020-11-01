@@ -5,10 +5,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using GoogleMobileAds.Api;
+using System.IO;
 
 public class MainMenu : MonoBehaviour
 {
     public GameObject newGameButton;
+    public GameObject continueGameButton;
     public GameObject camera;
     public Text text;
     private InterstitialAd interstitial;
@@ -45,6 +47,9 @@ public class MainMenu : MonoBehaviour
 
         this.interstitial.LoadAd(request);
 
+        if (File.Exists(Application.persistentDataPath + "/gamesave.save"))
+            continueGameButton.GetComponent<Button>().interactable = true;
+
     }
 
     // Update is called once per frame
@@ -52,18 +57,32 @@ public class MainMenu : MonoBehaviour
     {
     }
 
-    public void ShowInterstitial()
+    public void ShowInterstitialAndStartNewGame()
+    {
+        if (this.interstitial.IsLoaded() && Application.platform == RuntimePlatform.Android)
+            this.interstitial.Show();
+        else
+            StartNewGame();
+    }
+
+    public void ShowInterstitialAndLoadSavedGame()
     {
         if (this.interstitial.IsLoaded() && Application.platform == RuntimePlatform.Android)
             this.interstitial.Show();
         else
             LoadGame();
-
-
     }
 
     public void LoadGame()
     {
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+    }
+
+    public void StartNewGame()
+    {
+        if (File.Exists(Application.persistentDataPath + "/gamesave.save"))
+            File.Delete(Application.persistentDataPath + "/gamesave.save");
+
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
