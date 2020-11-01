@@ -93,11 +93,18 @@ public class GameScreen : MonoBehaviour
     private Save CreateSaveGameObject()
     {
         Save save = new Save();
-        ///save.score = score;
-        save.score = 505;
+        save.score = score;
 
         Cell[,] cells = gridScript.cells;
         save.SaveGridState(cells);
+
+        save.figurePosition.x = gridScript.currentFigure.transform.localPosition.x;
+        save.figurePosition.y = gridScript.currentFigure.transform.localPosition.y;
+        save.figureIndex = gridScript.figScript.index;
+        save.nextFigureIndex = gridScript.nextFigureIndex;
+        save.rotationCount = gridScript.figScript.rotationCount;
+        save.speedCoeff = gridScript.speedCoeff;
+        save.speedCoeffIncreaseCurrentTime = gridScript.speedCoeffIncreaseCurrentTime;
 
         return save;
     }
@@ -123,10 +130,17 @@ public class GameScreen : MonoBehaviour
 
             CreateCubeInCell Create = gridScript.CreateBlockInCell;
             save.SetGridState(Create);
+            gridScript.speedCoeff = save.speedCoeff;
+            gridScript.speedCoeffIncreaseCurrentTime = save.speedCoeffIncreaseCurrentTime;
+
+            gridScript.LaunchSavedStartFigure(new Vector3(save.figurePosition.x, save.figurePosition.y), save.figureIndex, save.rotationCount,  save.nextFigureIndex);
+
+            print("rotationCount");
+            print(save.rotationCount);
         }
         else
         {
-            Debug.Log("No game saved!");
+            gridScript.LaunchStartFigure();
         }
     }
 
@@ -172,8 +186,6 @@ public class GameScreen : MonoBehaviour
                                    .SetAutoKill(false);
             scoreTweener.OnUpdate(() => scoreText.text = scoreForTween.ToString());
         }
-
-        SaveGame();
     }
 
     private void OnMouseDown()
@@ -305,6 +317,8 @@ public class GameScreen : MonoBehaviour
         pausePopUp.SetActive(true);
         pauseScript.Start(OnNewGameButtonClick1, OnContinueButtonClick1, OnMainMenuButtonClick1);
         gridScript.SetPause(true);
+
+        SaveGame();
     }
 
     public void OnContinueButtonClick()

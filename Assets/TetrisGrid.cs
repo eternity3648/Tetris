@@ -21,21 +21,21 @@ public class TetrisGrid : MonoBehaviour
     public float startFastHorizontalMovementDelat;
     public float fallAnimationDelay;
     public float speedCoeffIncrease, speedCoeffIncreaseTime;
+    public GameObject currentFigure;
+    public Figure figScript;
+    public float speedCoeffIncreaseCurrentTime = 0;
+    public float speedCoeff = 1.0f;
+    public int nextFigureIndex;
 
+    private float currentFigureSpeed;
     private Vector3 startPositon;
     private Vector2 currentFigureCoord;
-    private GameObject currentFigure;
-    private Figure figScript;
     private Cell currentCell;
-    private float currentFigureSpeed;
     private float currentDelayBeforeFigureLanding;
     private TweenCallback<int> OnLineDestroy;
     private TweenCallback<GameObject> OnFigureCreate;
     private TweenCallback OnFigureFastFall;
     private TweenCallback OnGameStart;
-    private float speedCoeff = 1.0f;
-    private float speedCoeffIncreaseCurrentTime = 0;
-    private int nextFigureIndex;
     private bool pause = false;
 
     private enum Sides
@@ -89,8 +89,6 @@ public class TetrisGrid : MonoBehaviour
         }
 
         OnGameStart();
-
-        LaunchStartFigure();
     }
 
     public void SetPause(bool value)
@@ -206,6 +204,24 @@ public class TetrisGrid : MonoBehaviour
             currentFigureCoord = new Vector2(1000, 1000);
             CheckIfFigureCanExistInCoord(figScript, GetCellСoordByPosition(startPosition));
         }
+
+        SetFigureSpeed(1);
+        OnFigureCreate(CreateFigure(FigureTypes.GetFigureByIndex(nextFigureIndex), nextFigureIndex, false));
+    }
+
+    public void LaunchSavedStartFigure(Vector3 startPosition, int figureIndex, int rotationCount, int nextFigureIndex)
+    {
+        currentFigureSpeed = slowFigureSpeed;
+
+        int[,] figureMatrix = FigureTypes.GetFigureByIndex(figureIndex);
+        currentFigure = CreateFigure(figureMatrix, figureIndex);
+        currentFigure.transform.localPosition = startPosition;
+        figScript = currentFigure.GetComponent<Figure>();
+
+        for (int i = 0; i < rotationCount; i++)
+            figScript.Rotate();
+
+        currentCell = GetCellByPosition(startPosition);
 
         SetFigureSpeed(1);
         OnFigureCreate(CreateFigure(FigureTypes.GetFigureByIndex(nextFigureIndex), nextFigureIndex, false));
@@ -379,8 +395,8 @@ public class TetrisGrid : MonoBehaviour
         }
         else
         {
-            print(coord.x);
-            print(coord.y);
+            //print(coord.x);
+            //print(coord.y);
             return cells[Convert.ToInt32(coord.x), Convert.ToInt32(coord.y)];
         }
     }

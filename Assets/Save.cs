@@ -9,12 +9,26 @@ public class Save
 {
     public int score = 0;
     public CellInfo[,] cells;
+    public int figureIndex;
+    public int nextFigureIndex;
+    public SerializableVector figurePosition;
+    // how many times figure was rotated
+    public int rotationCount;
+    public float speedCoeff;
+    public float speedCoeffIncreaseCurrentTime;
 
     [System.Serializable]
     public struct CellInfo
     {
         public bool isFree;
         public int cubeIndex;
+    }
+
+    [System.Serializable]
+    public struct SerializableVector
+    {
+        public float x;
+        public float y;
     }
 
     public void SaveGridState(Cell[,] cells1)

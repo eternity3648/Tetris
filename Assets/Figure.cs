@@ -11,8 +11,9 @@ public class Figure : MonoBehaviour
     public GameObject[] blocks;
     public Vector2 centerCoord = new Vector2(0, 0);
     public Vector3 centerPosition;
+    public int index;
+    public int rotationCount = 0;
 
-    private int index;
     private Sprite sprite;
 
     public void Set(int[,] matrix, GameObject cube, Vector3 cellSize, int index1, Sprite sprite1)
@@ -61,6 +62,9 @@ public class Figure : MonoBehaviour
 
         blockMatrix = newMatrix;
         Render();
+
+        rotationCount++;
+        if (rotationCount > 3) rotationCount = 0;
     }
 
     public List<Vector2> GetBlockCoordsRelativeToCoord(Vector2 coord)
