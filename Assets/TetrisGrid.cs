@@ -32,6 +32,7 @@ public class TetrisGrid : MonoBehaviour
     private TweenCallback<int> OnLineDestroy;
     private TweenCallback<GameObject> OnFigureCreate;
     private TweenCallback OnFigureFastFall;
+    private TweenCallback OnGameStart;
     private float speedCoeff = 1.0f;
     private float speedCoeffIncreaseCurrentTime = 0;
     private int nextFigureIndex;
@@ -86,6 +87,8 @@ public class TetrisGrid : MonoBehaviour
                 }
             }
         }
+
+        OnGameStart();
 
         LaunchStartFigure();
     }
@@ -218,6 +221,11 @@ public class TetrisGrid : MonoBehaviour
         OnFigureFastFall = callb;
     }
 
+    public void SetOnGameStart(TweenCallback callb)
+    {
+        OnGameStart = callb;
+    }
+
     // direction true - right, false - left
     public void MoveFigure(bool direction)
     {
@@ -335,7 +343,7 @@ public class TetrisGrid : MonoBehaviour
         borderLine.SetActive(true);
     }
     
-    private void CreateBlockInCell(Vector2 coord, int figureIndex)
+    public void CreateBlockInCell(Vector2 coord, int figureIndex)
     {
         GameObject figureCube = Instantiate(CubePrefab, this.transform);
         figureCube.GetComponent<SpriteRenderer>().sprite = cubeSprites[figureIndex];
@@ -371,6 +379,8 @@ public class TetrisGrid : MonoBehaviour
         }
         else
         {
+            print(coord.x);
+            print(coord.y);
             return cells[Convert.ToInt32(coord.x), Convert.ToInt32(coord.y)];
         }
     }

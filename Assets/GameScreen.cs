@@ -51,7 +51,9 @@ public class GameScreen : MonoBehaviour
 
         gridScript = grid.GetComponent<TetrisGrid>();
         TweenCallback<int> callb = OnLineDestroy;
+        TweenCallback OnGameStartCallb = OnGameStart;
         gridScript.SetOnLinesDestroy(callb);
+        gridScript.SetOnGameStart(OnGameStartCallb);
         ResetVariables(true);
 
         TweenCallback OnMouseUp1 = OnMouseUp;
@@ -81,14 +83,21 @@ public class GameScreen : MonoBehaviour
         this.bannerView = new BannerView(adUnitId, AdSize.Banner, AdPosition.Bottom);
         AdRequest request = new AdRequest.Builder().Build();
         this.bannerView.LoadAd(request);
+    }
 
+    private void OnGameStart()
+    {
         LoadGame();
     }
 
     private Save CreateSaveGameObject()
     {
         Save save = new Save();
-        save.score = score;
+        ///save.score = score;
+        save.score = 505;
+
+        Cell[,] cells = gridScript.cells;
+        save.SaveGridState(cells);
 
         return save;
     }
@@ -112,8 +121,8 @@ public class GameScreen : MonoBehaviour
             Save save = (Save)bf.Deserialize(file);
             file.Close();
 
-            print("Score");
-            print(save.score);
+            CreateCubeInCell Create = gridScript.CreateBlockInCell;
+            save.SetGridState(Create);
         }
         else
         {
@@ -156,7 +165,6 @@ public class GameScreen : MonoBehaviour
     {
         if (lineCount > 0)
         {
-            print("OnLineDestroy");
             if (scoreTweener != null) scoreTweener.Kill(true);
             score += pointsForDestroyingLines[lineCount];
             scoreTweener = DOTween.To(x => scoreForTween = (int)x, scoreForTween, score, 1.5f)
