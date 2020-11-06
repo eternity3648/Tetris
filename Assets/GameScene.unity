@@ -2207,7 +2207,7 @@ MonoBehaviour:
   figurePrefab: {fileID: 5379771758226413113, guid: dda6a26933d7e8943b6cc593bfb90457,
     type: 3}
   cellSize: {x: 1.2, y: 1.2, z: 0}
-  slowFigureSpeed: 2.3
+  slowFigureSpeed: 3
   fastFigureSpeed: 15
   superFastFigureSpeed: 60
   delayBeforeFigureLanding: 0.35
@@ -2215,6 +2215,15 @@ MonoBehaviour:
   fallAnimationDelay: 0.3
   speedCoeffIncrease: 0.2
   speedCoeffIncreaseTime: 30
+  currentFigure: {fileID: 0}
+  figScript: {fileID: 0}
+  figureFallDelayDecreaseCurrentTime: 0
+  speedCoeff: 1
+  nextFigureIndex: 0
+  figureFallDelay: 1.5
+  minFigureFallDelay: 0.25
+  figureFallDelayDecreaseValue: 0.05
+  figureFallDelayDecreaseTime: 30
 --- !u!1 &1768526758
 GameObject:
   m_ObjectHideFlags: 0

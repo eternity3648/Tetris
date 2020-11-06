@@ -20,13 +20,18 @@ public class TetrisGrid : MonoBehaviour
     public float delayBeforeFigureLanding;
     public float startFastHorizontalMovementDelat;
     public float fallAnimationDelay;
-    public float speedCoeffIncrease, speedCoeffIncreaseTime;
     public GameObject currentFigure;
     public Figure figScript;
-    public float speedCoeffIncreaseCurrentTime = 0;
+    public float figureFallDelayDecreaseCurrentTime = 0;
     public float speedCoeff = 1.0f;
     public int nextFigureIndex;
+    public float figureFallDelay;
+    public float minFigureFallDelay;
+    public float figureFallDelayDecreaseValue;
+    public float figureFallDelayDecreaseTime;
 
+
+    private float currentFigureFallTime = 0;
     private float currentFigureSpeed;
     private Vector3 startPositon;
     private Vector2 currentFigureCoord;
@@ -59,8 +64,9 @@ public class TetrisGrid : MonoBehaviour
         startPositon = new Vector3(-cellSize.x * (sizeX / 2), cellSize.y * (sizeX / 2));
         currentDelayBeforeFigureLanding = 0;
         speedCoeff = 1.0f;
-        speedCoeffIncreaseCurrentTime = 0;
+        figureFallDelayDecreaseCurrentTime = 0;
         nextFigureIndex = -1;
+        figureFallDelay = 0.5f; //TEMP
 
         for (int x = 0; x < sizeX; x++)
         {
@@ -99,20 +105,23 @@ public class TetrisGrid : MonoBehaviour
     public void Update()
     {
         float delta = Time.deltaTime;
-        speedCoeffIncreaseCurrentTime += delta;
+        figureFallDelayDecreaseCurrentTime += delta;
+        currentFigureFallTime += delta;
 
         if (!pause)
         {
-            if (speedCoeffIncreaseCurrentTime >= speedCoeffIncreaseTime)
+            if (figureFallDelayDecreaseCurrentTime >= figureFallDelayDecreaseTime)
             {
-                speedCoeff += speedCoeffIncrease;
-                speedCoeffIncreaseCurrentTime -= speedCoeffIncreaseTime;
+                figureFallDelay -= figureFallDelayDecreaseValue;
+                if (figureFallDelay < minFigureFallDelay) figureFallDelay = minFigureFallDelay;
+                figureFallDelayDecreaseCurrentTime -= figureFallDelayDecreaseTime;
             }
 
-            if (currentFigure != null && delta < 0.2f)
+            if (currentFigure != null && currentFigureFallTime > figureFallDelay && delta < 0.2f)
             {
+                currentFigureFallTime = 0;
                 Vector3 previousFigurePosition = currentFigure.transform.localPosition;
-                Vector3 posDiff = new Vector3(0, -currentFigureSpeed * speedCoeff * Time.deltaTime, 0);
+                Vector3 posDiff = new Vector3(0, -cellSize.y + 0.0001f, 0);
                 Vector3 figurePosition = previousFigurePosition + posDiff;
 
                 Vector2 coord = GetCellСoordByPosition(figurePosition);
@@ -142,6 +151,7 @@ public class TetrisGrid : MonoBehaviour
                             if (CheckIfFigureCanExistInCoord(figScript, coord))
                             {
                                 currentDelayBeforeFigureLanding = 0;
+                                currentFigureFallTime = 0;
                                 List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
 
                                 coords.ForEach(delegate (Vector2 blockCoord)
@@ -167,6 +177,7 @@ public class TetrisGrid : MonoBehaviour
                     }
                     else
                     {
+                        currentFigureFallTime = figureFallDelay;
                         currentDelayBeforeFigureLanding -= delta;
 
                         if (currentDelayBeforeFigureLanding <= 0)
