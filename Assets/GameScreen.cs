@@ -168,7 +168,6 @@ public class GameScreen : MonoBehaviour
         fastHorizontalMovementDelay = 0;
         rightSidePressed = false;
         leftSidePressed = false;
-        SetFigureSpeed(1);
 
         if (scoreTweener != null) scoreTweener.Kill(true);
         scoreText.text = "0";
@@ -206,8 +205,6 @@ public class GameScreen : MonoBehaviour
     {
         mousePressed = false;
         mouseMoved = new Vector3();
-        if (gridScript.CanFigureSpeedBeChanged())
-            SetFigureSpeed(1);
 
         Vector3 posDiff = Input.mousePosition - lastMousePosition;
         if (!wasFigureMoved) RotateFigure(true);
@@ -263,23 +260,22 @@ public class GameScreen : MonoBehaviour
 
                 if (gridScript.CanFigureSpeedBeChanged()) 
                 {
-                    SetFigureSpeed(1);
+                    //SetFigureSpeed(1);
                     wasFigureAcceleratedVertically = false;
                     mouseMoved.y = 0;
                 }
 
             }
-            else if (posDiff.y < -superAccelerationDragSpeed && !wasFigureAcceleratedVertically)
+            //else if (posDiff.y < -superAccelerationDragSpeed && !wasFigureAcceleratedVertically)
+            //{
+            //    wasFigureMoved = true;
+            //    wasFigureAcceleratedVertically = true;
+            //    SetFigureSpeed(3);
+            //}
+            else if (mouseMoved.y <= -verticalDragSpeed)
             {
-                wasFigureMoved = true;
-                wasFigureAcceleratedVertically = true;
-                SetFigureSpeed(3);
-            }
-            else if (mouseMoved.y <= -verticalDragSpeed && gridScript.CanFigureSpeedBeChanged() && !wasFigureAcceleratedVertically)
-            {
-                wasFigureMoved = true;
-                wasFigureAcceleratedVertically = true;
-                SetFigureSpeed(2);
+                mouseMoved.y = 0;
+                gridScript.MoveFigureDownOnOneCell();
             }
 
             lastMousePosition = Input.mousePosition;
@@ -292,11 +288,6 @@ public class GameScreen : MonoBehaviour
         if (side) { rightSidePressed = true; }
         else { leftSidePressed = true; }
         fastHorizontalMovementDelay = startFastHorizontalMovementDelat;
-    }
-
-    void SetFigureSpeed(int speed)
-    {
-        gridScript.SetFigureSpeed(speed);
     }
 
     void RotateFigure(bool _)

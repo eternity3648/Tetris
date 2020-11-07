@@ -311,7 +311,7 @@ MonoBehaviour:
   startFastHorizontalMovementDelat: 0.35
   nativeAspectRatio: 0.5625
   horizontalDragSpeed: 40
-  verticalDragSpeed: 60
+  verticalDragSpeed: 50
   superAccelerationDragSpeed: 19
   pointsForDestroyingLines: 0000000064000000fa000000f401000020030000
 --- !u!222 &123263904
@@ -2213,15 +2213,13 @@ MonoBehaviour:
   delayBeforeFigureLanding: 0.35
   startFastHorizontalMovementDelat: 0.25
   fallAnimationDelay: 0.3
-  speedCoeffIncrease: 0.2
-  speedCoeffIncreaseTime: 30
   currentFigure: {fileID: 0}
   figScript: {fileID: 0}
   figureFallDelayDecreaseCurrentTime: 0
   speedCoeff: 1
   nextFigureIndex: 0
   figureFallDelay: 1.5
-  minFigureFallDelay: 0.25
+  minFigureFallDelay: 0.35
   figureFallDelayDecreaseValue: 0.05
   figureFallDelayDecreaseTime: 30
 --- !u!1 &1768526758

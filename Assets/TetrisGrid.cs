@@ -66,7 +66,7 @@ public class TetrisGrid : MonoBehaviour
         speedCoeff = 1.0f;
         figureFallDelayDecreaseCurrentTime = 0;
         nextFigureIndex = -1;
-        figureFallDelay = 0.5f; //TEMP
+        //figureFallDelay = 0.5f; //TEMP
 
         for (int x = 0; x < sizeX; x++)
         {
@@ -228,7 +228,6 @@ public class TetrisGrid : MonoBehaviour
             CheckIfFigureCanExistInCoord(figScript, GetCellСoordByPosition(startPosition));
         }
 
-        SetFigureSpeed(1);
         OnFigureCreate(CreateFigure(FigureTypes.GetFigureByIndex(nextFigureIndex), nextFigureIndex, false));
     }
 
@@ -246,7 +245,6 @@ public class TetrisGrid : MonoBehaviour
 
         currentCell = GetCellByPosition(startPosition);
 
-        SetFigureSpeed(1);
         OnFigureCreate(CreateFigure(FigureTypes.GetFigureByIndex(nextFigureIndex), nextFigureIndex, false));
     }
 
@@ -275,23 +273,6 @@ public class TetrisGrid : MonoBehaviour
         if (CheckIfFigureCanExistInCoord(figScript, coord))
         {
             currentFigure.transform.localPosition += positionShift;
-        }
-    }
-
-    // 1 - slow, 2 - fast, 3 - superfast and unstoppable
-    public void SetFigureSpeed(int speed)
-    {
-        if (speed == 1)
-        {
-            currentFigureSpeed = slowFigureSpeed;
-        }
-        else if (speed == 2)
-        {
-            currentFigureSpeed = fastFigureSpeed;
-        }
-        else if (speed == 3)
-        {
-            currentFigureSpeed = superFastFigureSpeed;
         }
     }
 
@@ -331,6 +312,11 @@ public class TetrisGrid : MonoBehaviour
             }
         }
         Destroy(testFigure);
+    }
+
+    public void MoveFigureDownOnOneCell()
+    {
+        currentFigureFallTime = figureFallDelay;
     }
 
 
