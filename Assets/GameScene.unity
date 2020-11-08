@@ -2210,7 +2210,7 @@ MonoBehaviour:
   slowFigureSpeed: 3
   fastFigureSpeed: 15
   superFastFigureSpeed: 60
-  delayBeforeFigureLanding: 1
+  delayBeforeFigureLanding: 0.2
   startFastHorizontalMovementDelat: 0.25
   fallAnimationDelay: 0.3
   currentFigure: {fileID: 0}

@@ -140,18 +140,19 @@ public class TetrisGrid : MonoBehaviour
                 }
                 else if (currentDelayBeforeFigureLanding == 0)
                 {
-                    currentDelayBeforeFigureLanding = delayBeforeFigureLanding;
+                    if (CheckIfFigureCanBeRotatedOrMoved())
+                        currentDelayBeforeFigureLanding = delayBeforeFigureLanding;
+                    else
+                        LandFigure(prevCoord);
                 }
             }
             else if (currentDelayBeforeFigureLanding != 0)
             {
-                print(currentDelayBeforeFigureLanding);
                 currentDelayBeforeFigureLanding -= delta;
                 if (currentDelayBeforeFigureLanding <= 0)
                 {
                     if (!CheckIfFigureCanExistInCoord(figScript, coord))
                         LandFigure(prevCoord);
-                    print("fall1111");
                 }
             }
         }
@@ -302,7 +303,9 @@ public class TetrisGrid : MonoBehaviour
             Figure testFigScript = testFigure.GetComponent<Figure>();
             testFigScript.Rotate();
             Vector2 coord = GetCellСoordByPosition(currentFigure.transform.localPosition);
-            int coordShiftRange = 2;
+            int coordShiftRange = 1;
+            if (figScript.blockMatrix.GetLength(0) == 4)
+                coordShiftRange = 2;
 
             for (int i = 0; i <= coordShiftRange; i++)
             {
@@ -415,6 +418,25 @@ public class TetrisGrid : MonoBehaviour
         Cell cell = GetCellByCoord(coord);
         cell.occupyingCube = figureCube;
         cell.cubeIndex = figureIndex;
+    }
+
+    private bool CheckIfFigureCanBeRotatedOrMoved()
+    {
+        bool result = false;
+        GameObject testFigure = CreateFigure(figScript.GetMatrix(), figScript.GetIndex());
+        Figure testFigScript = testFigure.GetComponent<Figure>();;
+        Vector2 coord = GetCellСoordByPosition(currentFigure.transform.localPosition);
+
+        if (CheckIfFigureCanExistInCoord(testFigScript, coord + new Vector2(1, 0)) || CheckIfFigureCanExistInCoord(testFigScript, coord + new Vector2(-1, 0)))
+            result = true;
+
+        testFigScript.Rotate();
+        if (CheckIfFigureCanExistInCoord(testFigScript, coord))
+            result = true;
+
+        Destroy(testFigure);
+
+        return result;
     }
 
     private Vector3 GetCellPosition(Vector2 coord)
