@@ -266,12 +266,10 @@ public class GameScreen : MonoBehaviour
                 }
 
             }
-            //else if (posDiff.y < -superAccelerationDragSpeed && !wasFigureAcceleratedVertically)
-            //{
-            //    wasFigureMoved = true;
-            //    wasFigureAcceleratedVertically = true;
-            //    SetFigureSpeed(3);
-            //}
+            else if (posDiff.y < -superAccelerationDragSpeed && !wasFigureAcceleratedVertically)
+            {
+                gridScript.ApplyFigureSuperFastFall();
+            }
             else if (mouseMoved.y <= -verticalDragSpeed)
             {
                 mouseMoved.y = 0;

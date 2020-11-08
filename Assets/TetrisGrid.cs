@@ -30,7 +30,7 @@ public class TetrisGrid : MonoBehaviour
     public float figureFallDelayDecreaseValue;
     public float figureFallDelayDecreaseTime;
 
-
+    private bool figureFastFalling = false;
     private float currentFigureFallTime = 0;
     private float currentFigureSpeed;
     private Vector3 startPositon;
@@ -108,7 +108,7 @@ public class TetrisGrid : MonoBehaviour
         figureFallDelayDecreaseCurrentTime += delta;
         currentFigureFallTime += delta;
 
-        if (!pause)
+        if (!pause && !figureFastFalling)
         {
             if (figureFallDelayDecreaseCurrentTime >= figureFallDelayDecreaseTime)
             {
@@ -140,35 +140,9 @@ public class TetrisGrid : MonoBehaviour
                 }
                 else
                 {
-                    void LandFigure()
-                    {
-                        int coordX = (int)coord.x;
-                        int coordY = (int)coord.y;
-
-                        for (int y = coordY; y >= 0; y--)
-                        {
-                            coord = new Vector2(coordX, y);
-                            if (CheckIfFigureCanExistInCoord(figScript, coord))
-                            {
-                                currentDelayBeforeFigureLanding = 0;
-                                currentFigureFallTime = 0;
-                                List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
-
-                                coords.ForEach(delegate (Vector2 blockCoord)
-                                {
-                                    CreateBlockInCell(blockCoord, figScript.GetIndex());
-                                });
-                                Destroy(currentFigure);
-                                currentFigure = null;
-                                CheckForBlocksRemoving();
-                                break;
-                            }
-                        }
-                    }
-
                     if (currentFigureSpeed == superFastFigureSpeed)
                     {
-                        LandFigure();
+                        LandFigure(coord);
                         OnFigureFastFall();
                     }
                     else if (currentDelayBeforeFigureLanding == 0)
@@ -182,7 +156,7 @@ public class TetrisGrid : MonoBehaviour
 
                         if (currentDelayBeforeFigureLanding <= 0)
                         {
-                            LandFigure();
+                            LandFigure(coord);
                         }
                     }
                 }
@@ -228,6 +202,8 @@ public class TetrisGrid : MonoBehaviour
             CheckIfFigureCanExistInCoord(figScript, GetCellСoordByPosition(startPosition));
         }
 
+        figureFastFalling = false;
+
         OnFigureCreate(CreateFigure(FigureTypes.GetFigureByIndex(nextFigureIndex), nextFigureIndex, false));
     }
 
@@ -266,13 +242,46 @@ public class TetrisGrid : MonoBehaviour
     // direction true - right, false - left
     public void MoveFigure(bool direction)
     {
-        Vector3 positionShift = new Vector3(cellSize.x, 0);
-        if (!direction) { positionShift = -positionShift; }
-        Vector2 coord = GetCellСoordByPosition(currentFigure.transform.localPosition + positionShift);
-
-        if (CheckIfFigureCanExistInCoord(figScript, coord))
+        if (!figureFastFalling)
         {
-            currentFigure.transform.localPosition += positionShift;
+            Vector3 positionShift = new Vector3(cellSize.x, 0);
+            if (!direction) { positionShift = -positionShift; }
+            Vector2 coord = GetCellСoordByPosition(currentFigure.transform.localPosition + positionShift);
+
+            if (CheckIfFigureCanExistInCoord(figScript, coord))
+            {
+                currentFigure.transform.localPosition += positionShift;
+            }
+        }
+    }
+
+    public void ApplyFigureSuperFastFall()
+    {
+        if (!figureFastFalling)
+        {
+            figureFastFalling = true;
+            Vector3 pos = currentFigure.transform.localPosition;
+            Vector3 prevPos = pos;
+            float fallCellTime = 0.035f;
+
+            Vector2 coord = GetCellСoordByPosition(pos);
+            while (CheckIfFigureCanExistInCoord(figScript, coord))
+            {
+                prevPos = pos;
+                pos += new Vector3(0, -cellSize.y + 0.0001f, 0);
+                coord = GetCellСoordByPosition(pos);
+            }
+
+            void OnFinish()
+            {
+                LandFigure(GetCellСoordByPosition(prevPos));
+            }
+
+            if (prevPos != currentFigure.transform.localPosition)
+            {
+                int count = (int)Math.Abs((currentFigure.transform.localPosition.y - prevPos.y) / cellSize.y);
+                currentFigure.transform.DOLocalMoveY(prevPos.y, fallCellTime * count).OnComplete(OnFinish);
+            }
         }
     }
 
@@ -288,30 +297,33 @@ public class TetrisGrid : MonoBehaviour
 
     public void RotateFigure()
     {
-        GameObject testFigure = CreateFigure(figScript.GetMatrix(), figScript.GetIndex());
-        Figure testFigScript = testFigure.GetComponent<Figure>();
-        testFigScript.Rotate();
-        Vector2 coord = GetCellСoordByPosition(currentFigure.transform.localPosition);
-        int coordShiftRange = 2;
-
-        for (int i = 0; i <= coordShiftRange; i++)
+        if (!figureFastFalling)
         {
-            Vector2 testLeftCoord = coord + new Vector2(-i, 0);
-            if (CheckIfFigureCanExistInCoord(testFigScript, testLeftCoord))
+            GameObject testFigure = CreateFigure(figScript.GetMatrix(), figScript.GetIndex());
+            Figure testFigScript = testFigure.GetComponent<Figure>();
+            testFigScript.Rotate();
+            Vector2 coord = GetCellСoordByPosition(currentFigure.transform.localPosition);
+            int coordShiftRange = 2;
+
+            for (int i = 0; i <= coordShiftRange; i++)
             {
-                currentFigure.transform.localPosition += new Vector3(-i * cellSize.x, 0);
-                figScript.Rotate();
-                break;
+                Vector2 testLeftCoord = coord + new Vector2(-i, 0);
+                if (CheckIfFigureCanExistInCoord(testFigScript, testLeftCoord))
+                {
+                    currentFigure.transform.localPosition += new Vector3(-i * cellSize.x, 0);
+                    figScript.Rotate();
+                    break;
+                }
+                Vector2 testRightCoord = coord + new Vector2(i, 0);
+                if (CheckIfFigureCanExistInCoord(testFigScript, testRightCoord))
+                {
+                    currentFigure.transform.localPosition += new Vector3(i * cellSize.x, 0);
+                    figScript.Rotate();
+                    break;
+                }
             }
-            Vector2 testRightCoord = coord + new Vector2(i, 0);
-            if (CheckIfFigureCanExistInCoord(testFigScript, testRightCoord))
-            {
-                currentFigure.transform.localPosition += new Vector3(i * cellSize.x, 0);
-                figScript.Rotate();
-                break;
-            }
+            Destroy(testFigure);
         }
-        Destroy(testFigure);
     }
 
     public void MoveFigureDownOnOneCell()
@@ -319,6 +331,33 @@ public class TetrisGrid : MonoBehaviour
         currentFigureFallTime = figureFallDelay;
     }
 
+    private void LandFigure(Vector2 coord)
+    {
+        int coordX = (int)coord.x;
+        int coordY = (int)coord.y;
+
+        for (int y = coordY; y >= 0; y--)
+        {
+            coord = new Vector2(coordX, y);
+            if (CheckIfFigureCanExistInCoord(figScript, coord))
+            {
+                currentDelayBeforeFigureLanding = 0;
+                currentFigureFallTime = 0;
+                List<Vector2> coords = figScript.GetBlockCoordsRelativeToCoord(coord);
+
+                coords.ForEach(delegate (Vector2 blockCoord)
+                {
+                    CreateBlockInCell(blockCoord, figScript.GetIndex());
+                });
+                Destroy(currentFigure);
+                currentFigure = null;
+                CheckForBlocksRemoving();
+                break;
+            }
+        }
+
+        // TODO, call OnGameLost when figure is not landed after code above
+    }
 
     private GameObject CreateFigure(int[,] matrix, int figureIndex, bool attachToGrid = true)
     {
