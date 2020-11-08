@@ -312,7 +312,7 @@ MonoBehaviour:
   nativeAspectRatio: 0.5625
   horizontalDragSpeed: 40
   verticalDragSpeed: 40
-  superAccelerationDragSpeed: 10
+  superAccelerationDragSpeed: 24
   pointsForDestroyingLines: 0000000064000000fa000000f401000020030000
 --- !u!222 &123263904
 CanvasRenderer:
@@ -2210,7 +2210,7 @@ MonoBehaviour:
   slowFigureSpeed: 3
   fastFigureSpeed: 15
   superFastFigureSpeed: 60
-  delayBeforeFigureLanding: 0.35
+  delayBeforeFigureLanding: 1
   startFastHorizontalMovementDelat: 0.25
   fallAnimationDelay: 0.3
   currentFigure: {fileID: 0}
@@ -2218,7 +2218,7 @@ MonoBehaviour:
   figureFallDelayDecreaseCurrentTime: 0
   speedCoeff: 1
   nextFigureIndex: 0
-  figureFallDelay: 1.5
+  figureFallDelay: 1
   minFigureFallDelay: 0.35
   figureFallDelayDecreaseValue: 0.05
   figureFallDelayDecreaseTime: 30

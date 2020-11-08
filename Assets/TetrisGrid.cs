@@ -117,15 +117,15 @@ public class TetrisGrid : MonoBehaviour
                 figureFallDelayDecreaseCurrentTime -= figureFallDelayDecreaseTime;
             }
 
-            if (currentFigure != null && currentFigureFallTime > figureFallDelay && delta < 0.2f)
+            Vector3 previousFigurePosition = currentFigure.transform.localPosition;
+            Vector3 posDiff = new Vector3(0, -cellSize.y + 0.0001f, 0);
+            Vector3 figurePosition = previousFigurePosition + posDiff;
+            Vector2 prevCoord = GetCellСoordByPosition(previousFigurePosition);
+            Vector2 coord = GetCellСoordByPosition(figurePosition);
+
+            if (currentDelayBeforeFigureLanding == 0 && (currentFigure != null && currentFigureFallTime > figureFallDelay && delta < 0.2f))
             {
                 currentFigureFallTime = 0;
-                Vector3 previousFigurePosition = currentFigure.transform.localPosition;
-                Vector3 posDiff = new Vector3(0, -cellSize.y + 0.0001f, 0);
-                Vector3 figurePosition = previousFigurePosition + posDiff;
-
-                Vector2 coord = GetCellСoordByPosition(figurePosition);
-                Cell cell = GetCellByCoord(coord);
 
                 if (CheckIfFigureCanExistInCoord(figScript, coord))
                 {
@@ -138,30 +138,27 @@ public class TetrisGrid : MonoBehaviour
                     Destroy(currentFigure);
                     currentFigure = null;
                 }
-                else
+                else if (currentDelayBeforeFigureLanding == 0)
                 {
-                    if (currentFigureSpeed == superFastFigureSpeed)
-                    {
-                        LandFigure(coord);
-                        OnFigureFastFall();
-                    }
-                    else if (currentDelayBeforeFigureLanding == 0)
-                    {
-                        currentDelayBeforeFigureLanding = delayBeforeFigureLanding;
-                    }
-                    else
-                    {
-                        currentFigureFallTime = figureFallDelay;
-                        currentDelayBeforeFigureLanding -= delta;
-
-                        if (currentDelayBeforeFigureLanding <= 0)
-                        {
-                            LandFigure(coord);
-                        }
-                    }
+                    currentDelayBeforeFigureLanding = delayBeforeFigureLanding;
+                }
+            }
+            else if (currentDelayBeforeFigureLanding != 0)
+            {
+                print(currentDelayBeforeFigureLanding);
+                currentDelayBeforeFigureLanding -= delta;
+                if (currentDelayBeforeFigureLanding <= 0)
+                {
+                    if (!CheckIfFigureCanExistInCoord(figScript, coord))
+                        LandFigure(prevCoord);
+                    print("fall1111");
                 }
             }
         }
+    }
+    IEnumerator ExecuteAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
     }
 
     public void ClearCells() 
@@ -202,6 +199,7 @@ public class TetrisGrid : MonoBehaviour
             CheckIfFigureCanExistInCoord(figScript, GetCellСoordByPosition(startPosition));
         }
 
+        currentDelayBeforeFigureLanding = 0;
         figureFastFalling = false;
 
         OnFigureCreate(CreateFigure(FigureTypes.GetFigureByIndex(nextFigureIndex), nextFigureIndex, false));
@@ -251,6 +249,7 @@ public class TetrisGrid : MonoBehaviour
             if (CheckIfFigureCanExistInCoord(figScript, coord))
             {
                 currentFigure.transform.localPosition += positionShift;
+                if (currentDelayBeforeFigureLanding != 0) currentDelayBeforeFigureLanding = delayBeforeFigureLanding;
             }
         }
     }
