@@ -2340,7 +2340,7 @@ MonoBehaviour:
   superFastFigureSpeed: 60
   delayBeforeFigureLanding: 0.2
   startFastHorizontalMovementDelat: 0.25
-  fallAnimationDelay: 0.3
+  fallAnimationDelay: 0.35
   currentFigure: {fileID: 0}
   figScript: {fileID: 0}
   figureFallDelayDecreaseCurrentTime: 0

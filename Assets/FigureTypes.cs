@@ -10,7 +10,16 @@ public static class FigureTypes
 
     private static bool initialized = false;
     private static System.Random random = new System.Random();
-
+    private static Color[] figureColors =
+{
+        new Color(15, 212, 65, 255),
+        new Color(15, 187, 212, 255),
+        new Color(71, 15, 212, 255),
+        new Color(209, 15, 212, 255),
+        new Color(212, 15, 83, 255),
+        new Color(212, 137, 15, 255),
+        new Color(208, 212, 15, 255)
+    };
 
     public static void Init()
     {
@@ -100,6 +109,14 @@ public static class FigureTypes
     {
         return types[index];
     }
+
+    public static Color GetСolor(int index)
+    {
+        Color color = figureColors[index];
+        Color dividedColor = new Color(color.r / 255, color.g / 255, color.b / 255, color.a / 255);
+        return dividedColor;
+    }
+
     public static Vector3 GetPositionShiftByIndex(int index)
     {
         return positionShifts[index];

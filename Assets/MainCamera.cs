@@ -54,7 +54,7 @@ public class MainCamera : MonoBehaviour
         int matrixSize = figScript.blockMatrix.GetUpperBound(0) + 1;
 
         Vector3 positionDiff = (float)matrixSize / 2.0f * cellSize * 1 / 0.35f;
-        figure.transform.parent = nextFigureContainer.transform;
+        figure.transform.SetParent(nextFigureContainer.transform);
         figure.transform.localPosition = -positionDiff - FigureTypes.GetPositionShiftByIndex(figScript.GetIndex());
         Vector3 scale = figure.transform.localScale;
         scale *= 0.35f;

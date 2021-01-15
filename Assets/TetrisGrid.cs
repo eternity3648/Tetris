@@ -191,8 +191,6 @@ public class TetrisGrid : MonoBehaviour
         figScript = currentFigure.GetComponent<Figure>();
 
         currentCell = GetCellByPosition(startPosition);
-        //print("currentCell");
-        //print(GetCellСoordByPosition(startPosition));
         if (CheckIfCellIsFreeForBlock(currentCell))
         {
             currentFigure.transform.localPosition = startPosition;
@@ -373,7 +371,7 @@ public class TetrisGrid : MonoBehaviour
             figure = Instantiate(figurePrefab);
         }
         Figure script = figure.GetComponent<Figure>();
-        script.Set(matrix, CubePrefab, cellSize, figureIndex, cubeSprites[figureIndex]);
+        script.Set(matrix, CubePrefab, cellSize, figureIndex);
         return figure;
     }
 
@@ -412,7 +410,9 @@ public class TetrisGrid : MonoBehaviour
     public void CreateBlockInCell(Vector2 coord, int figureIndex)
     {
         GameObject figureCube = Instantiate(CubePrefab, this.transform);
-        figureCube.GetComponent<SpriteRenderer>().sprite = cubeSprites[figureIndex];
+        Color color = FigureTypes.GetСolor(figureIndex);
+        figureCube.GetComponent<SpriteRenderer>().color = color;
+        figureCube.GetComponent<SpriteRenderer>().material.color = color;
         figureCube.transform.localPosition = GetCellPosition(coord);
         figureCube.SetActive(true);
         Cell cell = GetCellByCoord(coord);
@@ -550,7 +550,7 @@ public class TetrisGrid : MonoBehaviour
                 if (!cell.IsFree() && removedLinesCounterUnder > 0)
                 {
                     int cubeIndex = cell.cubeIndex;
-                    cell.DestroyCube();
+                    cell.DestroyCube(false);
                     Vector2 newCoord = new Vector2(x, y + removedLinesCounterUnder);
                     CreateBlockInCell(newCoord, cubeIndex);
                     TweenCallback OnFinish = LaunchStartFigure;
@@ -579,7 +579,9 @@ public class TetrisGrid : MonoBehaviour
         Vector3 targetPosition = tran.localPosition;
         Vector3 startPosition = targetPosition + new Vector3(0, cellSize.y * linesFallCount);
         tran.localPosition = startPosition;
-        tran.DOLocalMoveY(targetPosition.y, fallAnimationDelay).OnComplete(OnFinish);
+        Sequence mySequence = DOTween.Sequence();
+        mySequence.AppendInterval(fallAnimationDelay);
+        mySequence.Append(tran.DOLocalMoveY(targetPosition.y, fallAnimationDelay).OnComplete(OnFinish));
     }
 }
 
@@ -593,20 +595,27 @@ public class Cell
         return (occupyingCube == null);
     }
 
-    public void DestroyCube()
+    public void DestroyCube(bool animation = true, Action OnFinish = null)
     {
         GameObject cube = occupyingCube;
+        Material material = cube.GetComponent<SpriteRenderer>().material;
         occupyingCube = null;
         cubeIndex = -1;
 
         void Destroy()
         {
             GameObject.Destroy(cube);
+            OnFinish?.Invoke();
         }
 
-        SpriteRenderer rend = cube.GetComponent<SpriteRenderer>();
-        Color color = rend.color;
-        color.a = 0;
-        rend.DOColor(color, 0.3f).OnComplete(Destroy);
+        void ChangeMaterialFade(float value)
+        {
+            material.SetFloat("_Fade", value);
+        }
+
+        if (animation)
+            DOTween.To(ChangeMaterialFade, 1, 0, 0.6f).OnComplete(Destroy);
+        else
+            Destroy();
     }
 }

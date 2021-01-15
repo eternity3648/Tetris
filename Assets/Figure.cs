@@ -14,9 +14,7 @@ public class Figure : MonoBehaviour
     public int index;
     public int rotationCount = 0;
 
-    private Sprite sprite;
-
-    public void Set(int[,] matrix, GameObject cube, Vector3 cellSize, int index1, Sprite sprite1)
+    public void Set(int[,] matrix, GameObject cube, Vector3 cellSize, int index1)
     {
         centerPosition = -figureCellSize;
         blockMatrix = matrix;
@@ -24,7 +22,6 @@ public class Figure : MonoBehaviour
         figureCellSize = cellSize;
         blocks = new GameObject[blocksCount + 1];
         index = index1;
-        sprite = sprite1;
         Render();
     }
 
@@ -98,12 +95,15 @@ public class Figure : MonoBehaviour
             }
 
             GameObject figureCube = Instantiate(cubePrefab, this.transform);
-            figureCube.GetComponent<SpriteRenderer>().sprite = sprite;
+            print("index" + index);
             blocks[i] = figureCube;
             Vector2 blockCoord = GetBlockCoord(i);
             Vector3 position = GetBlockPositionByCoord(blockCoord);
             figureCube.transform.localPosition = GetBlockPositionByCoord(blockCoord);
             figureCube.SetActive(true);
+            Color color = FigureTypes.GetСolor(index);
+            figureCube.GetComponent<SpriteRenderer>().color = color;
+            figureCube.GetComponent<SpriteRenderer>().material.color = color;
         }
     }
 
