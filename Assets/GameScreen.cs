@@ -216,9 +216,6 @@ public class GameScreen : MonoBehaviour
         mouseMoved = new Vector3();
 
         Vector3 posDiff = Input.mousePosition - downMousePosition;
-        print("posDiff = " + posDiff);
-        //print("Input.mousePosition = " + Input.mousePosition);
-        //print("lastMousePosition = " + lastMousePosition);
         if (!wasFigureMoved && posDiff.magnitude < 0.0001f) RotateFigure(true);
         wasFigureMoved = false;
         wasFigureAcceleratedVertically = false;
@@ -247,6 +244,7 @@ public class GameScreen : MonoBehaviour
             if (posDiff.magnitude < 1) { posDiff = new Vector3(); }
             mouseMoved += posDiff;
 
+            print("posDiff.y = " + posDiff.y);
             if (Mathf.Abs(mouseMoved.x) >= horizontalDragSpeed)
             {
                 wasFigureMoved = true;
@@ -278,8 +276,9 @@ public class GameScreen : MonoBehaviour
                 }
 
             }
-            else if (posDiff.y < -superAccelerationDragSpeed && !wasFigureAcceleratedVertically)
+            else if (posDiff.y < -superAccelerationDragSpeed)
             {
+                print("Yessss");
                 gridScript.ApplyFigureSuperFastFall();
             }
             else if (mouseMoved.y <= -verticalDragSpeed)
