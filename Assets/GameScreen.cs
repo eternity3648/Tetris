@@ -64,15 +64,15 @@ public class GameScreen : MonoBehaviour
 
         if (Application.platform == RuntimePlatform.Android)
         {
-            horizontalDragSpeed *= 2.5f;
+            horizontalDragSpeed *= 2.0f;
             verticalDragSpeed *= 2.5f;
             superAccelerationDragSpeed *= 2.5f;
         } 
         else
         {
-            horizontalDragSpeed *= 2.5f;
+            horizontalDragSpeed *= 3.5f;
             verticalDragSpeed *= 2.5f;
-            superAccelerationDragSpeed *= 2.5f;
+            superAccelerationDragSpeed *= 1f;
         }
 
         LoadInterstitial();
@@ -244,7 +244,6 @@ public class GameScreen : MonoBehaviour
             if (posDiff.magnitude < 1) { posDiff = new Vector3(); }
             mouseMoved += posDiff;
 
-            print("posDiff.y = " + posDiff.y);
             if (Mathf.Abs(mouseMoved.x) >= horizontalDragSpeed)
             {
                 wasFigureMoved = true;
@@ -278,7 +277,6 @@ public class GameScreen : MonoBehaviour
             }
             else if (posDiff.y < -superAccelerationDragSpeed)
             {
-                print("Yessss");
                 gridScript.ApplyFigureSuperFastFall();
             }
             else if (mouseMoved.y <= -verticalDragSpeed)

@@ -318,7 +318,7 @@ MonoBehaviour:
   nativeAspectRatio: 0.5625
   horizontalDragSpeed: 40
   verticalDragSpeed: 40
-  superAccelerationDragSpeed: 8
+  superAccelerationDragSpeed: 25
   pointsForDestroyingLines: 0000000064000000fa000000f401000020030000
 --- !u!222 &123263904
 CanvasRenderer:

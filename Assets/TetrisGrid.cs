@@ -200,6 +200,7 @@ public class TetrisGrid : MonoBehaviour
         }
 
         currentDelayBeforeFigureLanding = 0;
+        figureFallDelayDecreaseCurrentTime = 0;
         figureFastFalling = false;
 
         OnFigureCreate(CreateFigure(FigureTypes.GetFigureByIndex(nextFigureIndex), nextFigureIndex, false));
@@ -561,14 +562,8 @@ public class TetrisGrid : MonoBehaviour
                     Vector2 newCoord = new Vector2(x, y + removedLinesCounterUnder);
                     CreateBlockInCell(newCoord, cubeIndex);
                     TweenCallback OnFinish = LaunchStartFigure;
-                    if (!isAnimationFirst) 
-                    {
-                        isAnimationFirst = true;
-                    } 
-                    else
-                    {
-                        OnFinish = null;
-                    }
+                    if (isAnimationFirst) OnFinish = null;
+                    isAnimationFirst = true;
                     AddCubeFallAnimation(GetCellByCoord(newCoord).occupyingCube, removedLinesCounterUnder, OnFinish);
                 }
             }
