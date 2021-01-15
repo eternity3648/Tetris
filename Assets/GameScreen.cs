@@ -27,6 +27,7 @@ public class GameScreen : MonoBehaviour
     private bool rightSidePressed, leftSidePressed;
     private Vector3 mouseMoved;
     private Vector3 lastMousePosition;
+    private Vector3 downMousePosition;
     private bool mousePressed = false;
     private bool wasFigureMoved = false;
     private bool wasFigureAcceleratedVertically = false;
@@ -54,6 +55,7 @@ public class GameScreen : MonoBehaviour
         TweenCallback OnGameStartCallb = OnGameStart;
         gridScript.SetOnLinesDestroy(callb);
         gridScript.SetOnGameStart(OnGameStartCallb);
+        gridScript.SetOnFigureLand(OnFigureLand);
         ResetVariables(true);
 
         TweenCallback OnMouseUp1 = OnMouseUp;
@@ -181,6 +183,12 @@ public class GameScreen : MonoBehaviour
             StartPausePopUp();
     }
 
+    private void OnFigureLand()
+    {
+        mousePressed = false;
+    }
+
+
     void OnLineDestroy(int lineCount)
     {
         if (lineCount > 0)
@@ -197,7 +205,8 @@ public class GameScreen : MonoBehaviour
     private void OnMouseDown()
     {
         mousePressed = true;
-        lastMousePosition = Input.mousePosition;
+        downMousePosition = Input.mousePosition;
+        lastMousePosition = downMousePosition;
         //print("Down");
     }
 
@@ -206,8 +215,11 @@ public class GameScreen : MonoBehaviour
         mousePressed = false;
         mouseMoved = new Vector3();
 
-        Vector3 posDiff = Input.mousePosition - lastMousePosition;
-        if (!wasFigureMoved) RotateFigure(true);
+        Vector3 posDiff = Input.mousePosition - downMousePosition;
+        print("posDiff = " + posDiff);
+        //print("Input.mousePosition = " + Input.mousePosition);
+        //print("lastMousePosition = " + lastMousePosition);
+        if (!wasFigureMoved && posDiff.magnitude < 0.0001f) RotateFigure(true);
         wasFigureMoved = false;
         wasFigureAcceleratedVertically = false;
         //print("UPPPP");

@@ -42,6 +42,7 @@ public class TetrisGrid : MonoBehaviour
     private TweenCallback OnFigureFastFall;
     private TweenCallback OnGameStart;
     private bool pause = false;
+    private Action OnFigureLand;
 
     private enum Sides
     {
@@ -331,6 +332,11 @@ public class TetrisGrid : MonoBehaviour
         currentFigureFallTime = figureFallDelay;
     }
 
+    public void SetOnFigureLand(Action func)
+    {
+        OnFigureLand = func;
+    }
+
     private void LandFigure(Vector2 coord)
     {
         int coordX = (int)coord.x;
@@ -356,6 +362,7 @@ public class TetrisGrid : MonoBehaviour
             }
         }
 
+        OnFigureLand?.Invoke();
         // TODO, call OnGameLost when figure is not landed after code above
     }
 

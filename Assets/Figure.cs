@@ -95,7 +95,6 @@ public class Figure : MonoBehaviour
             }
 
             GameObject figureCube = Instantiate(cubePrefab, this.transform);
-            print("index" + index);
             blocks[i] = figureCube;
             Vector2 blockCoord = GetBlockCoord(i);
             Vector3 position = GetBlockPositionByCoord(blockCoord);
