@@ -67,7 +67,6 @@ public class TetrisGrid : MonoBehaviour
         speedCoeff = 1.0f;
         figureFallDelayDecreaseCurrentTime = 0;
         nextFigureIndex = -1;
-        //figureFallDelay = 0.5f; //TEMP
 
         for (int x = 0; x < sizeX; x++)
         {

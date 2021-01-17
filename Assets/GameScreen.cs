@@ -105,8 +105,8 @@ public class GameScreen : MonoBehaviour
         save.figureIndex = gridScript.figScript.index;
         save.nextFigureIndex = gridScript.nextFigureIndex;
         save.rotationCount = gridScript.figScript.rotationCount;
-        save.speedCoeff = gridScript.speedCoeff;
-        //save.speedCoeffIncreaseCurrentTime = gridScript.speedCoeffIncreaseCurrentTime;
+        save.figureFallDelay = gridScript.figureFallDelay;
+        save.figureFallDelayDecreaseCurrentTime = gridScript.figureFallDelayDecreaseCurrentTime;
 
         return save;
     }
@@ -132,10 +132,11 @@ public class GameScreen : MonoBehaviour
 
             CreateCubeInCell Create = gridScript.CreateBlockInCell;
             save.SetGridState(Create);
-            gridScript.speedCoeff = save.speedCoeff;
-            //gridScript.speedCoeffIncreaseCurrentTime = save.speedCoeffIncreaseCurrentTime;
 
             gridScript.LaunchSavedStartFigure(new Vector3(save.figurePosition.x, save.figurePosition.y), save.figureIndex, save.rotationCount,  save.nextFigureIndex);
+
+            gridScript.figureFallDelay = save.figureFallDelay;
+            gridScript.figureFallDelayDecreaseCurrentTime = save.figureFallDelayDecreaseCurrentTime;
 
             scoreText.text = save.score.ToString();
             score = save.score;

@@ -14,8 +14,8 @@ public class Save
     public SerializableVector figurePosition;
     // how many times figure was rotated
     public int rotationCount;
-    public float speedCoeff;
-    public float speedCoeffIncreaseCurrentTime;
+    public float figureFallDelay;
+    public float figureFallDelayDecreaseCurrentTime;
 
     [System.Serializable]
     public struct CellInfo
