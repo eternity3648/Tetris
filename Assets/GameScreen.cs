@@ -30,7 +30,6 @@ public class GameScreen : MonoBehaviour
     private Vector3 downMousePosition;
     private bool mousePressed = false;
     private bool wasFigureMoved = false;
-    private bool wasFigureAcceleratedVertically = false;
     private Tweener scoreTweener;
     private int score = 0;
     private int scoreForTween = 0;
@@ -72,7 +71,7 @@ public class GameScreen : MonoBehaviour
         {
             horizontalDragSpeed *= 3.5f;
             verticalDragSpeed *= 2.5f;
-            superAccelerationDragSpeed *= 1f;
+            superAccelerationDragSpeed *= 2f;
         }
 
         LoadInterstitial();
@@ -219,7 +218,6 @@ public class GameScreen : MonoBehaviour
         Vector3 posDiff = Input.mousePosition - downMousePosition;
         if (!wasFigureMoved && posDiff.magnitude < 0.0001f) RotateFigure(true);
         wasFigureMoved = false;
-        wasFigureAcceleratedVertically = false;
         //print("UPPPP");
     }
 
@@ -271,7 +269,6 @@ public class GameScreen : MonoBehaviour
                 if (gridScript.CanFigureSpeedBeChanged()) 
                 {
                     //SetFigureSpeed(1);
-                    wasFigureAcceleratedVertically = false;
                     mouseMoved.y = 0;
                 }
 

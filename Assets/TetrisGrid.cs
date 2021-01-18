@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using System.Linq;
 using DG.Tweening;
 
 public class TetrisGrid : MonoBehaviour
@@ -10,7 +11,7 @@ public class TetrisGrid : MonoBehaviour
     public int sizeX, sizeY;
     public Cell[,] cells;
     public GameObject BorderLinePrefab;
-    public GameObject CubePrefab;
+    public GameObject CubePrefab, TrailPrefab;
     public Sprite[] cubeSprites;
     public GameObject figurePrefab;
     public Vector3 cellSize;
@@ -261,7 +262,7 @@ public class TetrisGrid : MonoBehaviour
             figureFastFalling = true;
             Vector3 pos = currentFigure.transform.localPosition;
             Vector3 prevPos = pos;
-            float fallCellTime = 0.035f;
+            float fallCellTime = 0.03f;
 
             Vector2 coord = GetCellСoordByPosition(pos);
             while (CheckIfFigureCanExistInCoord(figScript, coord))
@@ -280,6 +281,33 @@ public class TetrisGrid : MonoBehaviour
             {
                 int count = (int)Math.Abs((currentFigure.transform.localPosition.y - prevPos.y) / cellSize.y);
                 currentFigure.transform.DOLocalMoveY(prevPos.y, fallCellTime * count).OnComplete(OnFinish);
+
+                GameObject[] blocks = currentFigure.GetComponent<Figure>().blocks;
+                List<float> uniqueXCoords = new List<float>();
+                float minY = 1000;
+                for (int i = 1; i < blocks.Length; i ++)
+                {
+                    Vector3 pos1 = blocks[i].transform.localPosition;
+                    if (!uniqueXCoords.Contains(pos1.x)) uniqueXCoords.Add(pos1.x);
+                    if (pos1.y < minY) minY = pos1.y;
+                }
+
+                Vector3 trailPos = new Vector3(
+                    uniqueXCoords.Min() + (uniqueXCoords.Max() - uniqueXCoords.Min()) / 2,
+                    minY
+                );
+                trailPos = trailPos - new Vector3(0, cellSize.y / 2);
+                GameObject trail = Instantiate(TrailPrefab, currentFigure.transform);
+                trail.transform.localPosition = trailPos;
+                AnimationCurve curve = new AnimationCurve();
+                curve.AddKey(0.0f, 0.6f * uniqueXCoords.Count);
+                trail.GetComponent<TrailRenderer>().widthCurve = curve;
+                //for (int i = 1; i < blocks.Length; i++)
+                //{
+                //    Vector2 coord1 = currentFigure.GetComponent<Figure>().GetBlockCoord(i);
+                //    if (coord1.y == highestI)
+                //        blocks[i].GetComponent<TrailRenderer>().enabled = true;
+                //}
             }
         }
     }
@@ -355,7 +383,20 @@ public class TetrisGrid : MonoBehaviour
                 {
                     CreateBlockInCell(blockCoord, figScript.GetIndex());
                 });
-                Destroy(currentFigure);
+
+                GameObject[] blocks = currentFigure.GetComponent<Figure>().blocks;
+                for (int i = 1; i < blocks.Length; i++)
+                {
+                    blocks[i].SetActive(false);
+                }
+
+                GameObject fig = currentFigure;
+                void DestroyFigure() {
+                    Destroy(fig);
+                }
+
+                Sequence mySequence = DOTween.Sequence();
+                mySequence.AppendInterval(1).OnComplete(DestroyFigure);
                 currentFigure = null;
                 CheckForBlocksRemoving();
                 break;

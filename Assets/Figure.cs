@@ -84,6 +84,24 @@ public class Figure : MonoBehaviour
         return index;
     }
 
+    public Vector2 GetBlockCoord(int blockIndex)
+    {
+        for (int i = 0; i < blockMatrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < blockMatrix.GetLength(1); j++)
+            {
+                if (blockMatrix[i, j] == blockIndex)
+                {
+                    //print("Coord");
+                    //print(new Vector2(i, j));
+                    return new Vector2(i, j);
+                }
+            }
+        }
+
+        return new Vector2(-1, -1); // invalid index
+    }
+
     private void Render()
     {
         for (int i = 1; i <= blocksCount; i++)
@@ -104,24 +122,6 @@ public class Figure : MonoBehaviour
             figureCube.GetComponent<SpriteRenderer>().color = color;
             figureCube.GetComponent<SpriteRenderer>().material.color = color;
         }
-    }
-
-    private Vector2 GetBlockCoord(int blockIndex)
-    {
-        for (int i = 0; i < blockMatrix.GetLength(0); i++)
-        {
-            for (int j = 0; j < blockMatrix.GetLength(1); j++)
-            {
-                if (blockMatrix[i, j] == blockIndex)
-                {
-                    //print("Coord");
-                    //print(new Vector2(i, j));
-                    return new Vector2(i, j);
-                }
-            }
-        }
-
-        return new Vector2(-1, -1); // invalid index
     }
 
     private Vector3 GetBlockPositionByCoord(Vector2 coord)

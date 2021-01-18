@@ -47,3 +47,6 @@ TagManager:
   - name: Game
     uniqueID: 885753547
     locked: 0
+  - name: Light
+    uniqueID: 211679901
+    locked: 0
