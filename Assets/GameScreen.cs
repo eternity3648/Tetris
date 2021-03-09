@@ -61,18 +61,9 @@ public class GameScreen : MonoBehaviour
         TweenCallback OnMouseDown1 = OnMouseDown;
         fadeButton.GetComponent<FadeButton>().Set(OnMouseDown1, OnMouseUp1);
 
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            horizontalDragSpeed *= 2.0f;
-            verticalDragSpeed *= 2.5f;
-            superAccelerationDragSpeed *= 2.5f;
-        } 
-        else
-        {
-            horizontalDragSpeed *= 3.5f;
-            verticalDragSpeed *= 2.5f;
-            superAccelerationDragSpeed *= 2f;
-        }
+        horizontalDragSpeed = Screen.width * 0.1f;
+        verticalDragSpeed = Screen.height * 0.1f;
+        superAccelerationDragSpeed = verticalDragSpeed / 6;
 
         LoadInterstitial();
 
@@ -243,6 +234,7 @@ public class GameScreen : MonoBehaviour
             if (posDiff.magnitude < 1) { posDiff = new Vector3(); }
             mouseMoved += posDiff;
 
+            print("posDiff.y = " + posDiff.y);
             if (Mathf.Abs(mouseMoved.x) >= horizontalDragSpeed)
             {
                 wasFigureMoved = true;

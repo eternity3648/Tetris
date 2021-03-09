@@ -12,8 +12,6 @@ ScriptsOnlyBuild:
     - DG.Tweening.Core.DOTweenSettings
     GoogleMobileAds.Editor.dll:
     - GoogleMobileAds.Editor.GoogleMobileAdsSettings
-    GoogleMobileAds.dll:
-    - GoogleMobileAds.Common.MobileAdsEventExecutor
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
@@ -1156,4 +1154,4 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/MainMenu.unity
   - Assets/GameScene.unity
-  playerPath: C:/Repos/Tetris/Tetris/AndroidBuilds/Tetris 0.8.apk
+  playerPath: C:/Repos/Tetris/Tetris/AndroidBuilds/Tetris 11111111.apk
