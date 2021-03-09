@@ -234,7 +234,6 @@ public class GameScreen : MonoBehaviour
             if (posDiff.magnitude < 1) { posDiff = new Vector3(); }
             mouseMoved += posDiff;
 
-            print("posDiff.y = " + posDiff.y);
             if (Mathf.Abs(mouseMoved.x) >= horizontalDragSpeed)
             {
                 wasFigureMoved = true;

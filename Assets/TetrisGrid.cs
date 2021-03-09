@@ -6,6 +6,7 @@ using UnityEngine.Assertions;
 using System.Linq;
 using DG.Tweening;
 
+
 public class TetrisGrid : MonoBehaviour
 {
     public int sizeX, sizeY;
@@ -52,7 +53,7 @@ public class TetrisGrid : MonoBehaviour
         Right = 3,
         Bottom = 4
     }
-    
+
     public void Start()
     {
         foreach (Transform child in this.transform)
@@ -163,7 +164,7 @@ public class TetrisGrid : MonoBehaviour
         yield return new WaitForSeconds(time);
     }
 
-    public void ClearCells() 
+    public void ClearCells()
     {
         for (int x = 0; x < sizeX; x++)
         {
@@ -284,24 +285,56 @@ public class TetrisGrid : MonoBehaviour
 
                 GameObject[] blocks = currentFigure.GetComponent<Figure>().blocks;
                 List<float> uniqueXCoords = new List<float>();
-                float minY = 1000;
-                for (int i = 1; i < blocks.Length; i ++)
+                List<float> uniqueYCoords = new List<float>();
+                float[] yCount = new float[4];
+                float[] yCountX = new float[4];
+
+                for (int i = 1; i < blocks.Length; i++)
                 {
                     Vector3 pos1 = blocks[i].transform.localPosition;
                     if (!uniqueXCoords.Contains(pos1.x)) uniqueXCoords.Add(pos1.x);
-                    if (pos1.y < minY) minY = pos1.y;
+                    if (!uniqueYCoords.Contains(pos1.y))
+                    {
+                        uniqueYCoords.Add(pos1.y);
+                        yCount[uniqueYCoords.IndexOf(pos1.y)] = 1;
+                        yCountX[uniqueYCoords.IndexOf(pos1.y)] = pos1.x;
+                    }
+                    else
+                    {
+                        yCount[uniqueYCoords.IndexOf(pos1.y)]++;
+                    };
                 }
 
+                float maxYValue = -1000;
+                for (int i = 0; i < uniqueYCoords.Count; i++)
+                {
+                    float pos1 = uniqueYCoords[i];
+                    if (pos1 > maxYValue && yCount[i] == yCount.Max())
+                    {
+                        maxYValue = pos1;
+                    }
+                }
+
+
                 Vector3 trailPos = new Vector3(
-                    uniqueXCoords.Min() + (uniqueXCoords.Max() - uniqueXCoords.Min()) / 2,
-                    minY
+                    (uniqueXCoords.Min() + (uniqueXCoords.Max() - uniqueXCoords.Min()) / 2),
+                    maxYValue,
+                    0
                 );
+
                 trailPos = trailPos - new Vector3(0, cellSize.y / 2);
                 GameObject trail = Instantiate(TrailPrefab, currentFigure.transform);
                 trail.transform.localPosition = trailPos;
                 AnimationCurve curve = new AnimationCurve();
-                curve.AddKey(0.0f, 0.6f * uniqueXCoords.Count);
+                curve.AddKey(0.0f, 0.68f * uniqueXCoords.Count);
                 trail.GetComponent<TrailRenderer>().widthCurve = curve;
+
+                //List<Vector2> coords = currentFigure.GetComponent<Figure>().GetBlockCoordsRelativeToCoord(coord);
+
+                //coords.ForEach(delegate (Vector2 blockCoord)
+                //{
+                //    CreateBlockInCell(blockCoord, figScript.GetIndex());
+                //});
                 //for (int i = 1; i < blocks.Length; i++)
                 //{
                 //    Vector2 coord1 = currentFigure.GetComponent<Figure>().GetBlockCoord(i);
@@ -391,7 +424,8 @@ public class TetrisGrid : MonoBehaviour
                 }
 
                 GameObject fig = currentFigure;
-                void DestroyFigure() {
+                void DestroyFigure()
+                {
                     Destroy(fig);
                 }
 
@@ -434,7 +468,7 @@ public class TetrisGrid : MonoBehaviour
         if (side == Sides.Top)
         {
             borderPosition = centerPosition + new Vector3(0, cellSize.y * 0.5f);
-        } 
+        }
         else if (side == Sides.Right)
         {
             borderPosition = centerPosition + new Vector3(cellSize.x * 0.5f, 0);
@@ -454,7 +488,7 @@ public class TetrisGrid : MonoBehaviour
         transform.localPosition = borderPosition;
         borderLine.SetActive(true);
     }
-    
+
     public void CreateBlockInCell(Vector2 coord, int figureIndex)
     {
         GameObject figureCube = Instantiate(CubePrefab, this.transform);
@@ -472,7 +506,7 @@ public class TetrisGrid : MonoBehaviour
     {
         bool result = false;
         GameObject testFigure = CreateFigure(figScript.GetMatrix(), figScript.GetIndex());
-        Figure testFigScript = testFigure.GetComponent<Figure>();;
+        Figure testFigScript = testFigure.GetComponent<Figure>(); ;
         Vector2 coord = GetCellСoordByPosition(currentFigure.transform.localPosition);
 
         if (CheckIfFigureCanExistInCoord(testFigScript, coord + new Vector2(1, 0)) || CheckIfFigureCanExistInCoord(testFigScript, coord + new Vector2(-1, 0)))
@@ -493,7 +527,7 @@ public class TetrisGrid : MonoBehaviour
         return position;
     }
 
-    private Vector2 GetCellСoordByPosition(Vector3 position) 
+    private Vector2 GetCellСoordByPosition(Vector3 position)
     {
         position -= startPositon;
         return new Vector2(Convert.ToInt32((position.x / cellSize.x) - 0.5f), -Convert.ToInt32((position.y / cellSize.y)));
@@ -520,7 +554,7 @@ public class TetrisGrid : MonoBehaviour
 
     private Vector3 GetFigureStartPosition()
     {
-        Vector2 startCoord = new Vector2(Math.Abs(sizeX /2) - 2, 0);
+        Vector2 startCoord = new Vector2(Math.Abs(sizeX / 2) - 2, 0);
         return GetCellPosition(startCoord);
     }
 
@@ -553,13 +587,13 @@ public class TetrisGrid : MonoBehaviour
             bool is_line_filled = true;
             for (int x = 0; x < sizeX; x++)
             {
-                if (cells[x, y].IsFree()) 
+                if (cells[x, y].IsFree())
                 {
                     is_line_filled = false;
                     break;
                 }
             }
-            if (is_line_filled) 
+            if (is_line_filled)
             {
                 RemoveBlocksFromLine(y);
                 removedLinesIndices.Add(y);
