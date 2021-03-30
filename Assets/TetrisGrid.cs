@@ -14,6 +14,7 @@ public class TetrisGrid : MonoBehaviour
     public GameObject BorderLinePrefab;
     public GameObject CubePrefab, TrailPrefab;
     public Sprite[] cubeSprites;
+    public Material cubeCopyMat;
     public GameObject figurePrefab;
     public Vector3 cellSize;
     public float slowFigureSpeed;
@@ -24,6 +25,7 @@ public class TetrisGrid : MonoBehaviour
     public float fallAnimationDelay;
     public GameObject currentFigure;
     public Figure figScript;
+    public GameObject fallFigureCopy;
     public float figureFallDelayDecreaseCurrentTime = 0;
     public float speedCoeff = 1.0f;
     public int nextFigureIndex;
@@ -198,6 +200,8 @@ public class TetrisGrid : MonoBehaviour
             currentFigure.transform.localPosition = startPosition;
             currentFigureCoord = new Vector2(1000, 1000);
             CheckIfFigureCanExistInCoord(figScript, GetCellСoordByPosition(startPosition));
+            currentFigureCoord = GetCellСoordByPosition(startPosition);
+            UpdateFallFigureTip();
         }
 
         currentDelayBeforeFigureLanding = 0;
@@ -214,12 +218,14 @@ public class TetrisGrid : MonoBehaviour
         int[,] figureMatrix = FigureTypes.GetFigureByIndex(figureIndex);
         currentFigure = CreateFigure(figureMatrix, figureIndex);
         currentFigure.transform.localPosition = startPosition;
+        currentFigureCoord = GetCellСoordByPosition(startPosition);
         figScript = currentFigure.GetComponent<Figure>();
 
         for (int i = 0; i < rotationCount; i++)
             figScript.Rotate();
 
         currentCell = GetCellByPosition(startPosition);
+        UpdateFallFigureTip();
 
         OnFigureCreate(CreateFigure(FigureTypes.GetFigureByIndex(nextFigureIndex), nextFigureIndex, false));
     }
@@ -251,6 +257,8 @@ public class TetrisGrid : MonoBehaviour
             if (CheckIfFigureCanExistInCoord(figScript, coord))
             {
                 currentFigure.transform.localPosition += positionShift;
+                currentFigureCoord = GetCellСoordByPosition(currentFigure.transform.localPosition);
+                UpdateFallFigureTip();
                 if (currentDelayBeforeFigureLanding != 0) currentDelayBeforeFigureLanding = delayBeforeFigureLanding;
             }
         }
@@ -374,6 +382,7 @@ public class TetrisGrid : MonoBehaviour
                 {
                     currentFigure.transform.localPosition += new Vector3(-i * cellSize.x, 0);
                     figScript.Rotate();
+                    UpdateFallFigureTip();
                     break;
                 }
                 Vector2 testRightCoord = coord + new Vector2(i, 0);
@@ -381,6 +390,7 @@ public class TetrisGrid : MonoBehaviour
                 {
                     currentFigure.transform.localPosition += new Vector3(i * cellSize.x, 0);
                     figScript.Rotate();
+                    UpdateFallFigureTip();
                     break;
                 }
             }
@@ -500,6 +510,32 @@ public class TetrisGrid : MonoBehaviour
         Cell cell = GetCellByCoord(coord);
         cell.occupyingCube = figureCube;
         cell.cubeIndex = figureIndex;
+    }
+
+    private void UpdateFallFigureTip()
+    {
+        Vector2 figureCopyCoord = currentFigureCoord;
+        if (fallFigureCopy != null) Destroy(fallFigureCopy);
+        fallFigureCopy = CreateFigure(figScript.GetMatrix(), figScript.GetIndex(), true);
+        Figure fallFigureCopyScript = fallFigureCopy.GetComponent<Figure>();
+
+        while (CheckIfFigureCanExistInCoord(fallFigureCopyScript, figureCopyCoord + new Vector2(0, 1))) {
+            figureCopyCoord += new Vector2(0, 1);
+        }
+
+        fallFigureCopy.transform.localPosition = GetCellPosition(figureCopyCoord);
+
+        for (int i = 0; i < fallFigureCopyScript.blocks.Length; i++)
+        {
+            if (fallFigureCopyScript.blocks[i] != null)
+            {
+                fallFigureCopyScript.blocks[i].GetComponent<SpriteRenderer>().material = cubeCopyMat;
+                Material mat = fallFigureCopyScript.blocks[i].GetComponent<SpriteRenderer>().material;
+                Color oldColor = mat.color;
+                Color newColor = new Color(oldColor.r, oldColor.g, oldColor.b, 0.2f);
+                mat.SetColor("_Color", newColor);
+            }
+        }
     }
 
     private bool CheckIfFigureCanBeRotatedOrMoved()
