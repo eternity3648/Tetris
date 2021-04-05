@@ -271,7 +271,7 @@ public class TetrisGrid : MonoBehaviour
             figureFastFalling = true;
             Vector3 pos = currentFigure.transform.localPosition;
             Vector3 prevPos = pos;
-            float fallCellTime = 0.03f;
+            float fallCellTime = 0.015f;
 
             Vector2 coord = GetCellСoordByPosition(pos);
             while (CheckIfFigureCanExistInCoord(figScript, coord))
@@ -336,6 +336,11 @@ public class TetrisGrid : MonoBehaviour
                 AnimationCurve curve = new AnimationCurve();
                 curve.AddKey(0.0f, 0.68f * uniqueXCoords.Count);
                 trail.GetComponent<TrailRenderer>().widthCurve = curve;
+
+                ParticleSystem ps = trail.GetComponent<ParticleSystem>();
+                var sh = ps.shape;
+                sh.scale = new Vector3(0.3f * uniqueXCoords.Count, 1f, 1f);
+
 
                 //List<Vector2> coords = currentFigure.GetComponent<Figure>().GetBlockCoordsRelativeToCoord(coord);
 
