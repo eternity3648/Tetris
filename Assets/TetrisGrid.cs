@@ -334,7 +334,7 @@ public class TetrisGrid : MonoBehaviour
                 GameObject trail = Instantiate(TrailPrefab, currentFigure.transform);
                 trail.transform.localPosition = trailPos;
                 AnimationCurve curve = new AnimationCurve();
-                curve.AddKey(0.0f, 0.68f * uniqueXCoords.Count);
+                curve.AddKey(0.0f, 0.659f * uniqueXCoords.Count);
                 trail.GetComponent<TrailRenderer>().widthCurve = curve;
 
                 ParticleSystem ps = trail.GetComponent<ParticleSystem>();
@@ -689,7 +689,6 @@ public class TetrisGrid : MonoBehaviour
             LaunchStartFigure();
         }
     }
-
     private void AddCubeFallAnimation(GameObject cube, int linesFallCount, TweenCallback OnFinish)
     {
         Transform tran = cube.transform;
